@@ -2,6 +2,8 @@
 
 Hier staat een korte beschrijving van het probleem evt. met plaatje.
 
+De Amsterdamse gemeente staat voor een nieuwe uitdaging bij het bouwen van een nieuw woningcomplex. Omdat de grond hiervoor beschermd natuurgebied was zijn er namelijk bepaalde restricties gebonden aan de plaatsing van de huizen. Dit maakt het lastig de meest efficiënte en winstgevende plaatsing van de huizen in het vrijgemaakte gebied te bepalen en is dan ook het probleem wat opgelost moet worden. Voor de bouw van het woningcomplex zijn drie mogelijke aantallen aan huizen mogelijk: 20, 40 of 60 huizen. De oplossing van dit planologisch probleem moet daarbij in te zetten zijn voor al deze drie mogelijke woningscomplex varianten.
+
 ## Aan de slag (Getting Started)
 
 ### Vereisten (Prerequisites)
