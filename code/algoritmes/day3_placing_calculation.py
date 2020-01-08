@@ -34,7 +34,6 @@ def eensgezinswoningen(aantal):
         y_oud = random.randrange(2,170)
         print(wijk1[y_oud][x])
 
-
         while wijk1[y_oud][x] or wijk1[y_oud][x+8] or wijk1[y_oud+8][x] or wijk1[y_oud+8][x+8] != 0:
             x = random.randrange(32,150)
             y_oud = random.randrange(2,170)
