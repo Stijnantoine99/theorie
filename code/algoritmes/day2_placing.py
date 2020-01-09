@@ -95,6 +95,12 @@ def bungalow(aantal):
                 wijk1[y][x] = 2
         counter_bungalow += 1  
 
+    print(bungalow_coordinatenlijst[4])
+    print(bungalow_coordinatenlijst[4][1])
+    print(bungalow_coordinatenlijst[4][0])
+
+
+
 
 
 
