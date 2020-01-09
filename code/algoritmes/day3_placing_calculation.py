@@ -116,6 +116,123 @@ class Kosten():
         self.maison_aantal = maison_aantal
 
         
+    def eengezins_cost(self, eengezins_aantal):
+        # make default prices of houses
+        self.eengezins = 285000 
+        self.eengezins_aantal = eengezins_aantal
+
+        # calcualte percentage of extra housing worth per extra sqaure meter space
+        self.percentage_eengezins = self.eengezins * 0.03
+
+        # make default total prices
+        self.total_eengezins = eengezins_aantal * self.eengezins
+
+        # getting the coordinates from placing class
+        coordinateslijst = Placing.eensgezinswoningen(self, eengezins_aantal)
+
+        for coordinates in coordinateslijst:
+
+            # locate the basepoints
+            # top_left = [coordinates[0], coordinates[1]]
+            # print(top_left)
+            # top_right = [coordinates[0], coordinates[1] + 8]
+            # bottom_left = [coordinates[0] + 8, coordinates[1]]
+            # bottom_right = [coordinates[0] + 8, coordinates[1] + 8]
+            # top_middle = [coordinates[0], coordinates[1] + 4]
+            # left_middle = [coordinates[0] + 4, coordinates[1]]
+            # right_middle = [coordinates[0] + 4, coordinates[1] + 8]
+            # bottom_middle = [coordinates[0] + 8, coordinates[1] + 4]
+
+            top_left = [coordinates[1], coordinates[0]]
+            print(top_left)
+            top_right = [coordinates[1], coordinates[0] + 8]
+            bottom_left = [coordinates[1] + 8, coordinates[0]]
+            bottom_right = [coordinates[1] + 8, coordinates[0] + 8]
+            top_middle = [coordinates[1], coordinates[0] + 4]
+            left_middle = [coordinates[1] + 4, coordinates[0]]
+            right_middle = [coordinates[1] + 4, coordinates[0] + 8]
+            bottom_middle = [coordinates[1] + 8, coordinates[0] + 4]
+
+            # make default value for checking whether the area checked around the house is free
+            vrij = True
+            meter_counter = 3
+
+            # check whether there is free ground around the house
+            while vrij == True:
+            
+                # if there are any houses in the area of the search command then stop searching
+                if wijk1[top_left[0]][top_left[1] - meter_counter] or wijk1[top_left[0] - meter_counter][top_left[1]] or wijk1[top_right[0]][top_right[1] + meter_counter] or wijk1[top_right[0] - meter_counter][top_right[1]] or wijk1[bottom_left[0]][bottom_left[1] - meter_counter] or wijk1[bottom_left[0] + meter_counter][bottom_left[1]] or wijk1[bottom_right[0]][bottom_right[1] + meter_counter] or wijk1[bottom_right[0] + meter_counter][bottom_right[1]] or wijk1[top_middle[0] - meter_counter][top_middle[1]] or wijk1[left_middle[0]][left_middle[1] - meter_counter] or wijk1[right_middle[0]][right_middle[1] + meter_counter] or wijk1[bottom_middle[0] + meter_counter][bottom_middle[1] - meter_counter] != 0:
+                    print('begin')
+                    print(wijk1[top_left[0]][top_left[1] - meter_counter])
+                    print(wijk1[top_left[0] - meter_counter][top_left[1]])
+                    print(wijk1[top_right[0]][top_right[1] + meter_counter])
+                    print(wijk1[top_right[0] - meter_counter][top_right[1]])
+                    print(wijk1[bottom_left[0]][bottom_left[1] - meter_counter])
+                    print(wijk1[bottom_left[0] + meter_counter][bottom_left[1]])
+                    print(wijk1[bottom_right[0]][bottom_right[1] + meter_counter])
+                    print(wijk1[bottom_right[0] + meter_counter][bottom_right[1]])
+                    print(wijk1[top_middle[0] - meter_counter][top_middle[1]])
+                    print(wijk1[left_middle[0]][left_middle[1] - meter_counter])
+                    print(wijk1[right_middle[0]][right_middle[1] + meter_counter])
+                    print(wijk1[bottom_middle[0] + meter_counter][bottom_middle[1] - meter_counter])
+                    
+                    
+                    vrij = False
+                    print("break")
+                    print(meter_counter)
+                    print('eind')
+                # if wijk1[top_left[0]][top_left[1] - meter_counter] or wijk1[top_left[0] - meter_counter][top_left[1]] or wijk1[top_right[0]][top_left[1] + meter_counter] or wijk1[top_right[0] - meter_counter][top_right[1]] or wijk1[bottom_left[0]][bottom_left[1] - meter_counter] or wijk1[bottom_left[0] + meter_counter][bottom_left[1]] or wijk1[bottom_right[0]][bottom_right[1] + meter_counter] or wijk1[bottom_right[0] + meter_counter][bottom_right[1]] or wijk1[top_middle[0] - meter_counter][top_middle[1]] or wijk1[left_middle[0]][left_middle[1] - meter_counter] or wijk1[right_middle[0]][right_middle[1] + meter_counter] or wijk1[bottom_middle[0] + meter_counter][bottom_middle[1] - meter_counter] == 1 or 2 or 3:
+                #     print(wijk1[top_left[0]][top_left[1] - meter_counter])
+                #     print(wijk1[top_left[0] - meter_counter][top_left[1]])
+                #     print(wijk1[top_right[0]][top_right[1] + meter_counter])
+                #     print(wijk1[top_right[0] - meter_counter][top_right[1]])
+                #     print(wijk1[bottom_left[0]][bottom_left[1] - meter_counter])
+                #     print(wijk1[bottom_left[0] + meter_counter][bottom_left[1]])
+                #     print(wijk1[bottom_right[0]][bottom_right[1] + meter_counter])
+                #     print(wijk1[bottom_right[0] + meter_counter][bottom_right[1]])
+                #     print(wijk1[top_middle[0] - meter_counter][top_middle[1]])
+                #     print(wijk1[left_middle[0]][left_middle[1] - meter_counter])
+                #     print(wijk1[right_middle[0]][right_middle[1] + meter_counter])
+                #     print(wijk1[bottom_middle[0] + meter_counter][bottom_middle[1] - meter_counter])
+                    
+                    # self.total_eengezins = self.total_eengezins + self.percentage_eengezins
+                    # meter_counter += 1 
+                    # print('begin money')
+                    # print(self.total_eengezins)
+                    # print(meter_counter)
+                    # print('eind money')
+                    
+                    # vrij = False
+                    # print("break")
+                    # print(meter_counter)
+                    # print('eind')
+
+                
+                # if there are no houses found in the area of the search command an extra amount of money to the total worth of the eengezinswoningen
+                else:
+                
+                    self.total_eengezins = self.total_eengezins + self.percentage_eengezins
+                    meter_counter += 1 
+                    print('begin money')
+                    print(self.total_eengezins)
+                    print(meter_counter)
+                    print('eind money')
+                    
+
+    # def bungalow_cost(self, bungalow_aantal):
+
+    #     # make default prices of houses
+    #     self.bungalow = 399000
+
+    #     # calcualte percentage of extra housing worth per extra sqaure meter space
+    #     self.percentage_bungalow = self.bungalow * 0.04
+
+    #     # make default total prices
+    #     self.total_bungalow = bungalow_aantal * self.bungalow
+
+
+
+
     def housing_costs(self, eengezins_aantal, bungalow_aantal, maison_aantal):
 
         # make default prices of houses
@@ -149,12 +266,11 @@ class Kosten():
 
             # make default value for checking whether the area checked around the house is free
             vrij = True
+            meter_counter = 3
 
             # check whether there is free ground around the house
             while vrij == True:
             
-                meter_counter = 3
-
                 # if there are any houses in the area of the search command then stop searching
                 if wijk1[top_left[0]][top_left[1] - meter_counter] or wijk1[top_left[0] - meter_counter][top_left[1]] or wijk1[top_right[0]][top_left[1] + meter_counter] or wijk1[top_right[0] - meter_counter][top_right[1]] or wijk1[bottom_left[0]][bottom_left[1] - meter_counter] or wijk1[bottom_left[0] + meter_counter][bottom_left[1]] or wijk1[bottom_right[0]][bottom_right[1] + meter_counter] or wijk1[bottom_right[0] + meter_counter][bottom_right[1]] or wijk1[top_middle[0] - meter_counter][top_middle[1]] or wijk1[left_middle[0]][left_middle[1] - meter_counter] or wijk1[right_middle[0]][right_middle[1] + meter_counter] or wijk1[bottom_middle[0] + meter_counter][bottom_middle[1] - meter_counter] != 0:
                     vrij = False
@@ -165,6 +281,8 @@ class Kosten():
                 else:
                     self.total_eengezins = self.total_eengezins + self.percentage_eengezins
                     meter_counter += 1 
+                    print(self.total_eengezins)
+                    print(meter_counter)
 
 
 
@@ -178,7 +296,8 @@ def main():
     place.bungalow(5)
     place.maison(3)
 
-    price.housing_costs(12, 5, 3)
+    price.eengezins_cost(12)
+
 
     # showing picture
     H = np.array(wijk1)
