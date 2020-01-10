@@ -50,15 +50,15 @@ class Placing:
 
                 nested_break = False
 
-                for i in range(0,12):
+                for i in range(0,13):
                     if wijk1[y_oud - 2][x - 2 + i] == 1 or wijk1[y_oud - 2][x - 2 + i] == 2 or wijk1[y_oud - 2][x - 2 + i] == 3:
                         vrij = False
                         nested_break = True
                         break
                     else:
                         vrij = True
-                    for j in range(0,12):
-                        if wijk1[y_oud - 2 + j][x - 2 + i] == 1 or wijk1[y_oud - 2][x - 2 + i] == 2 or wijk1[y_oud - 2][x - 2 + i] == 3:
+                    for j in range(0,13):
+                        if wijk1[y_oud - 2 + j][x - 2 + i] == 1 or wijk1[y_oud - 2 + j][x - 2 + i] == 2 or wijk1[y_oud - 2 + j][x - 2 + i] == 3:
                             vrij = False
                             nested_break = True
                             break
@@ -140,26 +140,30 @@ class Placing:
 
                 nested_break = False
 
-                for i in range(0,24):
-                    # print(y_oud - 6, x - 6)
+                for i in range(0,25):
+                    print(y_oud - 6, x - 6)
                     
                     if wijk1[y_oud - 6][x - 6 + i] == 1 or wijk1[y_oud - 6][x - 6 + i] == 2 or wijk1[y_oud - 6][x - 6 + i] == 3:
                         vrij = False
                         nested_break = True
+                        print("break")
                         break
                     else:
                         vrij = True   
-                    for j in range(0,22):
+                    for j in range(0,23):
                         # print(wijk1[y_oud - 6 + j][x - 6 + i])
                         # print(y_oud - 6 + j, x-6 + i, wijk1[y_oud - 6 + j][x - 6 + i])
                         # print(x - 6 + i)
-                        if wijk1[y_oud - 6 + j][x - 6] == 1 or wijk1[y_oud - 6 + j][x - 6] == 2 or wijk1[y_oud - 6 + j][x - 6] == 3:
+                        if wijk1[y_oud - 6 + j][x - 6 + i] == 1 or wijk1[y_oud - 6 + j][x - 6 + i] == 2 or wijk1[y_oud - 6 + j][x - 6 + i] == 3:
                             vrij = False
                             nested_break = True
+                            print("break")
                             break
                         else:
                             vrij = True
+                    print(vrij)
                     if nested_break:
+                        print("nested break")
                         break
 
 
@@ -201,20 +205,25 @@ class Placing:
 
                 nested_break = False
 
-                for i in range(0,17):
+                for i in range(0,18):
                     if wijk1[y_oud - 3][x - 3 + i] == 1 or wijk1[y_oud - 3][x - 3 + i] == 2 or wijk1[y_oud - 3][x - 3 + i] == 3:
                         vrij = False
-                        nested_break = True
                         break
+
+                    # elif nested_break:
+                    #     break    
+
                     else:
                         vrij = True
-                    for j in range(0,13):
-                        if wijk1[y_oud - 3 + j][x - 3 + i] == 1 or wijk1[y_oud - 3][x - 3 + i] == 6 or wijk1[y_oud - 3][x - 3 + i] == 3:
+
+                    for j in range(0,14):
+                        if wijk1[y_oud - 3 + j][x - 3 + i] == 1 or wijk1[y_oud - 3 + j][x - 3 + i] == 2 or wijk1[y_oud - 3 + j][x - 3 + i] == 3:
                             vrij = False
                             nested_break = True
                             break
                         else:
                             vrij = True
+
                     if nested_break:
                         break
 
@@ -763,6 +772,7 @@ def main():
     # adding houses
     price = Kosten(12, 5, 3)
     place = Placing(12, 5, 3)
+    # place = Placing(60, 25, 13)
     
     place.water()
     coordinaten_eensgezin = place.eensgezinswoningen(12)
@@ -778,7 +788,6 @@ def main():
     # print(omzet_bungalow)
     # print(omzet_maison)
     # print(totaal)
-
 
     # showing picture
     H = np.array(wijk1)
