@@ -57,12 +57,12 @@ class Placing:
                     wijk1[y_oud][x] = 5
                     print(wijk1[y_oud][x])
                     
-                    for j in range(0,12):
+                    # for j in range(0,12):
 
-                        if j == 0 or j == 1 or j == 11 or j == 10:
-                            y = y_oud + j
-                            wijk1[y][x] = 5
-                            print(wijk1[y][x])
+                    #     if j == 0 or j == 1 or j == 11 or j == 10:
+                    #         y = y_oud + j
+                    #         wijk1[y][x] = 5
+                    #         print(wijk1[y][x])
 
 
                 else:
@@ -73,12 +73,12 @@ class Placing:
                     print(wijk1[y][x])
 
 
-                # for j in range(0,12):
+                for j in range(0,12):
 
-                #     if j == 0 or j == 1 or j == 11 or j == 10:
-                #         y = y_oud + j
-                #         wijk1[y][x] = 5
-                #         print(wijk1[y][x])
+                    if j == 0 or j == 1 or j == 11 or j == 10 or i == 0 or i == 1 or i == 11 or i == 10:
+                        y = y_oud + j
+                        wijk1[y][x] = 5
+                        print(wijk1[y][x])
                         
 
                     else: 
