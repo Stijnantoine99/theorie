@@ -22,26 +22,44 @@ class Placing:
         self.aantal_maison = aantal_maison
         self.aantal_bungalow = aantal_bungalow
 
-    def water(self):
+    def water(self, top_left, bottom_right):
 
-        """ This method adds an area of water to the created gridmap. """
+        """ This method adds areas of water to the created gridmap. 
+         The areas of water are given in top-left to bottom-right coordinates of 
+         the area that is supposed to be water. These coordinates are looped over and
+         the values of these coordinates are changed to the water value. """
 
-        # create starting coordinate in the top left
-        x_coor = -1
-        y_coor = -1
-        
-        for i in range(0,32):
+        # for every asked individual area of water create this area from the given coordinates
+        for water_top_left, water_bottom_right in zip(top_left, bottom_right):
             
-            # change the empty space value on the gridmap to the water value for every coordinate in the for loop
-            wijk1[y_coor][x_coor] = 4
-            x_coor += 1 
-            y_coor = -1
-
-            for i in range(0,180):
-                y_coor += 1
-                wijk1[y_coor][x_coor] = 4
+            # create the range of the water
+            water_range_x = water_bottom_right[0] - water_top_left[0]
+            water_range_y = water_bottom_right[1] - water_top_left[1]
+            
+            # create starting coordinate in the top left
+            x_coor = water_top_left[0]
+            y_coor = water_top_left[1]
+            
+            # move in the range of the x-axis
+            for i in range(water_range_x):
                 
-        
+                # change the coordinate value on the gridmap to the water value
+                wijk1[y_coor][x_coor] = 4
+
+                # move in the range of the y-axis
+                for j in range(water_range_y):
+                    
+                    # change the coordinate value on the gridmap to the water value
+                    wijk1[y_coor][x_coor] = 4
+
+                    # move one coordinate on the y-axis
+                    y_coor += 1
+
+                # move one coordinate on the x-axis
+                x_coor += 1 
+                
+                # move to the beginning y-axis value
+                y_coor = water_top_left[1]                        
 
     # adding eensgezinswoningen 
 
@@ -711,7 +729,17 @@ def main():
     price = Kosten(12, 5, 3)
     place = Placing(12, 5, 3)
     
-    place.water()
+    # create the possible water area coordinates for the gridmap outline
+    wijk1_top_left = [[0, 0]]
+    wijk1_bottom_right = [[32, 180]]
+    wijk2_top_left = [[0, 135], [0, 0], [128, 135], [128, 0]]
+    wijk2_bottom_right = [[32, 180], [32, 45], [160, 180], [160, 45]]
+    wijk3_top_left = [[44, 50]]
+    wijk3_bottom_right = [[116, 130]]
+    
+    # create the different water values of the gridmap
+    place.water(wijk3_top_left, wijk3_bottom_right)
+
     coordinaten_eensgezin = place.eensgezinswoningen(12)
     coordinaten_bungalow = place.bungalow(5)
     coordinaten_maison = place.maison(3)
