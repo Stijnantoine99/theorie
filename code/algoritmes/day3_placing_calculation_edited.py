@@ -68,15 +68,16 @@ class Placing:
                 x = random.randrange(32,150)
                 y_oud = random.randrange(2,170)
 
+
                 # set default value for nested break to False
                 nested_break = False
 
                 # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house horizontally
-                for i in range(0,13):
-                    
+                for i in range(0,12):
+
                     # if the coordinate is no empty area to place a house break out of the scanning loop
                     if wijk1[y_oud - 2][x - 2 + i] == 1 or wijk1[y_oud - 2][x - 2 + i] == 2 or wijk1[y_oud - 2][x - 2 + i] == 3:
-                        
+
                         # change the nested break value to True
                         vrij = False
                         nested_break = True
@@ -89,11 +90,11 @@ class Placing:
                         vrij = True
 
                     # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house vertically
-                    for j in range(0,13):
-                        
+                    for j in range(0,12):
+
                         # if the coordinate is no empty area to place a house break out of the scanning loop
                         if wijk1[y_oud - 2 + j][x - 2 + i] == 1 or wijk1[y_oud - 2 + j][x - 2 + i] == 2 or wijk1[y_oud - 2 + j][x - 2 + i] == 3:
-                            
+                    
                             # change the nested break value to True
                             vrij = False
                             nested_break = True
@@ -116,28 +117,31 @@ class Placing:
 
                 # change the outer 2 meters of the area for the house to "vrijstaand"
                 if i == 0 or i == 1 or i == 11 or i == 10:
-                    wijk1[y_oud][x] = 5
+                    wijk1[y_oud - 2][x - 2 + i] = 5
 
                 # change the area inside the "vrijstaand" area to "eengezins" value
                 else:
-                    wijk1[y_oud][x] = 1
-                    y = y_oud + j
-                    wijk1[y][x] = 1
+                    # wijk1[y_oud][x] = 1
+                    # y = y_oud + j
+                    wijk1[y_oud - 2][x - 2 + i] = 1
 
                 for j in range(0,12):
 
                     # change the outer 2 meters of the area for the house to "vrijstaand"
-                    if j == 0 or j == 1 or j == 11 or j == 10 or i == 0 or i == 1 or i == 11 or i == 10:
-                        y = y_oud + j
-                        wijk1[y][x] = 5                        
+                    if j == 0 or j == 1 or j == 11 or j == 10 or i == 0 or i == 1 or i == 11 or i == 10: 
+                        wijk1[y_oud - 2 + j][x - 2 + i] = 5                        
 
                     # change the area inside the "vrijstaand" area to "eengezins" value
                     else: 
-                        y = y_oud + j
-                        wijk1[y][x] = 1
+                        wijk1[y_oud - 2 + j][x -2 + i] = 1
                         
-                x += 1
-            counter += 1  
+                
+
+            counter += 1 
+            # H = np.array(wijk1)
+            # plt.imshow(H)
+            # plt.pcolor(H, cmap = "Greens_r")
+            # plt.show() 
 
         return eensgezins_coordinatenlijst
 
@@ -167,8 +171,8 @@ class Placing:
                 nested_break = False
 
                 # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house horizontally
-                for i in range(0,25):
-                    print(y_oud - 6, x - 6)
+                for i in range(0,24):
+                    # print(y_oud - 6, x - 6)
                     
                     # if the coordinate is no empty area to place a house break out of the scanning loop
                     if wijk1[y_oud - 6][x - 6 + i] == 1 or wijk1[y_oud - 6][x - 6 + i] == 2 or wijk1[y_oud - 6][x - 6 + i] == 3:
@@ -185,7 +189,7 @@ class Placing:
                         vrij = True   
 
                     # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house vertically    
-                    for j in range(0,23):
+                    for j in range(0,22):
 
                          # if the coordinate is no empty area to place a house break out of the scanning loop
                         if wijk1[y_oud - 6 + j][x - 6 + i] == 1 or wijk1[y_oud - 6 + j][x - 6 + i] == 2 or wijk1[y_oud - 6 + j][x - 6 + i] == 3:
@@ -206,13 +210,31 @@ class Placing:
             # if an empty area has been found save the randomized coordinate in the houses list
             maison_coordinatenlijst.append([x,y_oud])
 
-            for i in range(0,12):
-                x += 1
-                wijk1[y_oud][x] = 3
-                for j in range(0,10):
-                    y = y_oud + j
-                    wijk1[y][x] = 3 
-            counter_maison += 1  
+            for i in range(0,24):
+
+                # change the outer 2 meters of the area for the house to "vrijstaand"
+                if i == 0 or i == 1 or i == 2 or i == 3 or i == 4 or i == 5 or i == 18 or i == 19 or i == 20 or i == 21 or i == 22 or i == 23:
+                    wijk1[y_oud - 6][x - 6 + i] = 5
+
+                # change the area inside the "vrijstaand" area to "eengezins" value
+                else:
+                    # wijk1[y_oud][x] = 1
+                    # y = y_oud + j
+                    wijk1[y_oud - 6][x - 6 + i] = 3
+
+                for j in range(0,22):
+
+                    # change the outer 2 meters of the area for the house to "vrijstaand"
+                    if j == 0 or j == 1 or j == 2 or j == 3 or j == 4 or j == 5 or j == 16 or j == 17 or j == 18 or j == 19 or j == 20 or j == 21 or i == 0 or i == 1 or i == 2 or i == 3 or i == 4 or i == 5 or i == 18 or i == 19 or i == 20 or i == 21 or i == 22 or i == 23:
+                        wijk1[y_oud - 6 + j][x - 6 + i] = 5                        
+
+                    # change the area inside the "vrijstaand" area to "eengezins" value
+                    else: 
+                        wijk1[y_oud - 6 + j][x - 6 + i] = 3
+        
+            counter_maison += 1
+         
+                
 
         return maison_coordinatenlijst
 
@@ -240,7 +262,7 @@ class Placing:
                 nested_break = False
 
                 # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house horizontally
-                for i in range(0,18):
+                for i in range(0,17):
                     
                     # if the coordinate is no empty area to place a house break out of the scanning loop
                     if wijk1[y_oud - 3][x - 3 + i] == 1 or wijk1[y_oud - 3][x - 3 + i] == 2 or wijk1[y_oud - 3][x - 3 + i] == 3:
@@ -252,7 +274,7 @@ class Placing:
                         vrij = True
 
                     # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house vertically    
-                    for j in range(0,14):
+                    for j in range(0,13):
                         
                         # if the coordinate is no empty area to place a house break out of the scanning loop
                         if wijk1[y_oud - 3 + j][x - 3 + i] == 1 or wijk1[y_oud - 3 + j][x - 3 + i] == 2 or wijk1[y_oud - 3 + j][x - 3 + i] == 3:
@@ -271,13 +293,28 @@ class Placing:
             # if an empty area has been found save the randomized coordinate in the houses list
             bungalow_coordinatenlijst.append([x,y_oud])
             
-            for i in range(0,11):
-                x += 1
-                wijk1[y_oud][x] = 2
-                for j in range(0,7):
-                    y = y_oud + j
-                    wijk1[y][x] = 2
-            counter_bungalow += 1  
+            for i in range(0,17):
+
+                # change the outer 2 meters of the area for the house to "vrijstaand"
+                if i == 0 or i == 1 or i == 2 or i == 14 or i == 15 or i == 16 :
+                    wijk1[y_oud - 3][x - 3 + i] = 5
+
+                # change the area inside the "vrijstaand" area to "eengezins" value
+                else:
+                    # wijk1[y_oud][x] = 1
+                    # y = y_oud + j
+                    wijk1[y_oud - 3][x - 3 + i] = 2
+
+                for j in range(0,13):
+
+                    # change the outer 2 meters of the area for the house to "vrijstaand"
+                    if j == 0 or j == 1 or j == 2 or j == 10 or j == 11 or j == 12 or i == 0 or i == 1 or i == 2 or i == 14 or i == 15 or i == 16:
+                        wijk1[y_oud - 3 + j][x - 3 + i] = 5                        
+
+                    # change the area inside the "vrijstaand" area to "eengezins" value
+                    else: 
+                        wijk1[y_oud - 3 + j][x - 3 + i] = 2
+            counter_bungalow += 1
 
         return bungalow_coordinatenlijst
 
@@ -679,15 +716,16 @@ def main():
     coordinaten_bungalow = place.bungalow(5)
     coordinaten_maison = place.maison(3)
 
+    print(coordinaten_eensgezin)
+    print(coordinaten_bungalow)
+    print(coordinaten_maison)
+
+
     omzet_eengezin = price.eengezins_cost(coordinaten_eensgezin, 12)
     omzet_bungalow = price.bungalow_cost(coordinaten_bungalow, 5)
     omzet_maison = price.maison_cost(coordinaten_maison, 3)
 
     totaal = omzet_eengezin + omzet_bungalow + omzet_maison
-    # print(omzet_eengezin)
-    # print(omzet_bungalow)
-    # print(omzet_maison)
-    # print(totaal)
 
     # showing picture
     H = np.array(wijk1)
