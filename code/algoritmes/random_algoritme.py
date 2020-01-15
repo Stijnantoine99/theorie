@@ -902,7 +902,7 @@ def main():
     # saving in csv file
     with open("wijk.csv","w+") as my_csv:
         csvWriter = csv.writer(my_csv,delimiter=',')
-        csvWriter.writerows(wijk)
+        csvWriter.writerows(wijk_max)
 
 if __name__ == '__main__':
     main()
