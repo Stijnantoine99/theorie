@@ -82,10 +82,19 @@ class Placing:
             # while no empty space has been found keep searching
             while vrij == False:
                 
-                # create a random coordinate on the gridmap (not in the water)
-                x = random.randrange(32,150)
-                y_oud = random.randrange(2,170)
-
+                # set default to check if random coordinate is situated on water
+                self.water = True
+                
+                # create random coordinate till a place is found where there is no water
+                while self.water == True:
+                
+                    # create a random coordinate
+                    x = random.randrange(2, 150)
+                    y_oud = random.randrange(2,170)
+                    
+                    # if the corners of the house are not situated on water continue
+                    if wijk1[y_oud][x] != 4 and wijk1[y_oud][x + 8] != 4 and wijk1[y_oud + 8][x] != 4 and wijk1[y_oud + 8][x + 8] != 4:
+                        self.water = False
 
                 # set default value for nested break to False
                 nested_break = False
@@ -182,9 +191,19 @@ class Placing:
             # while the amount of houses needed to be placed has not been reached yet search for empty area
             while vrij == False:
                 
-                # create a random coordinate on the gridmap (not in the water)
-                x = random.randrange(32,142)
-                y_oud = random.randrange(6,164)
+                # set default to check if random coordinate is situated on water
+                self.water = True
+                
+                # create random coordinate till a place is found where there is no water
+                while self.water == True:
+                
+                    # create a random coordinate
+                    x = random.randrange(6, 142)
+                    y_oud = random.randrange(6,164)
+
+                    # if the corners of the house are not situated on water continue
+                    if wijk1[y_oud][x] != 4 and wijk1[y_oud][x + 12] != 4 and wijk1[y_oud + 10][x] != 4 and wijk1[y_oud + 10][x + 12] != 4:
+                        self.water = False
 
                 nested_break = False
 
@@ -273,9 +292,19 @@ class Placing:
             # set default value of empty gridmap area to False
             while vrij == False:
                 
-                # create a random coordinate on the gridmap (not in the water)
-                x = random.randrange(32,146)
-                y_oud = random.randrange(3,170)
+                # set default to check if random coordinate is situated on water
+                self.water = True
+                
+                # create random coordinate till a place is found where there is no water
+                while self.water is True:
+                
+                    # create a random coordinate
+                    x = random.randrange(3, 146)
+                    y_oud = random.randrange(3,170)
+
+                    # if the corners of the house are not situated on water continue
+                    if wijk1[y_oud][x] != 4 and wijk1[y_oud][x + 11] != 4 and wijk1[y_oud + 7][x] != 4 and wijk1[y_oud + 7][x +11] != 4:
+                        self.water = False
 
                 nested_break = False
 

@@ -768,6 +768,8 @@ class Kosten():
        
         totaal = omzet_eengezin + omzet_bungalow + omzet_maison
 
+        return totaal
+
 
 
 # class Move(): 
@@ -873,7 +875,7 @@ def main():
     
 
     total_prices = []
-    for i in range(0,2):
+    for i in range(0,1):
         # create a 160 x 180 gridmap
         x, y = (160, 180) 
         wijk1 = [[0 for i in range(x)] for j in range(y)] 
@@ -889,10 +891,132 @@ def main():
         coordinaten_maison = place.maison(3)
 
         totaal = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-        
+        print(totaal)
         total_prices.append(totaal)
 
         # move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+    #MOVE
+
+        for i in range(0,10):
+            counter = 0 
+
+            for coordinaten in coordinaten_maison:
+                
+                lijst = []
+                opbrengst = []
+
+                normaal = coordinaten
+                lijst.append(normaal)
+                coordinates = coordinaten_maison
+                # coordinates = [normaal, coordinaten_maison[1], coordinaten_maison[2]]
+                # print(coordinates)
+                # print(coordinaten_bungalow)
+                # print(coordinaten_eensgezin)
+
+                new = price.total(coordinates, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                # print(new)
+
+                linksboven = [(coordinaten[0] - 1), (coordinaten[1] - 1)]
+                lijst.append(linksboven)
+
+                coordinates = [linksboven, coordinaten_maison[1], coordinaten_maison[2]]
+                new = price.total(coordinates, coordinaten_bungalow, coordinaten_eensgezin)
+                # print(new)
+                opbrengst.append(new)
+
+                boven = [(coordinaten[0]), (coordinaten[1] - 1)]
+                lijst.append(boven)
+                
+                coordinates = [boven, coordinaten_maison[1], coordinaten_maison[2]]
+                new = price.total(coordinates, coordinaten_bungalow, coordinaten_eensgezin)
+                # print(new)
+                opbrengst.append(new)
+
+                rechtsboven = [(coordinaten[0] + 1), (coordinaten[1] - 1)]
+                lijst.append(rechtsboven)
+                
+                coordinates = [rechtsboven, coordinaten_maison[1], coordinaten_maison[2]]
+                new = price.total(coordinates, coordinaten_bungalow, coordinaten_eensgezin)
+                # print(new)
+                opbrengst.append(new)
+
+                rechts = [(coordinaten[0] + 1), (coordinaten[1])]
+                lijst.append(rechts)
+
+                coordinates = [rechts, coordinaten_maison[1], coordinaten_maison[2]]
+                new = price.total(coordinates, coordinaten_bungalow, coordinaten_eensgezin)
+                # print(new)
+                opbrengst.append(new)
+
+                rechtsonder = [(coordinaten[0] + 1), (coordinaten[1] + 1)]
+                lijst.append(rechtsonder)
+                
+                coordinates = [rechtsonder, coordinaten_maison[1], coordinaten_maison[2]]
+                new = price.total(coordinates, coordinaten_bungalow, coordinaten_eensgezin)
+                # print(new)
+                opbrengst.append(new)
+
+                onder = [(coordinaten[0]), (coordinaten[1] + 1)]
+                lijst.append(onder)
+                
+                coordinates = [onder, coordinaten_maison[1], coordinaten_maison[2]]
+                new = price.total(coordinates, coordinaten_bungalow, coordinaten_eensgezin)
+                # print(new)
+                opbrengst.append(new)
+
+                linksonder = [(coordinaten[0] - 1), (coordinaten[1] + 1)]
+                lijst.append(linksonder)
+                
+                coordinates = [linksonder, coordinaten_maison[1], coordinaten_maison[2]]
+                new = price.total(coordinates, coordinaten_bungalow, coordinaten_eensgezin)
+                # print(new)
+                opbrengst.append(new)
+
+                links = [(coordinaten[0] - 1), (coordinaten[1])]
+                lijst.append(links)
+                
+                coordinates = [links, coordinaten_maison[1], coordinaten_maison[2]]
+                new = price.total(coordinates, coordinaten_bungalow, coordinaten_eensgezin)
+                # print(new)
+                opbrengst.append(new)
+
+                hoogste = max(opbrengst)
+                index = opbrengst.index(hoogste)
+
+                best_coor = lijst[index]
+
+                coordinaten_maison[counter] = best_coor
+
+                # print(best_coor)
+                counter += 1 
+                
+                print("new price")
+                print(price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin))
+
+                print(coordinaten_maison)
+            
+
+            H = np.array(wijk1)
+            plt.imshow(H)
+            plt.pcolor(H, cmap = "Greens_r")
+
+            plt.show()
+            plt.savefig("blueprint.png")
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
 
         # showing picture
         H = np.array(wijk1)

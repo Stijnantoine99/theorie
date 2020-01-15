@@ -19,26 +19,45 @@ class Placing:
         self.aantal_maison = aantal_maison
         self.aantal_bungalow = aantal_bungalow
 
-    def water(self):
+    def water(self, top_left, bottom_right):
 
-        """ This method adds an area of water to the created gridmap. """
+        """ This method adds areas of water to the created gridmap. 
+         The areas of water are given in top-left to bottom-right coordinates of 
+         the area that is supposed to be water. These coordinates are looped over and
+         the values of these coordinates are changed to the water value. """
 
-        # create starting coordinate in the top left
-        x_coor = -1
-        y_coor = -1
-        
-        for i in range(0,32):
+        # for every asked individual area of water create this area from the given coordinates
+        for water_top_left, water_bottom_right in zip(top_left, bottom_right):
             
-            # change the empty space value on the gridmap to the water value for every coordinate in the for loop
-            self.wijk1[y_coor][x_coor] = 4
-            x_coor += 1 
-            y_coor = -1
-
-            for i in range(0,180):
-                y_coor += 1
-                self.wijk1[y_coor][x_coor] = 4
+            # create the range of the water
+            water_range_x = water_bottom_right[0] - water_top_left[0]
+            water_range_y = water_bottom_right[1] - water_top_left[1]
+            
+            # create starting coordinate in the top left
+            x_coor = water_top_left[0]
+            y_coor = water_top_left[1]
+            
+            # move in the range of the x-axis
+            for i in range(water_range_x):
                 
-        
+                # change the coordinate value on the gridmap to the water value
+                self.wijk1[y_coor][x_coor] = 4
+
+                # move in the range of the y-axis
+                for j in range(water_range_y):
+                    
+                    # change the coordinate value on the gridmap to the water value
+                    self.wijk1[y_coor][x_coor] = 4
+
+                    # move one coordinate on the y-axis
+                    y_coor += 1
+
+                # move one coordinate on the x-axis
+                x_coor += 1 
+                
+                # move to the beginning y-axis value
+                y_coor = water_top_left[1]                        
+
 
     # adding eensgezinswoningen 
 
@@ -61,10 +80,19 @@ class Placing:
             # while no empty space has been found keep searching
             while vrij == False:
                 
-                # create a random coordinate on the gridmap (not in the water)
-                x = random.randrange(32,150)
-                y_oud = random.randrange(2,170)
-
+                # set default to check if random coordinate is situated on water
+                self.water = True
+                
+                # create random coordinate till a place is found where there is no water
+                while self.water == True:
+                
+                    # create a random coordinate
+                    x = random.randrange(2, 150)
+                    y_oud = random.randrange(2,170)
+                    
+                    # if the corners of the house are not situated on water continue
+                    if self.wijk1[y_oud][x] != 4 and self.wijk1[y_oud][x + 8] != 4 and self.wijk1[y_oud + 8][x] != 4 and self.wijk1[y_oud + 8][x + 8] != 4:
+                        self.water = False
 
                 # set default value for nested break to False
                 nested_break = False
@@ -161,9 +189,19 @@ class Placing:
             # while the amount of houses needed to be placed has not been reached yet search for empty area
             while vrij == False:
                 
-                # create a random coordinate on the gridmap (not in the water)
-                x = random.randrange(32,142)
-                y_oud = random.randrange(6,164)
+               # set default to check if random coordinate is situated on water
+                self.water = True
+                
+                # create random coordinate till a place is found where there is no water
+                while self.water == True:
+                
+                    # create a random coordinate
+                    x = random.randrange(6, 142)
+                    y_oud = random.randrange(6,164)
+
+                    # if the corners of the house are not situated on water continue
+                    if self.wijk1[y_oud][x] != 4 and self.wijk1[y_oud][x + 12] != 4 and self.wijk1[y_oud + 10][x] != 4 and self.wijk1[y_oud + 10][x + 12] != 4:
+                        self.water = False
 
                 nested_break = False
 
@@ -231,8 +269,6 @@ class Placing:
         
             counter_maison += 1
          
-                
-
         return maison_coordinatenlijst
 
     def bungalow(self, aantal_bungalow):
@@ -252,9 +288,19 @@ class Placing:
             # set default value of empty gridmap area to False
             while vrij == False:
                 
-                # create a random coordinate on the gridmap (not in the water)
-                x = random.randrange(32,146)
-                y_oud = random.randrange(3,170)
+                # set default to check if random coordinate is situated on water
+                self.water = True
+                
+                # create random coordinate till a place is found where there is no water
+                while self.water is True:
+                
+                    # create a random coordinate
+                    x = random.randrange(3, 146)
+                    y_oud = random.randrange(3,170)
+
+                    # if the corners of the house are not situated on water continue
+                    if self.wijk1[y_oud][x] != 4 and self.wijk1[y_oud][x + 11] != 4 and self.wijk1[y_oud + 7][x] != 4 and self.wijk1[y_oud + 7][x +11] != 4:
+                        self.water = False
 
                 nested_break = False
 
@@ -774,7 +820,17 @@ def main():
         price = Kosten(wijk1, 12, 5, 3)
         place = Placing(wijk1, 12, 5, 3)
         
-        place.water()
+        # create the possible water area coordinates for the gridmap outline
+        wijk1_top_left = [[0, 0]]
+        wijk1_bottom_right = [[32, 180]]
+        wijk2_top_left = [[0, 135], [0, 0], [128, 135], [128, 0]]
+        wijk2_bottom_right = [[32, 180], [32, 45], [160, 180], [160, 45]]
+        wijk3_top_left = [[44, 50]]
+        wijk3_bottom_right = [[116, 130]]
+        
+        # create the different water values of the gridmap
+        place.water(wijk3_top_left, wijk3_bottom_right)
+        
         coordinaten_eensgezin = place.eensgezinswoningen(12)
         coordinaten_bungalow = place.bungalow(5)
         coordinaten_maison = place.maison(3)
@@ -801,18 +857,18 @@ def main():
 
 
         # showing picture
-        # H = np.array(wijk1)
-        # plt.imshow(H)
-        # plt.pcolor(H, cmap = "Greens_r")
+    H = np.array(wijk1)
+    plt.imshow(H)
+    plt.pcolor(H, cmap = "Greens_r")
 
-        # plt.show()
-        # plt.savefig("blueprint.png")
+    plt.show()
+    plt.savefig("blueprint.png")
 
 
-        # # saving in csv file
-        # with open("wijk1.csv","w+") as my_csv:
-        #     csvWriter = csv.writer(my_csv,delimiter=',')
-        #     csvWriter.writerows(wijk1)
+    # saving in csv file
+    with open("wijk1.csv","w+") as my_csv:
+        csvWriter = csv.writer(my_csv,delimiter=',')
+        csvWriter.writerows(wijk1)
 
 if __name__ == '__main__':
     main()
