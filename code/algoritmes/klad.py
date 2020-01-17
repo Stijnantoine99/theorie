@@ -60,11 +60,11 @@ class Placing:
         while counter < aantal_eensgezins: 
             oud = 0
             oud_coor = 0 
-            print(oud_coor)
+            # print(oud_coor)
 
             if counter > 0:
                 
-                for i in range(0,20):
+                for i in range(0,50):
                     # set default value of empty gridmap area to False
                     vrij = False
 
@@ -118,35 +118,40 @@ class Placing:
                                 break
                     
                     new_coor = [x, y_oud]
-                    print(new_coor)
+                    # print(new_coor)
                     # klad_coor_lijst.append(coor)
 
                     eensgezins_coordinatenlijst[counter] = new_coor
 
-                    print(eensgezins_coordinatenlijst[counter])
+                
+                    # print(eensgezins_coordinatenlijst[counter])
 
                     price = Kosten(wijk1, 12, 5, 3)
-                    print(price)
+                    # print(price)
                     # hier Matthijs de ligt het probleem 
                     new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-                    print("hoi")
-                    print(new)
+                    # print("hoi")
+                    # print(new)
                     # prijs_lijst.append(new)
 
                     if new > oud:
-                        print(oud)
+                        # print(oud)
                         oud = new
                         oud_coor = new_coor
-                        print(oud)
-                        print
+                        # print(oud)
+                        # print
                 
+                for i in range(0,len(eensgezins_coordinatenlijst)):
+                    if eensgezins_coordinatenlijst[i] == [0,0]:
+                        eensgezins_coordinatenlijst[i] = oud_coor
+
                 eensgezins_coordinatenlijst[counter] = oud_coor
                 
-                print("oud")
-                print(oud_coor)
-                print(oud)
-                print(eensgezins_coordinatenlijst[counter])
-                print(eensgezins_coordinatenlijst)
+                # print("oud")
+                # print(oud_coor)
+                # print(oud)
+                # print(eensgezins_coordinatenlijst[counter])
+                # print(eensgezins_coordinatenlijst)
 
             # hoogste = max(prijs_lijst)
             # index = opbrengst.index(hoogste)
@@ -206,15 +211,18 @@ class Placing:
                             break
 
                 eensgezins_coordinatenlijst[counter] = [x,y_oud]
-            
+                for i in range(0,len(eensgezins_coordinatenlijst)):
+                    if eensgezins_coordinatenlijst[i] == [0,0]:
+                        eensgezins_coordinatenlijst[i] = [x,y_oud]
+
             counter += 1 
 
             # if an empty area has been found save the randomized coordinate in the houses list
             for coor in eensgezins_coordinatenlijst:
-                print('begin')
-                print(coor)
-                print(eensgezins_coordinatenlijst)
-                print('eind')
+                # print('begin')
+                # print(coor)
+                # print(eensgezins_coordinatenlijst)
+                # print('eind')
                 for i in range(0,12):
                 
                     # change the outer 2 meters of the area for the house to "vrijstaand"
@@ -241,10 +249,12 @@ class Placing:
             # plt.imshow(H)
             # plt.pcolor(H, cmap = "Greens_r")
             # plt.show() 
-
+        totaal = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+        print("totaal na eengezin")
+        print(totaal)
         return eensgezins_coordinatenlijst
 
-    def maison(self, aantal_maison, wijk1):
+    def maison(self, aantal_maison, wijk1, coordinaten_eensgezin):
 
         """ This method searches the gridmap for empty areas by creating random coordinates. If the area
          around the randomized coordinate fits this specific type of house, the house is placed and saved
@@ -254,8 +264,7 @@ class Placing:
         coordinaten_bungalow =[[0,0],[0,0],[0,0],[0,0],[0,0]]
 
         # create a coordinates list of the houses being placed
-        maison_coordinatenlijst = []
-        counter_maison = 0 
+        counter_maison = 0
 
         # while the amount of houses needed to be placed has not been reached yet search for empty area
         while counter_maison < aantal_maison: 
@@ -263,72 +272,10 @@ class Placing:
             oud_coor = 0 
             # set default value of empty gridmap area to False
 
-            if counter_maison > 0:
+            # if counter_maison > 0:
               
             # while the amount of houses needed to be placed has not been reached yet search for empty area
-                for i in range(0,10):
-                    vrij = False
-                    while vrij == False:
-                        
-                        # create a random coordinate on the gridmap (not in the water)
-                        x = random.randrange(32,142)
-                        y_oud = random.randrange(6,164)
-
-                        nested_break = False
-
-                        # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house horizontally
-                        for i in range(0,24):
-                            # print(y_oud - 6, x - 6)
-                            
-                            # if the coordinate is no empty area to place a house break out of the scanning loop
-                            if self.wijk1[y_oud - 6][x - 6 + i] == 1 or self.wijk1[y_oud - 6][x - 6 + i] == 2 or self.wijk1[y_oud - 6][x - 6 + i] == 3:
-                                
-                                # change the nested break value to True
-                                vrij = False
-                                nested_break = True
-                                break
-
-                            # if the coordinate is empty
-                            else:
-
-                                # change default value of empty gridmap area to True
-                                vrij = True   
-
-                            # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house vertically    
-                            for j in range(0,22):
-
-                                # if the coordinate is no empty area to place a house break out of the scanning loop
-                                if self.wijk1[y_oud - 6 + j][x - 6 + i] == 1 or self.wijk1[y_oud - 6 + j][x - 6 + i] == 2 or self.wijk1[y_oud - 6 + j][x - 6 + i] == 3:
-                                    
-                                    # change the nested break value to True
-                                    vrij = False
-                                    nested_break = True
-                                    break
-                                
-                                # if the coordinate is empty
-                                else:
-                                    vrij = True
-
-                            # if there has been found no empty space break and find a new randomized coordinate
-                            if nested_break:
-                                break
-                    new_coor = [x, y_oud]
-                    # if an empty area has been found save the randomized coordinate in the houses list
-                    eensgezins_coordinatenlijst[counter_maison] = new_coor
-                    price = Kosten(wijk1, 12, 5, 3)
-                    new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-                    
-                    if new > oud:
-                        print(oud)
-                        oud = new
-                        oud_coor = new_coor
-                        print(oud)
-                        print
-                    
-
-                maison_coordinatenlijst[counter_maison] = oud_coor
-
-            else:
+            for i in range(0,50):
                 vrij = False
                 while vrij == False:
                     
@@ -374,11 +321,84 @@ class Placing:
                         # if there has been found no empty space break and find a new randomized coordinate
                         if nested_break:
                             break
+                new_coor = [x, y_oud]
+                maison_coordinatenlijst[counter_maison] = new_coor
+                # for i in range(0,len(maison_coordinatenlijst)):
+                #     if maison_coordinatenlijst[i] == [0,0]:
+                #         maison_coordinatenlijst[i] = new_coor
                 
-                print(counter_maison)
-                print(x)
-                print(y_oud)
-                maison_coordinatenlijst[counter_maison] = [x, y_oud]
+                # if an empty area has been found save the randomized coordinate in the houses list
+                # print(counter_maison)
+                # print(new_coor)
+                # print(maison_coordinatenlijst[1])
+
+                # print(maison_coordinatenlijst[0])
+                price = Kosten(wijk1, 12, 5, 3)
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                
+                if new > oud:
+                    # print(oud)
+                    oud = new
+                    oud_coor = new_coor
+                    # print(oud)
+                    # print
+                
+            for i in range(0,len(maison_coordinatenlijst)):
+                if maison_coordinatenlijst[i] == [0,0]:
+                    maison_coordinatenlijst[i] = oud_coor
+            maison_coordinatenlijst[counter_maison] = oud_coor
+
+            # else:
+            #     vrij = False
+            #     while vrij == False:
+                    
+            #         # create a random coordinate on the gridmap (not in the water)
+            #         x = random.randrange(32,142)
+            #         y_oud = random.randrange(6,164)
+
+            #         nested_break = False
+
+            #         # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house horizontally
+            #         for i in range(0,24):
+            #             # print(y_oud - 6, x - 6)
+                        
+            #             # if the coordinate is no empty area to place a house break out of the scanning loop
+            #             if self.wijk1[y_oud - 6][x - 6 + i] == 1 or self.wijk1[y_oud - 6][x - 6 + i] == 2 or self.wijk1[y_oud - 6][x - 6 + i] == 3:
+                            
+            #                 # change the nested break value to True
+            #                 vrij = False
+            #                 nested_break = True
+            #                 break
+
+            #             # if the coordinate is empty
+            #             else:
+
+            #                 # change default value of empty gridmap area to True
+            #                 vrij = True   
+
+            #             # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house vertically    
+            #             for j in range(0,22):
+
+            #                 # if the coordinate is no empty area to place a house break out of the scanning loop
+            #                 if self.wijk1[y_oud - 6 + j][x - 6 + i] == 1 or self.wijk1[y_oud - 6 + j][x - 6 + i] == 2 or self.wijk1[y_oud - 6 + j][x - 6 + i] == 3:
+                                
+            #                     # change the nested break value to True
+            #                     vrij = False
+            #                     nested_break = True
+            #                     break
+                            
+            #                 # if the coordinate is empty
+            #                 else:
+            #                     vrij = True
+
+            #             # if there has been found no empty space break and find a new randomized coordinate
+            #             if nested_break:
+            #                 break
+                
+            #     print(counter_maison)
+            #     print(x)
+            #     print(y_oud)
+            #     maison_coordinatenlijst[counter_maison] = [x, y_oud]
                     
             counter_maison += 1
    
@@ -407,87 +427,117 @@ class Placing:
                 
          
                 
-
+        totaal = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+        print('totaal na maison')
+        print(totaal)
         return maison_coordinatenlijst
 
-    def bungalow(self, aantal_bungalow):
+    def bungalow(self, aantal_bungalow, wijk1, coordinaten_eensgezin, coordinaten_maison):
 
         """ This method searches the gridmap for empty areas by creating random coordinates. If the area
          around the randomized coordinate fits this specific type of house, the house is placed and saved
          in the coordinates list. """
          
         # create a coordinates list of the houses being placed
-        bungalow_coordinatenlijst = []
+        coordinaten_bungalow =[[0,0],[0,0],[0,0],[0,0],[0,0]]
+        bungalow_coordinatenlijst = coordinaten_bungalow
         counter_bungalow = 0 
 
         # while the amount of houses needed to be placed has not been reached yet search for empty area
         while counter_bungalow < aantal_bungalow: 
-            vrij = False
+            oud = 0
+            oud_coor = 0
+            
+            for i in range(0,50):
+                vrij = False
 
-            # set default value of empty gridmap area to False
-            while vrij == False:
-                
-                # create a random coordinate on the gridmap (not in the water)
-                x = random.randrange(32,146)
-                y_oud = random.randrange(3,170)
-
-                nested_break = False
-
-                # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house horizontally
-                for i in range(0,17):
+                # set default value of empty gridmap area to False
+                while vrij == False:
                     
-                    # if the coordinate is no empty area to place a house break out of the scanning loop
-                    if self.wijk1[y_oud - 3][x - 3 + i] == 1 or self.wijk1[y_oud - 3][x - 3 + i] == 2 or self.wijk1[y_oud - 3][x - 3 + i] == 3:
-                        vrij = False
-                        break
+                    # create a random coordinate on the gridmap (not in the water)
+                    x = random.randrange(32,146)
+                    y_oud = random.randrange(3,170)
 
-                    # change the nested break value to True
-                    else:
-                        vrij = True
+                    nested_break = False
 
-                    # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house vertically    
-                    for j in range(0,13):
+                    # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house horizontally
+                    for i in range(0,17):
                         
                         # if the coordinate is no empty area to place a house break out of the scanning loop
-                        if self.wijk1[y_oud - 3 + j][x - 3 + i] == 1 or self.wijk1[y_oud - 3 + j][x - 3 + i] == 2 or self.wijk1[y_oud - 3 + j][x - 3 + i] == 3:
+                        if self.wijk1[y_oud - 3][x - 3 + i] == 1 or self.wijk1[y_oud - 3][x - 3 + i] == 2 or self.wijk1[y_oud - 3][x - 3 + i] == 3:
                             vrij = False
-                            nested_break = True
                             break
-                        
+
                         # change the nested break value to True
                         else:
                             vrij = True
 
-                    # if there has been found no empty space break and find a new randomized coordinate
-                    if nested_break:
-                        break
+                        # check from the randomly chosen coordinate as the top left corner if there is empty space to place a house vertically    
+                        for j in range(0,13):
+                            
+                            # if the coordinate is no empty area to place a house break out of the scanning loop
+                            if self.wijk1[y_oud - 3 + j][x - 3 + i] == 1 or self.wijk1[y_oud - 3 + j][x - 3 + i] == 2 or self.wijk1[y_oud - 3 + j][x - 3 + i] == 3:
+                                vrij = False
+                                nested_break = True
+                                break
+                            
+                            # change the nested break value to True
+                            else:
+                                vrij = True
 
+                        # if there has been found no empty space break and find a new randomized coordinate
+                        if nested_break:
+                            break
+                new_coor = [x, y_oud]
+                bungalow_coordinatenlijst[counter_bungalow] = new_coor
+
+                
+                price = Kosten(wijk1, 12, 5, 3)
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                
+                if new > oud:
+                    # print(oud)
+                    oud = new
+                    oud_coor = new_coor
+                    # print(oud)
+                    # print
+                
+            for i in range(0,len(bungalow_coordinatenlijst)):
+                if bungalow_coordinatenlijst[i] == [0,0]:
+                    bungalow_coordinatenlijst[i] = oud_coor
+
+            bungalow_coordinatenlijst[counter_bungalow] = oud_coor
             # if an empty area has been found save the randomized coordinate in the houses list
-            bungalow_coordinatenlijst.append([x,y_oud])
+            counter_bungalow += 1            
             
-            for i in range(0,17):
-
-                # change the outer 2 meters of the area for the house to "vrijstaand"
-                if i == 0 or i == 1 or i == 2 or i == 14 or i == 15 or i == 16 :
-                    self.wijk1[y_oud - 3][x - 3 + i] = 5
-
-                # change the area inside the "vrijstaand" area to "eengezins" value
-                else:
-                    # wijk1[y_oud][x] = 1
-                    # y = y_oud + j
-                    self.wijk1[y_oud - 3][x - 3 + i] = 2
-
-                for j in range(0,13):
-
+            print(bungalow_coordinatenlijst)
+        
+            for coor in bungalow_coordinatenlijst:
+                print(coor)
+                for i in range(0,17):
+                    
                     # change the outer 2 meters of the area for the house to "vrijstaand"
-                    if j == 0 or j == 1 or j == 2 or j == 10 or j == 11 or j == 12 or i == 0 or i == 1 or i == 2 or i == 14 or i == 15 or i == 16:
-                        self.wijk1[y_oud - 3 + j][x - 3 + i] = 5                        
+                    if i == 0 or i == 1 or i == 2 or i == 14 or i == 15 or i == 16 :
+                        self.wijk1[coor[1] - 3][coor[0] - 3 + i] = 5
 
                     # change the area inside the "vrijstaand" area to "eengezins" value
-                    else: 
-                        self.wijk1[y_oud - 3 + j][x - 3 + i] = 2
-            counter_bungalow += 1
+                    else:
+                        # wijk1[y_oud][x] = 1
+                        # y = y_oud + j
+                        self.wijk1[coor[1] - 3][coor[0] - 3 + i] = 2
 
+                    for j in range(0,13):
+
+                        # change the outer 2 meters of the area for the house to "vrijstaand"
+                        if j == 0 or j == 1 or j == 2 or j == 10 or j == 11 or j == 12 or i == 0 or i == 1 or i == 2 or i == 14 or i == 15 or i == 16:
+                            self.wijk1[coor[1] - 3 + j][coor[0] - 3 + i] = 5                        
+
+                        # change the area inside the "vrijstaand" area to "eengezins" value
+                        else: 
+                            self.wijk1[coor[1] - 3 + j][coor[0] - 3 + i] = 2
+        totaal = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+        print('totaal na bungalow')
+        print(totaal)
         return bungalow_coordinatenlijst
 
 class Kosten():
@@ -1219,8 +1269,8 @@ def main():
         
         place.water()
         coordinaten_eensgezin = place.eensgezinswoningen(12, wijk1)
-        coordinaten_maison = place.maison(3, wijk1)
-        coordinaten_bungalow = place.bungalow(5)
+        coordinaten_maison = place.maison(3, wijk1, coordinaten_eensgezin)
+        coordinaten_bungalow = place.bungalow(5, wijk1, coordinaten_eensgezin, coordinaten_maison)
 
         print("coordinaten before")
         print(coordinaten_eensgezin)
@@ -1231,7 +1281,7 @@ def main():
         print("before")
         print(totaal)
 
-        for i in range(0):
+        for i in range(0,3):
             move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk1)
             move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk1)
             move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk1)
@@ -1246,12 +1296,12 @@ def main():
         total_prices.append(totaal)
 
         # showing picture
-        # H = np.array(wijk1)
-        # plt.imshow(H)
-        # plt.pcolor(H, cmap = "Greens_r")
+        H = np.array(wijk1)
+        plt.imshow(H)
+        plt.pcolor(H, cmap = "Greens_r")
 
-        # plt.show()
-        # plt.savefig("blueprint.png")
+        plt.show()
+        plt.savefig("blueprint.png")
 
 
         # saving in csv file
@@ -1264,13 +1314,13 @@ def main():
     print(max(total_prices))
 
 
-        # showing picture
-    H = np.array(wijk1)
-    plt.imshow(H)
-    plt.pcolor(H, cmap = "Greens_r")
+    #     # showing picture
+    # H = np.array(wijk1)
+    # plt.imshow(H)
+    # plt.pcolor(H, cmap = "Greens_r")
 
-    plt.show()
-    plt.savefig("blueprint.png")
+    # plt.show()
+    # plt.savefig("blueprint.png")
 
 
         # # saving in csv file
