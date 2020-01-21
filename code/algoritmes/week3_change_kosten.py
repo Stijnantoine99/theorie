@@ -1128,7 +1128,7 @@ class Move():
             lijst = []
             opbrengst = []
             lijst.append(coordinaten)
-         
+
             new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
             opbrengst.append(new)
 
@@ -1136,8 +1136,6 @@ class Move():
             wijk[coordinaten[0]:(coordinaten[0]+12) , coordinaten[1]:(coordinaten[1]+10)] = 0
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
-
-            if x == 5
             linksboven = [x,y]
             lijst.append(linksboven)
 
@@ -1147,7 +1145,17 @@ class Move():
             # Calculate
             coordinaten_maison[counter] = linksboven
             new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+            if wijk[x-6][y-6] == 1 or wijk[x-6][y-6] == 2 or wijk[x-6][y-6] == 3:
+                new = 0
+            else: 
+                # Draw
+                wijk[x:x+12, y:y+10] = 3
+            
+                # Calculate
+                coordinaten_maison[counter] = linksboven
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+
+                opbrengst.append(new)
 
             # Boven
             wijk[x:x+12, y:y+10] = 0
