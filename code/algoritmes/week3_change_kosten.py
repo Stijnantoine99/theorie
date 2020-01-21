@@ -67,44 +67,65 @@ class Placing:
         eensgezins_coordinatenlijst = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
         coordinaten_maison = [[0,0],[0,0],[0,0]]
         coordinaten_bungalow =[[0,0],[0,0],[0,0],[0,0],[0,0]]
-        coordinaten_eensgezin = eensgezins_coordinatenlijst
 
         for i in range(0,aantal_eensgezins):
+            
+            highest_price = 0
 
-            x = random.randrange(2,150)
-            y = random.randrange(2,170)
-        
-            check = True
-            while check == True:
+            for j in range(0,3):
 
-                if self.index_water in self.wijk[y:(y+8),x:(x+8)]:
-                    x = random.randrange(2,150)
-                    y = random.randrange(2,170)
+                x = random.randrange(2,150)
+                y = random.randrange(2,170)
 
-                elif self.index_eengezinswoning in self.wijk[(y-2):(y+10),(x-2):(x+10)] or self.index_bungalow in self.wijk[(y-2):(y+10),(x-2):(x+10)] or self.index_maison in self.wijk[(y-2):(y+10),(x-2):(x+10)]:
-                    x = random.randrange(2,150)
-                    y = random.randrange(2,170)
+                check = True
+                while check == True:
 
-                elif self.index_vrijstand in self.wijk[y:(y+8),x:(x+8)]:
-                    x = random.randrange(2,150)
-                    y = random.randrange(2,170)
-                    
-                else:
-                    check = False
+                    if self.index_water in self.wijk[y:(y+8),x:(x+8)]:
+                        x = random.randrange(2,150)
+                        y = random.randrange(2,170)
 
-            new_coor = [x,y]
-            eensgezins_coordinatenlijst[i] = new_coor
+                    elif self.index_eengezinswoning in self.wijk[(y-2):(y+10),(x-2):(x+10)] or self.index_bungalow in self.wijk[(y-2):(y+10),(x-2):(x+10)] or self.index_maison in self.wijk[(y-2):(y+10),(x-2):(x+10)]:
+                        x = random.randrange(2,150)
+                        y = random.randrange(2,170)
 
-            self.wijk[(y - 2):(y + 10),(x - 2):(x + 10)] = 5
-            self.wijk[y:(y + 8),x:(x + 8)] = 1
+                    elif self.index_vrijstand in self.wijk[y:(y+8),x:(x+8)]:
+                        x = random.randrange(2,150)
+                        y = random.randrange(2,170)
+                        
+                    else:
+                        check = False
 
-        # for coor in eensgezins_coordinatenlijst:
+                if i == 0:
+                    highest_price_coor = [x,y]
+                    break
 
-        #     self.wijk[(coor[1] - 2):(coor[1] + 10),(coor[0] - 2):(coor[0] + 10)] = 5
-        #     self.wijk[(coor[1]):(coor[1] + 8),(coor[0]):(coor[0] + 8)] = 1
+                new_coor = [x,y]
+                eensgezins_coordinatenlijst[i] = new_coor
 
-        price = Kosten(self.wijk, 12, 5, 3)
-        totaal = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                self.wijk[(y - 2):(y + 10),(x - 2):(x + 10)] = 5
+                self.wijk[y:(y + 8),x:(x + 8)] = 1
+
+                price = Kosten(self.wijk, 12, 5, 3)
+                new_price = price.eengezins_cost(eensgezins_coordinatenlijst, self.aantal_eensgezins)
+
+                self.wijk[(y - 2):(y + 10),(x - 2):(x + 10)] = 0
+                self.wijk[y:(y + 8),x:(x + 8)] = 0
+
+                if new_price > highest_price:
+                    highest_price = new_price
+                    highest_price_coor = new_coor
+
+            for b in range(0,len(eensgezins_coordinatenlijst)):
+                if eensgezins_coordinatenlijst[b] == [0,0]:
+                    eensgezins_coordinatenlijst[b] = highest_price_coor
+
+            eensgezins_coordinatenlijst[i] = highest_price_coor
+
+            for coor in eensgezins_coordinatenlijst:
+                y = coor[1]
+                x = coor[0]
+                self.wijk[(y - 2):(y + 10),(x - 2):(x + 10)] = 5
+                self.wijk[y:(y + 8),x:(x + 8)] = 1
 
         return eensgezins_coordinatenlijst
 
@@ -119,36 +140,66 @@ class Placing:
         coordinaten_bungalow =[[0,0],[0,0],[0,0],[0,0],[0,0]]
 
         for i in range(0,aantal_maison):
-            x = random.randrange(6,142)
-            y = random.randrange(6,164)
+
+            highest_price = 0
             
-            check = True
-            while check == True:
+            for j in range(0,3):
 
-                if self.index_water in self.wijk[y:(y+10),x:(x+12)]:
-                    x = random.randrange(6,142)
-                    y = random.randrange(6,164)
+                x = random.randrange(6,142)
+                y = random.randrange(6,164)
+                
+                check = True
+                while check == True:
 
-                elif self.index_eengezinswoning in self.wijk[(y-6):(y+16),(x-6):(x+18)] or self.index_bungalow in self.wijk[(y-6):(y+16),(x-6):(x+18)] or self.index_maison in self.wijk[(y-6):(y+16),(x-6):(x+18)]:
-                    x = random.randrange(6,142)
-                    y = random.randrange(6,164)
+                    if self.index_water in self.wijk[y:(y+10),x:(x+12)]:
+                        x = random.randrange(6,142)
+                        y = random.randrange(6,164)
 
-                elif self.index_vrijstand in self.wijk[y:(y+10),x:(x+12)]:
-                    x = random.randrange(6,142)
-                    y = random.randrange(6,164)
+                    elif self.index_eengezinswoning in self.wijk[(y-6):(y+16),(x-6):(x+18)] or self.index_bungalow in self.wijk[(y-6):(y+16),(x-6):(x+18)] or self.index_maison in self.wijk[(y-6):(y+16),(x-6):(x+18)]:
+                        x = random.randrange(6,142)
+                        y = random.randrange(6,164)
 
-                else:
-                    check = False
+                    elif self.index_vrijstand in self.wijk[y:(y+10),x:(x+12)]:
+                        x = random.randrange(6,142)
+                        y = random.randrange(6,164)
 
-            new_coor = [x,y]
-            maison_coordinatenlijst[i] = new_coor
+                    else:
+                        check = False
+                    
+                if i == 0:
+                    highest_price_coor = [x,y]
+                    break
 
-            self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
-            self.wijk[y:(y + 10),x:(x + 12)] = 3
+                new_coor = [x,y]
+                maison_coordinatenlijst[i] = new_coor
 
-        price = Kosten(self.wijk, 12, 5, 3)
-        totaal = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
+                self.wijk[y:(y + 10),x:(x + 12)] = 3
+
+                price = Kosten(self.wijk, 12, 5, 3)
+                new_mais = price.maison_cost(maison_coordinatenlijst, self.aantal_maison)
+                new_eens = price.eengezins_cost(coordinaten_eensgezin, self.aantal_eensgezins)
+                new_price = new_mais + new_eens
+
+                self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 0
+                self.wijk[y:(y + 10),x:(x + 12)] = 0
         
+                if new_price > highest_price:
+                    highest_price = new_price
+                    highest_price_coor = new_coor
+
+            for b in range(0,len(maison_coordinatenlijst)):
+                if maison_coordinatenlijst[b] == [0,0]:
+                    maison_coordinatenlijst[b] = highest_price_coor
+
+            maison_coordinatenlijst[i] = highest_price_coor
+
+            for coor in maison_coordinatenlijst:
+                y = coor[1]
+                x = coor[0]
+                self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
+                self.wijk[y:(y + 10),x:(x + 12)] = 3
+                
         return maison_coordinatenlijst
 
     def bungalow(self, aantal_bungalow, coordinaten_eensgezin, coordinaten_maison):
@@ -163,35 +214,63 @@ class Placing:
         counter_bungalow = 0 
 
         for i in range(0,aantal_bungalow):
-            x = random.randrange(3,146)
-            y = random.randrange(3,170)
-            
-            check = True
-            while check == True:
 
-                if self.index_water in self.wijk[y:(y+7),x:(x+11)]:
-                    x = random.randrange(3,146)
-                    y = random.randrange(3,170)
+            highest_price = 0
 
-                elif self.index_eengezinswoning in self.wijk[(y-3):(y+10),(x-3):(x+14)] or self.index_bungalow in self.wijk[(y-3):(y+10),(x-3):(x+14)] or self.index_maison in self.wijk[(y-3):(y+10),(x-3):(x+14)]:
-                    x = random.randrange(3,146)
-                    y = random.randrange(3,170)
+            for j in range(0,3):
+  
+                x = random.randrange(3,146)
+                y = random.randrange(3,170)
 
-                elif self.index_vrijstand in self.wijk[y:(y+7),x:(x+11)]:
-                    x = random.randrange(3,146)
-                    y = random.randrange(3,170)
-                
-                else:
-                    check = False
+                check = True
+                while check == True:
 
-            new_coor = [x,y]
-            bungalow_coordinatenlijst[i] = new_coor
+                    if self.index_water in self.wijk[y:(y+7),x:(x+11)]:
+                        x = random.randrange(3,146)
+                        y = random.randrange(3,170)
 
-            self.wijk[(y - 3):(y + 10),(x - 3):(x + 14)] = 5
-            self.wijk[y:(y + 7),x:(x + 11)] = 2
+                    elif self.index_eengezinswoning in self.wijk[(y-3):(y+10),(x-3):(x+14)] or self.index_bungalow in self.wijk[(y-3):(y+10),(x-3):(x+14)] or self.index_maison in self.wijk[(y-3):(y+10),(x-3):(x+14)]:
+                        x = random.randrange(3,146)
+                        y = random.randrange(3,170)
 
-        price = Kosten(self.wijk, 12, 5, 3)
-        totaal = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                    elif self.index_vrijstand in self.wijk[y:(y+7),x:(x+11)]:
+                        x = random.randrange(3,146)
+                        y = random.randrange(3,170)
+                    
+                    else:
+                        check = False
+
+                if i == 0:
+                    highest_price_coor = [x,y]
+                    break
+
+                new_coor = [x,y]
+                bungalow_coordinatenlijst[i] = new_coor
+
+                self.wijk[(y - 3):(y + 10),(x - 3):(x + 14)] = 5
+                self.wijk[y:(y + 7),x:(x + 11)] = 2
+
+                price = Kosten(self.wijk, 12, 5, 3)
+                new_price = price.total(coordinaten_maison, bungalow_coordinatenlijst, coordinaten_eensgezin)
+
+                self.wijk[(y - 3):(y + 10),(x - 3):(x + 14)] = 0
+                self.wijk[y:(y + 7),x:(x + 11)] = 0
+
+                if new_price > highest_price:
+                    highest_price = new_price
+                    highest_price_coor = new_coor
+
+            for b in range(0,len(bungalow_coordinatenlijst)):
+                if bungalow_coordinatenlijst[b] == [0,0]:
+                    bungalow_coordinatenlijst[b] = highest_price_coor
+
+            bungalow_coordinatenlijst[i] = highest_price_coor
+
+            for coor in bungalow_coordinatenlijst:
+                y = coor[1]
+                x = coor[0]
+                self.wijk[(y - 3):(y + 10),(x - 3):(x + 14)] = 5
+                self.wijk[y:(y + 7),x:(x + 11)] = 2
 
         return bungalow_coordinatenlijst
 
@@ -232,9 +311,7 @@ class Kosten():
         coordinateslijst = coordinaten
 
         # check the outline of every eengezinshuis
-
         for coordinates in coordinateslijst:
-
             eensgezinswoning = 1 
             bungalow = 2 
             maison = 3      
@@ -379,13 +456,13 @@ class Kosten():
                     if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
                     else:
-                        self.total_eengezins = self.total_eengezins + self.percentage_eengezins
+                        self.total_maison = self.total_maison + self.percentage_maison
                         afstand_tot_huis += 1
                 except IndexError:
                     if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
                     else:
-                        self.total_eengezins = self.total_eengezins + self.percentage_eengezins
+                        self.total_maison = self.total_maison + self.percentage_maison
                         afstand_tot_huis += 1
 
             self.wijk[(y_coordinaat - 6):(y_coordinaat + 16),(x_coordinaat - 6):(x_coordinaat + 18)] = 5
@@ -1016,7 +1093,7 @@ class Move():
 def main():
     
     wijk_type = 1
-    runs = 1000
+    runs = 10
 
     total_prices = []
 
