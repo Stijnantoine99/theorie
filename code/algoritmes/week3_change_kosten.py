@@ -235,21 +235,6 @@ class Kosten():
 
         for coordinates in coordinateslijst:
 
-            # create default variables for checking the outline
-
-            # range_eengezins = 14
-            # locatie_outline_boven_x_as =  -3
-            # locatie_outline_boven_y_as = -3
-            # locatie_outline_onder_x_as = 11
-            # locatie_outline_onder_y_as = 11
-            # constante_x_links = -3
-            # constante_x_rechts = 11
-
-            # check = True
-            # counter_x = 0
-            # counter_y = 0 
-            # counter_x_onder = 0
-            # counter_y_onder = 0
             eensgezinswoning = 1 
             bungalow = 2 
             maison = 3      
@@ -266,149 +251,24 @@ class Kosten():
                 y = y_coordinaat - afstand_tot_huis
                 y_ver = y_coordinaat + 8 + afstand_tot_huis
 
+                self.wijk[(y_coordinaat - 2):(y_coordinaat + 10),(x_coordinaat - 2):(x_coordinaat + 10)] = 0
+    
                 try:
-                    if eensgezinswoning in self.wijk[x:x_ver, y:y_ver] or bungalow in self.wijk[x:x_ver, y:y_ver] or maison in self.wijk[x:x_ver, y:y_ver]:
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
                     else:
                         self.total_eengezins = self.total_eengezins + self.percentage_eengezins
                         afstand_tot_huis += 1
                 
                 except IndexError:
-                    if eensgezinswoning in self.wijk[x:x_ver, y:y_ver] or bungalow in self.wijk[x:x_ver, y:y_ver] or maison in self.wijk[x:x_ver, y:y_ver]:
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
                     else:
                         self.total_eengezins = self.total_eengezins + self.percentage_eengezins
                         afstand_tot_huis += 1
 
-                
-
-
-            # while som < 241 or som > 600:
-            #     x = x_coordinaat - afstand_tot_huis
-            #     x_ver = x_coordinaat + 8 + afstand_tot_huis
-            #     y = y_coordinaat - afstand_tot_huis
-            #     y_ver = y_coordinaat + 8 + afstand_tot_huis
-                
-            #     try: 
-            #         som = np.sum(self.wijk[x:x_ver, y:y_ver])
-            #         if som < 241:
-            #             self.total_eengezins = self.total_eengezins + self.percentage_eengezins
-            #             afstand_tot_huis += 1 
-            #     except IndexError:
-            #         som = np.sum(self.wijk[(x_coordinaat - afstand_tot_huis):(x_coordinaat + 8 + afstand_tot_huis), (y_coordinaat - afstand_tot_huis):(y_coordinaat + 8 + afstand_tot_huis)])
-            #         if som < 241:
-            #             self.total_eengezins = self.total_eengezins + self.percentage_eengezins
-            #             afstand_tot_huis += 1
-            #         break
-                    
-            
-                
-
-
-
-
-
-
-
-            # while check == True:
-
-            #     # check area of x-axis topside from the top left
-            #     for i in range(range_eengezins):
-
-            #         # if a house has been found in the area stop checking
-            #         try:    
-            #             if self.wijk[coordinates[1] + locatie_outline_boven_x_as][coordinates[0] + locatie_outline_boven_y_as] == 1 or self.wijk[coordinates[1] + locatie_outline_boven_x_as][coordinates[0] + locatie_outline_boven_y_as] == 2 or self.wijk[coordinates[1] + locatie_outline_boven_x_as][coordinates[0] + locatie_outline_boven_y_as] == 3:
-            #                 check = False
-            #                 break
-
-            #             else:
-                            
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_boven_x_as += 1
-            #                 counter_x += 1 
-            #         except IndexError:
-            #             locatie_outline_boven_x_as += 1
-            #             counter_x += 1 
-
-            #     # check area of y-axis leftside from the top left
-            #     for i in range(range_eengezins):
-
-            #         # if a house has been found in the area stop checking
-            #         try:    
-            #             if self.wijk[coordinates[1] + constante_x_links][coordinates[0] + locatie_outline_boven_y_as] == 1 or self.wijk[coordinates[1] + constante_x_links][coordinates[0] + locatie_outline_boven_y_as] == 2 or self.wijk[coordinates[1] + constante_x_links][coordinates[0] + locatie_outline_boven_y_as] == 3 :
-            #                 check = False
-            #                 break
-
-            #             else:
-                            
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_boven_y_as += 1
-            #                 counter_y += 1 
-
-            #         except IndexError:
-            #             locatie_outline_boven_y_as += 1
-            #             counter_y += 1 
-                    
-            #     # check area of x-axis bottomside from the bottom right
-            #     for i in range(range_eengezins):
-
-            #         # if a house has been found in the area stop checking
-            #         try:    
-            #             if self.wijk[coordinates[1] + locatie_outline_onder_x_as][coordinates[0] + locatie_outline_onder_y_as] == 1 or self.wijk[coordinates[1] + locatie_outline_onder_x_as][coordinates[0] + locatie_outline_onder_y_as] == 2 or self.wijk[coordinates[1] + locatie_outline_onder_x_as][coordinates[0] + locatie_outline_onder_y_as] == 3:
-            #                 check = False
-            #                 break
-
-            #             else:
-                            
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_onder_x_as -= 1
-            #                 counter_x_onder -= 1 
-
-            #         except IndexError:
-            #             locatie_outline_onder_x_as -= 1
-            #             counter_x_onder -= 1 
-                        
-            #     # check area of y-axis rightside from the bottom right
-            #     for i in range(range_eengezins):
-
-            #         # if a house has been found in the area stop checking
-            #         try:
-            #             if self.wijk[coordinates[1] + constante_x_rechts][coordinates[0] + locatie_outline_onder_y_as] == 1 or self.wijk[coordinates[1] + constante_x_rechts][coordinates[0] + locatie_outline_onder_y_as] == 2 or self.wijk[coordinates[1] + constante_x_rechts][coordinates[0] + locatie_outline_onder_y_as] == 3:
-            #                 check = False
-            #                 break 
-
-            #             else:
-                            
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_onder_y_as -= 1
-            #                 counter_y_onder -= 1
-                    
-            #         except IndexError:
-            #             locatie_outline_onder_y_as -= 1
-            #             counter_y_onder -= 1
-
-            #     # reset tracers back to default values and increment by one in order to check next outline around the house
-            #     locatie_outline_boven_x_as = locatie_outline_boven_x_as - counter_x - 1
-            #     locatie_outline_boven_y_as = locatie_outline_boven_y_as - counter_y - 1
-            #     constante_x_links = locatie_outline_boven_x_as
-
-            #     # reset tracers back to default values and increment by one in order to check next outline around the house
-            #     locatie_outline_onder_x_as = locatie_outline_onder_x_as - counter_x_onder - 1
-            #     locatie_outline_onder_y_as = locatie_outline_onder_y_as - counter_x_onder - 1
-            #     constante_x_rechts = locatie_outline_onder_x_as
-
-            #     # reset counters back to default values
-            #     counter_x = 0
-            #     counter_y = 0 
-            #     counter_x_onder = 0
-            #     counter_y_onder = 0
-
-            #     # When no houses found expand outline by 1 meter on every side
-            #     range_eengezins = range_eengezins + 2
-
-            #     # adjust price of the house by the percentage increase
-            #     if check == True:
-            #         self.total_eengezins = self.total_eengezins + self.percentage_eengezins
+            self.wijk[(y_coordinaat - 2):(y_coordinaat + 10),(x_coordinaat - 2):(x_coordinaat + 10)] = 5
+            self.wijk[y_coordinaat:(y_coordinaat + 8),x_coordinaat:(x_coordinaat + 8)] = 1
 
         return self.total_eengezins
         
@@ -435,24 +295,6 @@ class Kosten():
         # check the outline of every bungalow
         for coordinates in coordinaten:
 
-            # create default variables for checking the outline
-
-            # range_bungalow_x = 19
-            # range_bungalow_y = 15
-            # locatie_outline_boven_x_as =  -4
-            # locatie_outline_boven_y_as = -4
-            # locatie_outline_onder_x_as = 15
-            # locatie_outline_onder_y_as = 11
-            # constante_x_links = -4
-            # constante_x_rechts = 15
-
-            # check = True
-            # counter_x = 0
-            # counter_y = 0 
-            # counter_x_onder = 0
-            # counter_y_onder = 0
-
-
             eensgezinswoning = 1 
             bungalow = 2 
             maison = 3 
@@ -463,154 +305,33 @@ class Kosten():
             som = 0 
             
             check = True
+
             while check == True:
                 x = x_coordinaat - afstand_tot_huis
                 x_ver = x_coordinaat + 11 + afstand_tot_huis
                 y = y_coordinaat - afstand_tot_huis
                 y_ver = y_coordinaat + 7 + afstand_tot_huis
+                
+                self.wijk[(y_coordinaat - 3):(y_coordinaat + 10),(x_coordinaat - 3):(x_coordinaat + 14)] = 0
 
                 try: 
-                    if eensgezinswoning in self.wijk[x:x_ver, y:y_ver] or bungalow in self.wijk[x:x_ver, y:y_ver] or maison in self.wijk[x:x_ver, y:y_ver]:
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
                     else:
                         self.total_eengezins = self.total_eengezins + self.percentage_eengezins
                         afstand_tot_huis += 1 
                
                 except IndexError:
-                    if eensgezinswoning in self.wijk[x:x_ver, y:y_ver] or bungalow in self.wijk[x:x_ver, y:y_ver] or maison in self.wijk[x:x_ver, y:y_ver]:
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
                     else:
                         self.total_eengezins = self.total_eengezins + self.percentage_eengezins
                         afstand_tot_huis += 1 
 
 
+            self.wijk[(y_coordinaat - 3):(y_coordinaat + 10),(x_coordinaat - 3):(x_coordinaat + 14)] = 5
+            self.wijk[y_coordinaat:(y_coordinaat + 7),x_coordinaat:(x_coordinaat + 11)] = 2
 
-
-
-            
-            
-            # while som < 466 or som > 1000:
-            #     x = x_coordinaat - afstand_tot_huis
-            #     x_ver = x_coordinaat + 11 + afstand_tot_huis
-            #     y = y_coordinaat - afstand_tot_huis
-            #     y_ver = y_coordinaat + 7 + afstand_tot_huis
-                
-            #     try: 
-            #         som = np.sum(self.wijk[x:x_ver, y:y_ver])
-            #         if som < 466:
-            #             self.total_eengezins = self.total_eengezins + self.percentage_eengezins
-            #             afstand_tot_huis += 1 
-            #     except IndexError:
-            #         som = np.sum(self.wijk[(x_coordinaat - afstand_tot_huis):(x_coordinaat + 8 + afstand_tot_huis), (y_coordinaat - afstand_tot_huis):(y_coordinaat + 8 + afstand_tot_huis)])
-            #         if som < 466:
-            #             self.total_eengezins = self.total_eengezins + self.percentage_eengezins
-            #             afstand_tot_huis += 1
-            #         break
-            
-            
-            
-            # while check == True:
-
-            #     # check area of x-axis topside from the top left
-            #     for i in range(range_bungalow_x):
-
-            #         # if a house has been found in the area stop checking
-            #         try:
-            #             if self.wijk[coordinates[1] + locatie_outline_boven_x_as][coordinates[0] + locatie_outline_boven_y_as] == 1 or self.wijk[coordinates[1] + locatie_outline_boven_x_as][coordinates[0] + locatie_outline_boven_y_as] == 2 or self.wijk[coordinates[1] + locatie_outline_boven_x_as][coordinates[0] + locatie_outline_boven_y_as] == 3:
-            #                 check = False
-            #                 break
-                        
-            #             else:
-                            
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_boven_x_as += 1
-            #                 counter_x += 1
-
-            #         except IndexError:
-            #             locatie_outline_boven_x_as += 1
-            #             counter_x += 1
-                
-            #     # check area of y-axis leftside from the top left
-            #     for i in range(range_bungalow_y):
-
-            #         # if a house has been found in the area stop checking
-            #         try:
-            #             if self.wijk[coordinates[1] + constante_x_links][coordinates[0] + locatie_outline_boven_y_as] == 1 or self.wijk[coordinates[1] + constante_x_links][coordinates[0] + locatie_outline_boven_y_as] == 2 or self.wijk[coordinates[1] + constante_x_links][coordinates[0] + locatie_outline_boven_y_as] == 3:
-            #                 check = False
-            #                 break
-            #             else:
-
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_boven_y_as += 1
-            #                 counter_y += 1 
-
-            #         except IndexError:
-            #             locatie_outline_boven_y_as += 1
-            #             counter_y += 1 
-
-            #     # check area of x-axis bottomside from the bottom right
-            #     for i in range(range_bungalow_x):
-                    
-            #         # if a house has been found in the area stop checking
-            #         try: 
-            #             if self.wijk[coordinates[1] + locatie_outline_onder_x_as][coordinates[0] + locatie_outline_onder_y_as] == 1 or self.wijk[coordinates[1] + locatie_outline_onder_x_as][coordinates[0] + locatie_outline_onder_y_as] == 2 or self.wijk[coordinates[1] + locatie_outline_onder_x_as][coordinates[0] + locatie_outline_onder_y_as] == 3:
-            #                 check = False
-            #                 break
-
-            #             else:
-
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_onder_x_as -= 1
-            #                 counter_x_onder -= 1
-
-            #         except IndexError:
-            #             locatie_outline_onder_x_as -= 1
-            #             counter_x_onder -= 1
-
-            #     # check area of y-axis rightside from the bottom right
-            #     for i in range(range_bungalow_y):
-                    
-            #         # if a house has been found in the area stop checking
-            #         try:
-            #             if self.wijk[coordinates[1] + constante_x_rechts][coordinates[0] + locatie_outline_onder_y_as] == 1 or self.wijk[coordinates[1] + constante_x_rechts][coordinates[0] + locatie_outline_onder_y_as] == 2 or self.wijk[coordinates[1] + constante_x_rechts][coordinates[0] + locatie_outline_onder_y_as] == 3:
-            #                 check = False
-            #                 break 
-
-            #             else:
-
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_onder_y_as -= 1
-            #                 counter_y_onder -= 1 
-
-            #         except IndexError:
-            #             locatie_outline_onder_y_as -= 1
-            #             counter_y_onder -= 1 
-                            
-                
-            #     # reset tracers back to default values and increment by one in order to check next outline around the house
-            #     locatie_outline_boven_x_as = locatie_outline_boven_x_as - counter_x - 1
-            #     locatie_outline_boven_y_as = locatie_outline_boven_y_as - counter_y - 1
-            #     constante_x_links = locatie_outline_boven_x_as
-
-            #     # reset tracers back to default values and increment by one in order to check next outline around the house
-            #     locatie_outline_onder_x_as = locatie_outline_onder_x_as - counter_x_onder - 1
-            #     locatie_outline_onder_y_as = locatie_outline_onder_y_as - counter_x_onder - 1
-            #     constante_x_rechts = locatie_outline_onder_x_as
-
-            #     # reset counters back to default values
-            #     counter_x = 0
-            #     counter_y = 0 
-            #     counter_x_onder = 0
-            #     counter_y_onder = 0
-
-            #     # When no houses found expand outline by 1 meter on every side
-            #     range_bungalow_x += 2
-            #     range_bungalow_y += 2  
-
-            #     # adjust price of the house by the percentage increase
-            #     if check == True:
-            #         self.total_bungalow = self.total_bungalow + self.percentage_bungalow
-        
         return self.total_bungalow
 
     def maison_cost(self, coordinaten, maison_aantal):
@@ -636,23 +357,6 @@ class Kosten():
         # check the outline of every bungalow
         for coordinates in coordinaten:
 
-            # create default variables for checking the outline
-
-            # range_maison_x = 26
-            # range_maison_y = 24
-            # locatie_outline_boven_x_as = -7
-            # locatie_outline_boven_y_as = -7
-            # locatie_outline_onder_x_as = 19
-            # locatie_outline_onder_y_as = 17
-            # constante_x_links = -7
-            # constante_x_rechts = 19
-
-            # check = True
-            # counter_x = 0
-            # counter_y = 0 
-            # counter_x_onder = 0
-            # counter_y_onder = 0
-
             afstand_tot_huis = 7
             x_coordinaat = coordinates[0]
             y_coordinaat = coordinates[1]
@@ -669,146 +373,25 @@ class Kosten():
                 y = y_coordinaat - afstand_tot_huis
                 y_ver = y_coordinaat + 10 + afstand_tot_huis
                 
+                self.wijk[(y_coordinaat-6):(y_coordinaat+16), (x_coordinaat-6):(x_coordinaat+18)] = 0
+
                 try: 
-                    if eensgezinswoning in self.wijk[x:x_ver, y:y_ver] or bungalow in self.wijk[x:x_ver, y:y_ver] or maison in self.wijk[x:x_ver, y:y_ver]:
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
                     else:
                         self.total_eengezins = self.total_eengezins + self.percentage_eengezins
                         afstand_tot_huis += 1
                 except IndexError:
-                    if eensgezinswoning in self.wijk[x:x_ver, y:y_ver] or bungalow in self.wijk[x:x_ver, y:y_ver] or maison in self.wijk[x:x_ver, y:y_ver]:
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
                     else:
                         self.total_eengezins = self.total_eengezins + self.percentage_eengezins
                         afstand_tot_huis += 1
 
-            
-            
-            # while som < 720 or som > 1000:
-            #     x = x_coordinaat - afstand_tot_huis
-            #     x_ver = x_coordinaat + 12 + afstand_tot_huis
-            #     y = y_coordinaat - afstand_tot_huis
-            #     y_ver = y_coordinaat + 10 + afstand_tot_huis
-                
-            #     try: 
-            #         som = np.sum(self.wijk[x:x_ver, y:y_ver])
-            #         if som < 720:
-            #             self.total_eengezins = self.total_eengezins + self.percentage_eengezins
-            #             afstand_tot_huis += 1 
-            #     except IndexError:
-            #         som = np.sum(self.wijk[(x_coordinaat - afstand_tot_huis):(x_coordinaat + 8 + afstand_tot_huis), (y_coordinaat - afstand_tot_huis):(y_coordinaat + 8 + afstand_tot_huis)])
-            #         if som < 720:
-            #             self.total_eengezins = self.total_eengezins + self.percentage_eengezins
-            #             afstand_tot_huis += 1
-            #         else: 
-            #             break
-            
-            
-            
-            
-            
-            # while check == True:
+            self.wijk[(y_coordinaat - 6):(y_coordinaat + 16),(x_coordinaat - 6):(x_coordinaat + 18)] = 5
+            self.wijk[y_coordinaat:(y_coordinaat + 10),x_coordinaat:(x_coordinaat + 12)] = 3
 
-            #     # check area of x-axis topside from the top left
-            #     for i in range(range_maison_x):
-
-            #         # if a house has been found in the area stop checking
-            #         try:
-            #             if self.wijk[coordinates[1] + locatie_outline_boven_x_as][coordinates[0] + locatie_outline_boven_y_as] == 1 or self.wijk[coordinates[1] + locatie_outline_boven_x_as][coordinates[0] + locatie_outline_boven_y_as] == 2 or self.wijk[coordinates[1] + locatie_outline_boven_x_as][coordinates[0] + locatie_outline_boven_y_as] == 3:
-            #                 check = False
-            #                 break
-                        
-            #             else:
-                            
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_boven_x_as += 1
-            #                 counter_x += 1 
-
-            #         except IndexError:
-            #             locatie_outline_boven_x_as += 1
-            #             counter_x += 1
-
-            #     # check area of y-axis leftside from the top left
-            #     for i in range(range_maison_y):
-
-            #         # if a house has been found in the area stop checking
-            #         try: 
-            #             if self.wijk[coordinates[1] + constante_x_links][coordinates[0] + locatie_outline_boven_y_as] == 1 or self.wijk[coordinates[1] + constante_x_links][coordinates[0] + locatie_outline_boven_y_as] == 2 or self.wijk[coordinates[1] + constante_x_links][coordinates[0] + locatie_outline_boven_y_as] == 3:
-            #                 check = False
-            #                 break
-                        
-            #             else:
-
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_boven_y_as += 1
-            #                 counter_y += 1 
-
-            #         except IndexError:
-            #             locatie_outline_boven_y_as += 1
-            #             counter_y += 1 
-
-            #     # check area of x-axis bottomside from the bottom right
-            #     for i in range(range_maison_x):
-                    
-            #         # if a house has been found in the area stop checking
-            #         try:
-            #             if self.wijk[coordinates[1] + locatie_outline_onder_x_as][coordinates[0] + locatie_outline_onder_y_as] == 1 or self.wijk[coordinates[1] + locatie_outline_onder_x_as][coordinates[0] + locatie_outline_onder_y_as] == 2 or self.wijk[coordinates[1] + locatie_outline_onder_x_as][coordinates[0] + locatie_outline_onder_y_as] == 3:
-            #                 check = False
-            #                 break
-
-            #             else:
-
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_onder_x_as -= 1
-            #                 counter_x_onder -= 1 
-
-            #         except IndexError:
-            #             locatie_outline_onder_x_as -= 1
-            #             counter_x_onder -= 1 
-
-            #     # check area of y-axis rightside from the bottom right
-            #     for i in range(range_maison_y):
-                    
-            #         # if a house has been found in the area stop checking
-            #         try:
-            #             if self.wijk[coordinates[1] + constante_x_rechts][coordinates[0] + locatie_outline_onder_y_as] == 1 or self.wijk[coordinates[1] + constante_x_rechts][coordinates[0] + locatie_outline_onder_y_as] == 2 or self.wijk[coordinates[1] + constante_x_rechts][coordinates[0] + locatie_outline_onder_y_as] == 3:
-            #                 check = False
-            #                 break 
-
-            #             else:
-            #                 # update by incrementing variable to search area
-            #                 locatie_outline_onder_y_as -= 1
-            #                 counter_y_onder -= 1 
-
-            #         except IndexError:
-            #             locatie_outline_onder_y_as -= 1
-            #             counter_y_onder -= 1 
-
-
-            #     # reset tracers back to default values and increment by one in order to check next outline around the house
-            #     locatie_outline_boven_x_as = locatie_outline_boven_x_as - counter_x - 1
-            #     locatie_outline_boven_y_as = locatie_outline_boven_y_as - counter_y - 1
-            #     constante_x_links = locatie_outline_boven_x_as
-
-            #     # reset tracers back to default values and increment by one in order to check next outline around the house
-            #     locatie_outline_onder_x_as = locatie_outline_onder_x_as - counter_x_onder - 1
-            #     locatie_outline_onder_y_as = locatie_outline_onder_y_as - counter_x_onder - 1
-            #     constante_x_rechts = locatie_outline_onder_x_as
-
-            #     # reset counters back to default values
-            #     counter_x = 0
-            #     counter_y = 0 
-            #     counter_x_onder = 0
-            #     counter_y_onder = 0
-
-            #     # When no houses found expand outline by 1 meter on every side
-            #     range_maison_x += 2
-            #     range_maison_y += 2  
-
-            #     # adjust price of the house by the percentage increase
-            #     if check == True:
-            #         self.total_maison = self.total_maison + self.percentage_maison
-
+        
         return self.total_maison
 
 
@@ -832,6 +415,7 @@ class Move():
         self.coordinaten_maison = coordinaten_maison
         self.coordinaten_bungalow = coordinaten_bungalow
         self.coordinaten_eensgezin = coordinaten_eensgezin
+        self.wijk = wijk
 
         price = Kosten(wijk, 12, 5, 3)
         counter = 0 
@@ -846,15 +430,16 @@ class Move():
             opbrengst.append(new)
 
             # Linksboven
-            wijk[coordinaten[0]:(coordinaten[0]+12) , coordinaten[1]:(coordinaten[1]+10)] = 0
+            self.wijk[(coordinaten[1]-2):(coordinaten[1]+10),(coordinaten[0]-2):(coordinaten[1]+10)] = 0
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
             linksboven = [x,y]
             lijst.append(linksboven)
 
             # Draw
-            wijk[x:x+12, y:y+10] = 3
-            
+            self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
+            self.wijk[y:(y + 10),x:(x + 12)] = 3      
+
             # Calculate
             coordinaten_maison[counter] = linksboven
             new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
@@ -1460,10 +1045,10 @@ def main():
 
         totaal = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
 
-        for i in range(0,3):
-            move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-            move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-            move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+        # for i in range(0,3):
+        #     move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+        #     move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+        #     move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
 
         # print("Na move")
         # print(coordinaten_eensgezin)
