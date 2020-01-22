@@ -490,9 +490,39 @@ class Kosten():
 
 class Move(): 
 
-    def __init__(self):
-        pass
+    def __init__(self,wijk,wijk_type):
+        self.index_vrijstand = 5
+        self.index_water = 4
+        self.index_maison = 3 
+        self.index_bungalow = 2
+        self.index_eengezinswoning = 1
+        self.wijk_type = wijk_type
+        self.wijk = wijk
+        
+        self.place = Placing(self.wijk, 12, 5, 3, self.wijk_type)
+
     
+    def possible_move(self, x, y, x_len, y_len, vrijstand):
+        
+        if self.index_water in self.wijk[y:(y+y_len),x:(x+x_len)]:
+           return False
+        
+        elif self.index_eengezinswoning in self.wijk[(y-vrijstand):(y+y_len+vrijstand),(x-vrijstand):(x+x_len+vrijstand)] or self.index_bungalow in self.wijk[(y-vrijstand):(y+y_len+vrijstand),(x-vrijstand):(x+x_len+vrijstand)] or self.index_maison in self.wijk[(y-vrijstand):(y+y_len+vrijstand),(x-vrijstand):(x+x_len+vrijstand)]:
+            return False
+
+        elif self.index_vrijstand in self.wijk[y:(y+y_len),x:(x+x_len)]:
+           return False
+        
+        elif x+x_len+vrijstand > 160:
+            return False
+        
+        elif y+y_len+vrijstand>180 or y-vrijstand<0:
+            return False
+
+        else:
+            return True
+
+        
     def move_maison(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk):
         self.coordinaten_maison = coordinaten_maison
         self.coordinaten_bungalow = coordinaten_bungalow
@@ -511,153 +541,197 @@ class Move():
             new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
             opbrengst.append(new)
 
+            # wijk[coordinaten[1]:(coordinaten[1]+8), coordinaten[0]:(coordinaten[0]+8)] = 0
+
             # Linksboven
-            self.wijk[(coordinaten[1]-2):(coordinaten[1]+10),(coordinaten[0]-2):(coordinaten[1]+10)] = 0
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
-            linksboven = [x,y]
-            lijst.append(linksboven)
 
-            # Draw
-            self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
-            self.wijk[y:(y + 10),x:(x + 12)] = 3      
+            wijk[coordinaten[1]-6:(coordinaten[1]+16), coordinaten[0]-6:(coordinaten[0]+18)] = 0
+            self.place.water()
 
-            # Calculate
-            coordinaten_maison[counter] = linksboven
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            if wijk[x-6][y-6] == 1 or wijk[x-6][y-6] == 2 or wijk[x-6][y-6] == 3:
-                new = 0
-            else: 
-                # Draw
-                wijk[x:x+12, y:y+10] = 3
-            
-                # Calculate
+            if self.possible_move(x, y, 12, 10, 6) == True:
+                # Adding new coordinate
+                linksboven = [x,y]
+                lijst.append(linksboven)
+
+                # Adding calculated price
                 coordinaten_maison[counter] = linksboven
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-
                 opbrengst.append(new)
+                wijk[y-6:y+16, x-6:x+18] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
 
             # Boven
-            wijk[x:x+12, y:y+10] = 0
             x = (coordinaten[0])
             y = (coordinaten[1] - 1)
-            boven = [x,y]
-            lijst.append(boven)
+            
+            if self.possible_move(x, y, 12, 10, 6) == True:
+                # Adding new coordinate
+                boven = [x,y]
+                lijst.append(boven)
 
-            # Draw
-            wijk[x:x+12, y:y+10] = 3
+                # Adding calculated price
+                coordinaten_maison[counter] = boven
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-6:y+16, x-6:x+18] = 0
+                self.place.water()
 
-            # Calculate
-            coordinaten_maison[counter] = boven
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
-
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+            
             # Rechtsboven
-            wijk[x:x+12, y:y+10] = 0
             x = coordinaten[0] + 1
             y = coordinaten[1] - 1
-            rechtsboven = [x,y]
-            lijst.append(rechtsboven)
 
-            # Draw
-            wijk[x:x+12, y:y+10] = 3
+            if self.possible_move(x, y, 12, 10, 6) == True:
+                # Adding new coordinate
+                rechtsboven = [x,y]
+                lijst.append(rechtsboven)
 
-            # Calculate
-            coordinaten_maison[counter] = rechtsboven
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_maison[counter] = rechtsboven
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-6:y+16, x-6:x+18] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
 
             # Rechts
-            wijk[x:x+12, y:y+10] = 0
             x = coordinaten[0] + 1
             y = coordinaten[1]
-            rechts = [x,y]
-            lijst.append(rechts)
 
-            # Draw
-            wijk[x:x+12, y:y+10] = 3
+            if self.possible_move(x, y, 12, 10, 6) == True:
+                # Adding new coordinate
+                rechts = [x,y]
+                lijst.append(rechts)
 
-            # Calculate
-            coordinaten_maison[counter] = rechts
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
-
+                # Adding calculated price
+                coordinaten_maison[counter] = rechts
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-6:y+16, x-6:x+18] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+            
             # Rechtsonder
-            wijk[x:x+12, y:y+10] = 0
             x = coordinaten[0] + 1
             y = coordinaten[1] + 1
-            rechtsonder = [x,y]
-            lijst.append(rechtsonder)
 
-            # Draw
-            wijk[x:x+12, y:y+10] = 3
+            if self.possible_move(x, y, 12, 10, 6) == True:
+                # Adding new coordinate
+                rechtsonder = [x,y]
+                lijst.append(rechtsonder)
 
-            # Calculate
-            coordinaten_maison[counter] = rechtsonder
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
-
+                # Adding calculated price
+                coordinaten_maison[counter] = rechtsonder
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-6:y+16, x-6:x+18] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+        
             # Onder
-            wijk[x:x+12, y:y+10] = 0
             x = coordinaten[0] 
             y = coordinaten[1] + 1
-            onder = [x,y]
-            lijst.append(onder)
 
-            # Draw
-            wijk[x:x+12, y:y+10] = 3
+            if self.possible_move(x, y, 12, 10, 6) == True:
+                # Adding new coordinate
+                onder = [x,y]
+                lijst.append(onder)
 
-            # Calculate
-            coordinaten_maison[counter] = onder
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
-
+                # Adding calculated price
+                coordinaten_maison[counter] = onder
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-6:y+16, x-6:x+18] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+            
             # Linksonder
-            wijk[x:x+12, y:y+10] = 0
             x = coordinaten[0] - 1
             y = coordinaten[1] + 1
-            linksonder = [x,y]
-            lijst.append(linksonder)
 
-            # Draw
-            wijk[x:x+12, y:y+10] = 3
+            if self.possible_move(x, y, 12, 10, 6) == True:
+                # Adding new coordinate
+                linksonder = [x,y]
+                lijst.append(linksonder)
 
-            # Calculate
-            coordinaten_maison[counter] = linksonder
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_maison[counter] = linksonder
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-6:y+16, x-6:x+18] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+            
 
             # Links
-            wijk[x:x+12, y:y+10] = 0
             x = coordinaten[0] - 1
             y = coordinaten[1]
-            links = [x,y]
-            lijst.append(links)
             
-            # Draw
-            wijk[x:x+12, y:y+10] = 3
+            if self.possible_move(x, y, 12, 10, 6) == True:
+                # Adding new coordinate
+                links = [x,y]
+                lijst.append(links)
 
-            # Calculate
-            coordinaten_maison[counter] = links
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
-
+                # Adding calculated price
+                coordinaten_maison[counter] = links
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-6:y+16, x-6:x+18] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+            
+            
             # Getting the best option
             hoogste = max(opbrengst)
             index = opbrengst.index(hoogste)
             best_coor = lijst[index]
+
+            y = best_coor[1]
+            x = best_coor[0]
+            
             # Draw
-            wijk[best_coor[0]: best_coor[0]+12, best_coor[1]: best_coor[1]+10]
+            self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
+            self.wijk[y:(y + 10),x:(x + 12)] = 3
 
             coordinaten_maison[counter] = best_coor
-
             counter += 1
+    
+        return coordinaten_maison
 
             
     def move_eensgezin(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk):
         self.coordinaten_maison = coordinaten_maison
         self.coordinaten_bungalow = coordinaten_bungalow
         self.coordinaten_eensgezin = coordinaten_eensgezin
+        self.wijk = wijk
 
         price = Kosten(wijk, 12, 5, 3)
         counter = 0 
@@ -666,217 +740,196 @@ class Move():
             
             lijst = []
             opbrengst = []
-
             lijst.append(coordinaten)
             
             new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
             opbrengst.append(new)
 
             # Linksboven
-            wijk[coordinaten[0]:(coordinaten[0]+8) , coordinaten[1]:(coordinaten[1]+8)] = 0
+            wijk[coordinaten[1]-2:(coordinaten[1]+10) , coordinaten[0]-2:(coordinaten[0]+10)] = 0
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
-            linksboven = [x,y]
-            lijst.append(linksboven)
+            self.place.water()
+            if self.possible_move(x,y,8,8,2) == True:
+                # Adding new coordinate
+                linksboven = [x,y]
+                lijst.append(linksboven)
 
-            # Draw
-            wijk[x:x+8, y:y+8] = 1
-            
-            # Calculate
-            coordinaten_eensgezin[counter] = linksboven
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_eensgezin[counter] = linksboven
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-2:y+10, x-2:x+10] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
 
             # Boven
-            wijk[x:x+8, y:y+8] = 0
             x = (coordinaten[0])
             y = (coordinaten[1] - 1)
-            boven = [x,y]
-            lijst.append(boven)
+            
+            if self.possible_move(x,y,8,8,2) == True:
+                # Adding new coordinate
+                boven = [x,y]
+                lijst.append(boven)
 
-            # Draw
-            wijk[x:x+8, y:y+8] = 1
-
-            # Calculate
-            coordinaten_eensgezin[counter] = boven
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
-
+                # Adding calculated price
+                coordinaten_eensgezin[counter] = boven
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-2:y+10, x-2:x+10] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+        
             # Rechtsboven
-            wijk[x:x+8, y:y+8] = 0
             x = coordinaten[0] + 1
             y = coordinaten[1] - 1
-            rechtsboven = [x,y]
-            lijst.append(rechtsboven)
 
-            # Draw
-            wijk[x:x+8, y:y+8] = 1
+            if self.possible_move(x,y,8,8,2) == True:
+                # Adding new coordinate
+                rechtsboven = [x,y]
+                lijst.append(rechtsboven)
 
-            # Calculate
-            coordinaten_eensgezin[counter] = rechtsboven
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_eensgezin[counter] = rechtsboven
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-2:y+10, x-2:x+10] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+            
+            
 
             # Rechts
-            wijk[x:x+8, y:y+8] = 0
             x = coordinaten[0] + 1
             y = coordinaten[1]
-            rechts = [x,y]
-            lijst.append(rechts)
 
-            # Draw
-            wijk[x:x+8, y:y+8] = 1
+            if self.possible_move(x,y,8,8,2) == True:
+                # Adding new coordinate
+                rechts = [x,y]
+                lijst.append(rechts)
 
-            # Calculate
-            coordinaten_eensgezin[counter] = rechts
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_eensgezin[counter] = rechts
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-2:y+10, x-2:x+10] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
 
             # Rechtsonder
-            wijk[x:x+8, y:y+8] = 0
             x = coordinaten[0] + 1
             y = coordinaten[1] + 1
-            rechtsonder = [x,y]
-            lijst.append(rechtsonder)
 
-            # Draw
-            wijk[x:x+8, y:y+8] = 1
+            if self.possible_move(x,y,8,8,2) == True:
+                # Adding new coordinate
+                rechtsonder = [x,y]
+                lijst.append(rechtsonder)
 
-            # Calculate
-            coordinaten_eensgezin[counter] = rechtsonder
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_eensgezin[counter] = rechtsonder
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-2:y+10, x-2:x+10] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
 
             # Onder
-            wijk[x:x+8, y:y+8] = 0
             x = coordinaten[0] 
             y = coordinaten[1] + 1
-            onder = [x,y]
-            lijst.append(onder)
 
-            # Draw
-            wijk[x:x+8, y:y+8] = 1
+            if self.possible_move(x,y,8,8,2) == True:
+                # Adding new coordinate
+                onder = [x,y]
+                lijst.append(onder)
 
-            # Calculate
-            coordinaten_eensgezin[counter] = onder
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_eensgezin[counter] = onder
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-2:y+10, x-2:x+10] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
 
             # Linksonder
-            wijk[x:x+8, y:y+8] = 0
             x = coordinaten[0] - 1
             y = coordinaten[1] + 1
-            linksonder = [x,y]
-            lijst.append(linksonder)
 
-            # Draw
-            wijk[x:x+8, y:y+8] = 1
+            if self.possible_move(x,y,8,8,2) == True:
+                # Adding new coordinate
+                linksonder = [x,y]
+                lijst.append(linksonder)
 
-            # Calculate
-            coordinaten_eensgezin[counter] = linksonder
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_eensgezin[counter] = linksonder
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-2:y+10, x-2:x+10] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
 
             # Links
-            wijk[x:x+8, y:y+8] = 0
             x = coordinaten[0] - 1
             y = coordinaten[1]
-            links = [x,y]
-            lijst.append(links)
             
-            # Draw
-            wijk[x:x+8, y:y+8] = 1
+            if self.possible_move(x,y,8,8,2) == True:
+                # Adding new coordinate
+                links = [x,y]
+                lijst.append(links)
 
-            # Calculate
-            coordinaten_eensgezin[counter] = links
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_eensgezin[counter] = links
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-2:y+10, x-2:x+10] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
 
             # Getting the best option
             hoogste = max(opbrengst)
             index = opbrengst.index(hoogste)
             best_coor = lijst[index]
 
+            y = best_coor[1]
+            x = best_coor[0]
+
             # Draw
-            wijk[best_coor[0]: best_coor[0]+8, best_coor[1]: best_coor[1]+8]
-
+            self.wijk[(y - 2):(y + 10),(x - 2):(x + 10)] = 5
+            self.wijk[y:(y + 8),x:(x + 8)] = 1
+            
             coordinaten_eensgezin[counter] = best_coor
-
             counter += 1
-            
-            
-            
-            
-            # # Linksboven
-            # linksboven = [(coordinaten[0] - 1), (coordinaten[1] - 1)]
-            # lijst.append(linksboven)
-            # coordinaten_eensgezin[counter] = linksboven
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-
-            # # Boven
-            # boven = [(coordinaten[0]), (coordinaten[1] - 1)]
-            # lijst.append(boven)
-            # coordinaten_eensgezin[counter] = boven
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Rechtsboven
-            # rechtsboven = [(coordinaten[0] + 1), (coordinaten[1] - 1)]
-            # lijst.append(rechtsboven)
-            # coordinaten_eensgezin[counter] = rechtsboven
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Rechts
-            # rechts = [(coordinaten[0] + 1), (coordinaten[1])]
-            # lijst.append(rechts)
-            # coordinaten_eensgezin[counter] = rechts
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Rechtsonder
-            # rechtsonder = [(coordinaten[0] + 1), (coordinaten[1] + 1)]
-            # lijst.append(rechtsonder)
-            # coordinaten_eensgezin[counter] = rechtsonder
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Onder
-            # onder = [(coordinaten[0]), (coordinaten[1] + 1)]
-            # lijst.append(onder)
-            # coordinaten_eensgezin[counter] = onder
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Linksonder
-            # linksonder = [(coordinaten[0] - 1), (coordinaten[1] + 1)]
-            # lijst.append(linksonder)
-            # coordinaten_eensgezin[counter] = linksonder
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Links
-            # links = [(coordinaten[0] - 1), (coordinaten[1])]
-            # lijst.append(links)
-            # coordinaten_eensgezin[counter] = links
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Getting the best option
-            # hoogste = max(opbrengst)
-            # index = opbrengst.index(hoogste)
-            # best_coor = lijst[index]
-            # coordinaten_eensgezin[counter] = best_coor
-
-            # counter += 1 
+        
             
 
     def move_bungalow(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk):
         self.coordinaten_maison = coordinaten_maison
         self.coordinaten_bungalow = coordinaten_bungalow
         self.coordinaten_eensgezin = coordinaten_eensgezin
+        self.wijk = wijk
 
         price = Kosten(wijk, 12, 5, 3)
         counter = 0 
@@ -884,221 +937,200 @@ class Move():
         for coordinaten in coordinaten_bungalow:
             lijst = []
             opbrengst = []
-
             lijst.append(coordinaten)
          
             new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
             opbrengst.append(new)
 
             # Linksboven
-            wijk[coordinaten[0]:(coordinaten[0]+11) , coordinaten[1]:(coordinaten[1]+7)] = 0
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
-            linksboven = [x,y]
-            lijst.append(linksboven)
-
-            # Draw
-            wijk[x:x+11, y:y+7] = 2
             
-            # Calculate
-            coordinaten_bungalow[counter] = linksboven
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+            wijk[coordinaten[1]-3:(coordinaten[1]+10), coordinaten[0]-3:(coordinaten[0]+14)] = 0
+            self.place.water()
 
+            if self.possible_move(x, y, 11, 7, 3) == True:
+                # Adding new coordinate
+                linksboven = [x,y]
+                lijst.append(linksboven)
+
+                # Adding calculated price
+                coordinaten_bungalow[counter] = linksboven
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-3:y+10, x-3:x+14] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+            
             # Boven
-            wijk[x:x+11, y:y+7] = 0
             x = (coordinaten[0])
             y = (coordinaten[1] - 1)
-            boven = [x,y]
-            lijst.append(boven)
+            
+            if self.possible_move(x, y, 11, 7, 3) == True:
+                # Adding new coordinate
+                boven = [x,y]
+                lijst.append(boven)
 
-            # Draw
-            wijk[x:x+11, y:y+7] = 2
+                # Adding calculated price
+                coordinaten_bungalow[counter] = boven
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-3:y+10, x-3:x+14] = 0
+                self.place.water()
 
-            # Calculate
-            coordinaten_bungalow[counter] = boven
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
 
             # Rechtsboven
-            wijk[x:x+11, y:y+7] = 0
             x = coordinaten[0] + 1
             y = coordinaten[1] - 1
-            rechtsboven = [x,y]
-            lijst.append(rechtsboven)
 
-            # Draw
-            wijk[x:x+11, y:y+7] = 2
+            if self.possible_move(x, y, 11, 7, 3) == True:
+                # Adding new coordinate
+                rechtsboven = [x,y]
+                lijst.append(rechtsboven)
 
-            # Calculate
-            coordinaten_bungalow[counter] = rechtsboven
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_bungalow[counter] = rechtsboven
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-3:y+10, x-3:x+14] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
 
             # Rechts
-            wijk[x:x+11, y:y+7] = 0
             x = coordinaten[0] + 1
             y = coordinaten[1]
-            rechts = [x,y]
-            lijst.append(rechts)
 
-            # Draw
-            wijk[x:x+11, y:y+7] = 2
+            if self.possible_move(x, y, 11, 7, 3) == True:
+                # Adding new coordinate
+                rechts = [x,y]
+                lijst.append(rechts)
 
-            # Calculate
-            coordinaten_bungalow[counter] = rechts
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_bungalow[counter] = rechts
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-3:y+10, x-3:x+14] = 0
+                self.place.water()
+
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+            
 
             # Rechtsonder
-            wijk[x:x+11, y:y+7] = 0
             x = coordinaten[0] + 1
             y = coordinaten[1] + 1
-            rechtsonder = [x,y]
-            lijst.append(rechtsonder)
 
-            # Draw
-            wijk[x:x+11, y:y+7] = 2
+            if self.possible_move(x, y, 11, 7, 3) == True:
+                # Adding new coordinate
+                rechtsonder = [x,y]
+                lijst.append(rechtsonder)
 
-            # Calculate
-            coordinaten_bungalow[counter] = rechtsonder
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_bungalow[counter] = rechtsonder
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-3:y+10, x-3:x+14] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
 
             # Onder
-            wijk[x:x+11, y:y+7] = 0
             x = coordinaten[0] 
             y = coordinaten[1] + 1
-            onder = [x,y]
-            lijst.append(onder)
 
-            # Draw
-            wijk[x:x+11, y:y+7] = 2
+            if self.possible_move(x, y, 11, 7, 3) == True:
+                # Adding new coordinate
+                onder = [x,y]
+                lijst.append(onder)
 
-            # Calculate
-            coordinaten_bungalow[counter] = onder
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_bungalow[counter] = onder
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-3:y+10, x-3:x+14] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+
 
             # Linksonder
-            wijk[x:x+11, y:y+7] = 0
             x = coordinaten[0] - 1
             y = coordinaten[1] + 1
-            linksonder = [x,y]
-            lijst.append(linksonder)
 
-            # Draw
-            wijk[x:x+11, y:y+7] = 2
+            if self.possible_move(x, y, 11, 7, 3) == True:
+                # Adding new coordinate
+                linksonder = [x,y]
+                lijst.append(linksonder)
 
-            # Calculate
-            coordinaten_bungalow[counter] = linksonder
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_bungalow[counter] = linksonder
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-3:y+10, x-3:x+14] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+
 
             # Links
-            wijk[x:x+11, y:y+7] = 0
             x = coordinaten[0] - 1
             y = coordinaten[1]
-            links = [x,y]
-            lijst.append(links)
             
-            # Draw
-            wijk[x:x+11, y:y+7] = 2
+            if self.possible_move(x, y, 11, 7, 3) == True:
+                # Adding new coordinate
+                links = [x,y]
+                lijst.append(links)
 
-            # Calculate
-            coordinaten_bungalow[counter] = links
-            new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            opbrengst.append(new)
+                # Adding calculated price
+                coordinaten_bungalow[counter] = links
+                new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                opbrengst.append(new)
+                wijk[y-3:y+10, x-3:x+14] = 0
+                self.place.water()
+            else:
+                # Adding default
+                lijst.append([0,0])
+                opbrengst.append(0.00)
+
 
             # Getting the best option
             hoogste = max(opbrengst)
             index = opbrengst.index(hoogste)
             best_coor = lijst[index]
             
+            y = best_coor[1]
+            x = best_coor[0]
             # Draw
-            wijk[best_coor[0]: best_coor[0]+8, best_coor[1]: best_coor[1]+8]
+            self.wijk[(y - 3):(y + 10),(x - 3):(x + 14)] = 5
+            self.wijk[y:(y + 7),x:(x + 11)] = 2
 
             coordinaten_bungalow[counter] = best_coor
-
             counter += 1
-            # lijst = []
-            # opbrengst = []
-
-            # lijst.append(coordinaten)
-            # coordinates = coordinaten_bungalow
-         
-            # new = price.total(coordinaten_bungalow, coordinates, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Linksboven
-            # linksboven = [(coordinaten[0] - 1), (coordinaten[1] - 1)]
-            # lijst.append(linksboven)
-            # coordinaten_bungalow[counter] = linksboven
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Boven
-            # boven = [(coordinaten[0]), (coordinaten[1] - 1)]
-            # lijst.append(boven)
-            # coordinaten_bungalow[counter] = boven
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Rechtsboven
-            # rechtsboven = [(coordinaten[0] + 1), (coordinaten[1] - 1)]
-            # lijst.append(rechtsboven)
-            # coordinaten_bungalow[counter] = rechtsboven
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Rechts
-            # rechts = [(coordinaten[0] + 1), (coordinaten[1])]
-            # lijst.append(rechts)
-            # coordinaten_bungalow[counter] = rechts
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Rechtsonder
-            # rechtsonder = [(coordinaten[0] + 1), (coordinaten[1] + 1)]
-            # lijst.append(rechtsonder)
-            # coordinaten_bungalow[counter] = rechtsonder
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Onder
-            # onder = [(coordinaten[0]), (coordinaten[1] + 1)]
-            # lijst.append(onder)
-            # coordinaten_bungalow[counter] = onder
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Linksonder
-            # linksonder = [(coordinaten[0] - 1), (coordinaten[1] + 1)]
-            # lijst.append(linksonder)
-            # coordinaten_bungalow[counter] = linksonder
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Links
-            # links = [(coordinaten[0] - 1), (coordinaten[1])]
-            # lijst.append(links)
-            # coordinaten_bungalow[counter] = links
-            # new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            # opbrengst.append(new)
-
-            # # Getting the best option
-            # hoogste = max(opbrengst)
-            # index = opbrengst.index(hoogste)
-            # best_coor = lijst[index]
-            # coordinaten_bungalow[counter] = best_coor
-
-            # counter += 1 
 
 
 def main():
     
     wijk_type = 1
-    runs = 10
+    runs = 5
+    highest_price_move = 0
 
     total_prices = []
 
@@ -1137,17 +1169,18 @@ def main():
         total_prices.append(totaal)
 
         # save current wijk with the highest price
-        highest_price_move = 0
         if totaal >= max(total_prices):
             wijk_max = wijk
             print(max(total_prices))
-            # for i in range(0,3):
-            #     move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-            #     move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-            #     move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+            for i in range(0,10):
+                move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+                move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+                move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
             price_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+            print("Move klaar")
             if price_move >= highest_price_move:
                 highest_price_move = price_move
+                wijk_move = wijk
 
 
     # calculate and show statistics
@@ -1160,7 +1193,8 @@ def main():
     print()
 
     # create visualization
-    H = np.array(wijk_max)
+    # H = np.array(wijk_max)
+    H = np.array(wijk_move)
     plt.imshow(H)
 
     ca = np.array([[0, 102, 204, 0],
@@ -1190,7 +1224,8 @@ def main():
     # saving in csv file
     with open("wijk1.csv","w+") as my_csv:
         csvWriter = csv.writer(my_csv,delimiter=',')
-        csvWriter.writerows(wijk_max)
+        # csvWriter.writerows(wijk_max)
+        csvWriter.writerows(wijk_move)
 
 
 if __name__ == '__main__':
