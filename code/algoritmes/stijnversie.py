@@ -12,7 +12,7 @@ class Placing:
     Furthermore the water is created and placed. """
 
     # save the amount of houses being placed when running the Placing class 
-    def __init__(self, wijk, aantal_eensgezins, aantal_maison, aantal_bungalow, wijk_type, random_range):
+    def __init__(self, wijk, aantal_eensgezins, aantal_maison, aantal_bungalow, wijk_type):
         
         self.wijk = wijk
         self.aantal_eensgezins = aantal_eensgezins
@@ -24,7 +24,6 @@ class Placing:
         self.index_maison = 3 
         self.index_water = 4
         self.index_vrijstand = 5
-        self.random_range = random_range
 
     def water(self):
 
@@ -64,18 +63,15 @@ class Placing:
          around the randomized coordinate fits this specific type of house, the house is placed and saved
          in the coordinates list. """
 
-        # eensgezins_coordinatenlijst = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
         eensgezins_coordinatenlijst = [[0,0]] * 12
-        # coordinaten_maison = [[0,0],[0,0],[0,0]]
         coordinaten_maison = [[0,0]] * 3
-        # coordinaten_bungalow =[[0,0],[0,0],[0,0],[0,0],[0,0]]
         coordinaten_bungalow = [[0,0]] * 5
 
         for i in range(0,aantal_eensgezins):
             
             highest_price = 0
 
-            for j in range(0,self.random_range):
+            for j in range(0,10):
 
                 x = random.randrange(2,150)
                 y = random.randrange(2,170)
@@ -148,7 +144,7 @@ class Placing:
 
             highest_price = 0
             
-            for j in range(0,self.random_range):
+            for j in range(0,10):
 
                 x = random.randrange(6,142)
                 y = random.randrange(6,164)
@@ -222,7 +218,7 @@ class Placing:
 
             highest_price = 0
 
-            for j in range(0,self.random_range):
+            for j in range(0,10):
   
                 x = random.randrange(3,146)
                 y = random.randrange(3,170)
@@ -294,9 +290,6 @@ class Kosten():
         self.eengezins_aantal = eengezins_aantal
         self.bungalow_aantal = bungalow_aantal
         self.maison_aantal = maison_aantal
-        self.eensgezinswoning = 1 
-        self.bungalow = 2 
-        self.maison = 3
 
         
     def eengezins_cost(self, coordinaten, eengezins_aantal):
@@ -316,18 +309,25 @@ class Kosten():
         # make default total prices
         self.total_eengezins = eengezins_aantal * self.eengezins
 
+        # getting the coordinates from placing class
+        coordinateslijst = coordinaten
+
         # check the outline of every eengezinshuis
-        for coordinates in coordinaten:      
+        for coordinates in coordinateslijst:
+            eensgezinswoning = 1 
+            bungalow = 2 
+            maison = 3      
       
-            afstand_tot_huis = 3
+            afstand_tot_huis = 3 
             x_coordinaat = coordinates[0]
             y_coordinaat = coordinates[1]
+            som = 0 
 
             check = True
             while check == True:
                 x = x_coordinaat - afstand_tot_huis
                 if x < 0:
-                    x = 0
+                    x = 0 
 
                 x_ver = x_coordinaat + 8 + afstand_tot_huis
                 if x_ver > 160:
@@ -336,18 +336,26 @@ class Kosten():
                 y = y_coordinaat - afstand_tot_huis
                 if y < 0:
                     y = 0
-
+            
                 y_ver = y_coordinaat + 8 + afstand_tot_huis
                 if y_ver > 180:
                     y_ver = 180
 
                 self.wijk[(y_coordinaat - 2):(y_coordinaat + 10),(x_coordinaat - 2):(x_coordinaat + 10)] = 0
     
-                if self.eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or self.bungalow in self.wijk[y:y_ver, x:x_ver] or self.maison in self.wijk[y:y_ver, x:x_ver]:
-                    check = False
-                else:
-                    self.total_eengezins = self.total_eengezins + self.percentage_eengezins
-                    afstand_tot_huis += 1
+                try:
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
+                        check = False
+                    else:
+                        self.total_eengezins = self.total_eengezins + self.percentage_eengezins
+                        afstand_tot_huis += 1
+                
+                except IndexError:
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
+                        check = False
+                    else:
+                        self.total_eengezins = self.total_eengezins + self.percentage_eengezins
+                        afstand_tot_huis += 1
 
             self.wijk[(y_coordinaat - 2):(y_coordinaat + 10),(x_coordinaat - 2):(x_coordinaat + 10)] = 5
             self.wijk[y_coordinaat:(y_coordinaat + 8),x_coordinaat:(x_coordinaat + 8)] = 1
@@ -371,39 +379,58 @@ class Kosten():
         # make default total prices
         self.total_bungalow = bungalow_aantal * self.bungalow
 
+        # getting the coordinates from placing class
+        coordinateslijst = coordinaten
+
         # check the outline of every bungalow
         for coordinates in coordinaten:
+
+            eensgezinswoning = 1 
+            bungalow = 2 
+            maison = 3 
             
             afstand_tot_huis = 4
             x_coordinaat = coordinates[0]
             y_coordinaat = coordinates[1]
+            som = 0 
             
             check = True
 
             while check == True:
+
                 x = x_coordinaat - afstand_tot_huis
                 if x < 0:
-                    x = 0
+                    x = 0 
 
                 x_ver = x_coordinaat + 11 + afstand_tot_huis
                 if x_ver > 160:
-                    x_ver = 160
+                    x_ver=160
 
                 y = y_coordinaat - afstand_tot_huis
                 if y < 0:
                     y = 0
-
+            
                 y_ver = y_coordinaat + 7 + afstand_tot_huis
                 if y_ver > 180:
                     y_ver = 180
+
                 
                 self.wijk[(y_coordinaat - 3):(y_coordinaat + 10),(x_coordinaat - 3):(x_coordinaat + 14)] = 0
 
-                if self.eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or self.bungalow in self.wijk[y:y_ver, x:x_ver] or self.maison in self.wijk[y:y_ver, x:x_ver]:
-                    check = False
-                else:
-                    self.total_eengezins = self.total_eengezins + self.percentage_eengezins
-                    afstand_tot_huis += 1 
+                try: 
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
+                        check = False
+                    else:
+                        self.total_eengezins = self.total_eengezins + self.percentage_eengezins
+                        afstand_tot_huis += 1 
+               
+                except IndexError:
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
+                        check = False
+                    else:
+                        self.total_eengezins = self.total_eengezins + self.percentage_eengezins
+                        afstand_tot_huis += 1 
+
 
             self.wijk[(y_coordinaat - 3):(y_coordinaat + 10),(x_coordinaat - 3):(x_coordinaat + 14)] = 5
             self.wijk[y_coordinaat:(y_coordinaat + 7),x_coordinaat:(x_coordinaat + 11)] = 2
@@ -427,43 +454,60 @@ class Kosten():
         # make default total prices
         self.total_maison = maison_aantal * self.maison
 
+        # getting the coordinates from placing class
+        coordinateslijst = coordinaten
+
         # check the outline of every bungalow
         for coordinates in coordinaten:
 
             afstand_tot_huis = 7
             x_coordinaat = coordinates[0]
             y_coordinaat = coordinates[1]
+            som = 0 
+            
+            eensgezinswoning = 1 
+            bungalow = 2 
+            maison = 3 
             
             check = True
             while check == True:
                 x = x_coordinaat - afstand_tot_huis
                 if x < 0:
-                    x = 0
+                    x = 0 
 
                 x_ver = x_coordinaat + 12 + afstand_tot_huis
                 if x_ver > 160:
-                    x_ver = 160
+                    x_ver=160
 
                 y = y_coordinaat - afstand_tot_huis
                 if y < 0:
                     y = 0
-                    
+            
                 y_ver = y_coordinaat + 10 + afstand_tot_huis
                 if y_ver > 180:
                     y_ver = 180
                 
                 self.wijk[(y_coordinaat-6):(y_coordinaat+16), (x_coordinaat-6):(x_coordinaat+18)] = 0
 
-                if self.eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or self.bungalow in self.wijk[y:y_ver, x:x_ver] or self.maison in self.wijk[y:y_ver, x:x_ver]:
-                    check = False
-                else:
-                    self.total_maison = self.total_maison + self.percentage_maison
-                    afstand_tot_huis += 1
+                try: 
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
+                        check = False
+                    else:
+                        self.total_maison = self.total_maison + self.percentage_maison
+                        afstand_tot_huis += 1
+                except IndexError:
+                    if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
+                        check = False
+                    else:
+                        self.total_maison = self.total_maison + self.percentage_maison
+                        afstand_tot_huis += 1
 
             self.wijk[(y_coordinaat - 6):(y_coordinaat + 16),(x_coordinaat - 6):(x_coordinaat + 18)] = 5
             self.wijk[y_coordinaat:(y_coordinaat + 10),x_coordinaat:(x_coordinaat + 12)] = 3
 
+        
         return self.total_maison
+
 
     def total(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin):
         
@@ -478,7 +522,7 @@ class Kosten():
 
 class Move(): 
 
-    def __init__(self,wijk,wijk_type, random_range):
+    def __init__(self,wijk,wijk_type):
         self.index_vrijstand = 5
         self.index_water = 4
         self.index_maison = 3 
@@ -486,9 +530,8 @@ class Move():
         self.index_eengezinswoning = 1
         self.wijk_type = wijk_type
         self.wijk = wijk
-        self.random_range = random_range
         
-        self.place = Placing(self.wijk, 12, 5, 3, self.wijk_type, self.random_range)
+        self.place = Placing(self.wijk, 12, 5, 3, self.wijk_type)
 
     
     def possible_move(self, x, y, x_len, y_len, vrijstand):
@@ -502,7 +545,7 @@ class Move():
         elif self.index_vrijstand in self.wijk[y:(y+y_len),x:(x+x_len)]:
            return False
         
-        elif x+x_len+vrijstand > 160:
+        elif x+x_len+vrijstand > 160 or x-vrijstand<0:
             return False
         
         elif y+y_len+vrijstand>180 or y-vrijstand<0:
@@ -1119,22 +1162,20 @@ def main():
     
     wijk_type = 3
     runs = 1
-    random_range = 10
-
     highest_price_move = 0
+
     total_prices = []
 
     for i in range(runs):
-
         # create a 160 x 180 gridmap
-        x, y = (160, 180)
+        x, y = (160, 180) 
         wijk = [[0 for i in range(x)] for j in range(y)]
-        wijk = np.array(wijk)
+        wijk = np.array(wijk) 
 
         # adding houses
         price = Kosten(wijk, 12, 5, 3)
-        place = Placing(wijk, 12, 5, 3, wijk_type, random_range)
-        move = Move(wijk, wijk_type, random_range)
+        place = Placing(wijk, 12, 5, 3, wijk_type)
+        move = Move(wijk, wijk_type)
 
         # create the different water values of the gridmap
         place.water()
@@ -1150,28 +1191,40 @@ def main():
         if totaal >= max(total_prices):
             wijk_max = wijk
             print(max(total_prices))
+            
+            oud_move = totaal
+            
+            counter = 1
 
-            for i in range(0,10):
-                
-                move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+            move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+            move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+            move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+            
+            new_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+
+            
+            while new_move > oud_move:
+                # Move houses
+                counter +=1
                 move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+                move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
                 move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+                
+                # New values
+                oud_move = new_move
+                new_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+            
+            
             price_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+
+
             print("Move klaar")
+            print(price_move)
+            print(counter)
             if price_move >= highest_price_move:
                 highest_price_move = price_move
                 wijk_move = wijk
 
-            # if max(total_prices) >= 15000000:
-            #     for i in range(0,20):
-            #         move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-            #         move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-            #         move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-            #     price_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
-            #     print("Move klaar")
-            #     if price_move >= highest_price_move:
-            #         highest_price_move = price_move
-            #         wijk_move = wijk
 
     # calculate and show statistics
     mean = statistics.mean(total_prices)
