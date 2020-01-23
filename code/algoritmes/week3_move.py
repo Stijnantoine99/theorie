@@ -478,7 +478,7 @@ class Kosten():
 
 class Move(): 
 
-    def __init__(self,wijk,wijk_type):
+    def __init__(self,wijk,wijk_type, random_range):
         self.index_vrijstand = 5
         self.index_water = 4
         self.index_maison = 3 
@@ -486,8 +486,9 @@ class Move():
         self.index_eengezinswoning = 1
         self.wijk_type = wijk_type
         self.wijk = wijk
+        self.random_range = random_range
         
-        self.place = Placing(self.wijk, 12, 5, 3, self.wijk_type)
+        self.place = Placing(self.wijk, 12, 5, 3, self.wijk_type, self.random_range)
 
     
     def possible_move(self, x, y, x_len, y_len, vrijstand):
@@ -1127,14 +1128,14 @@ def main():
         print(i)
 
         # create a 160 x 180 gridmap
-        x, y = (160, 180) 
+        x, y = (160, 180)
         wijk = [[0 for i in range(x)] for j in range(y)]
-        wijk = np.array(wijk) 
+        wijk = np.array(wijk)
 
         # adding houses
         price = Kosten(wijk, 12, 5, 3)
         place = Placing(wijk, 12, 5, 3, wijk_type, random_range)
-        move = Move(wijk, wijk_type)
+        move = Move(wijk, wijk_type, random_range)
 
         # create the different water values of the gridmap
         place.water()
@@ -1151,8 +1152,8 @@ def main():
             wijk_max = wijk
             print(max(total_prices))
 
-            for i in range(0,30):
-                # print(i)
+            for i in range(0,10):
+                print(i)
                 move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
                 move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
                 move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
