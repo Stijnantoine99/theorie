@@ -3,6 +3,7 @@ import statistics
 import csv
 import numpy as np 
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import matplotlib.colors
 
 class Placing: 
@@ -12,18 +13,20 @@ class Placing:
     Furthermore the water is created and placed. """
 
     # save the amount of houses being placed when running the Placing class 
-    def __init__(self, wijk, aantal_eensgezins, aantal_maison, aantal_bungalow, wijk_type):
+    # def __init__(self, wijk, aantal_eensgezins, aantal_maison, aantal_bungalow, wijk_type):
+    def __init__(self, wijk, houses, wijk_type, random_range):
         
         self.wijk = wijk
-        self.aantal_eensgezins = aantal_eensgezins
-        self.aantal_maison = aantal_maison
-        self.aantal_bungalow = aantal_bungalow
+        self.aantal_eensgezins = int(houses * 0.6)
+        self.aantal_maison = int(houses * 0.15)
+        self.aantal_bungalow = int(houses * 0.25)
         self.wijk_type = wijk_type
         self.index_eengezinswoning = 1
         self.index_bungalow = 2
         self.index_maison = 3 
         self.index_water = 4
         self.index_vrijstand = 5
+        self.random_range = random_range
 
     def water(self):
 
@@ -57,21 +60,21 @@ class Placing:
 
         return self.wijk_type
 
-    def eensgezinswoningen(self, aantal_eensgezins):
+    def eensgezinswoningen(self):
 
         """ This method searches the gridmap for empty areas by creating random coordinates. If the area
          around the randomized coordinate fits this specific type of house, the house is placed and saved
          in the coordinates list. """
 
-        eensgezins_coordinatenlijst = [[0,0]] * 12
-        coordinaten_maison = [[0,0]] * 3
-        coordinaten_bungalow = [[0,0]] * 5
+        eensgezins_coordinatenlijst = [[0,0]] * self.aantal_eensgezins
+        coordinaten_maison = [[0,0]] * self.aantal_maison
+        coordinaten_bungalow = [[0,0]] * self.aantal_bungalow
 
-        for i in range(0,aantal_eensgezins):
+        for i in range(0,self.aantal_eensgezins):
             
             highest_price = 0
 
-            for j in range(0,10):
+            for j in range(0,self.random_range):
 
                 x = random.randrange(2,150)
                 y = random.randrange(2,170)
@@ -104,8 +107,8 @@ class Placing:
                 self.wijk[(y - 2):(y + 10),(x - 2):(x + 10)] = 5
                 self.wijk[y:(y + 8),x:(x + 8)] = 1
 
-                price = Kosten(self.wijk, 12, 5, 3)
-                new_price = price.eengezins_cost(eensgezins_coordinatenlijst, self.aantal_eensgezins)
+                price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
+                new_price = price.eengezins_cost(eensgezins_coordinatenlijst)
 
                 self.wijk[(y - 2):(y + 10),(x - 2):(x + 10)] = 0
                 self.water()
@@ -128,23 +131,21 @@ class Placing:
 
         return eensgezins_coordinatenlijst
 
-    def maison(self, aantal_maison, coordinaten_eensgezin):
+    def maison(self, coordinaten_eensgezin):
 
         """ This method searches the gridmap for empty areas by creating random coordinates. If the area
          around the randomized coordinate fits this specific type of house, the house is placed and saved
          in the coordinates list. """
 
-        # coordinaten_maison = [[0,0],[0,0],[0,0]]
-        coordinaten_maison = [[0,0]] * 3
+        coordinaten_maison = [[0,0]] * self.aantal_maison
         maison_coordinatenlijst = coordinaten_maison
-        # coordinaten_bungalow =[[0,0],[0,0],[0,0],[0,0],[0,0]]
-        coordinaten_bungalow = [[0,0]] * 5
+        coordinaten_bungalow = [[0,0]] * self.aantal_bungalow
 
-        for i in range(0,aantal_maison):
+        for i in range(0,self.aantal_maison):
 
             highest_price = 0
             
-            for j in range(0,10):
+            for j in range(0,self.random_range):
 
                 x = random.randrange(6,142)
                 y = random.randrange(6,164)
@@ -177,9 +178,9 @@ class Placing:
                 self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
                 self.wijk[y:(y + 10),x:(x + 12)] = 3
 
-                price = Kosten(self.wijk, 12, 5, 3)
-                new_mais = price.maison_cost(maison_coordinatenlijst, self.aantal_maison)
-                new_eens = price.eengezins_cost(coordinaten_eensgezin, self.aantal_eensgezins)
+                price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
+                new_mais = price.maison_cost(maison_coordinatenlijst)
+                new_eens = price.eengezins_cost(coordinaten_eensgezin)
                 new_price = new_mais + new_eens
 
                 self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 0
@@ -203,22 +204,21 @@ class Placing:
 
         return maison_coordinatenlijst
 
-    def bungalow(self, aantal_bungalow, coordinaten_eensgezin, coordinaten_maison):
+    def bungalow(self, coordinaten_eensgezin, coordinaten_maison):
 
         """ This method searches the gridmap for empty areas by creating random coordinates. If the area
          around the randomized coordinate fits this specific type of house, the house is placed and saved
          in the coordinates list. """
          
         # create a coordinates list of the houses being placed
-        # coordinaten_bungalow =[[0,0],[0,0],[0,0],[0,0],[0,0]]
-        coordinaten_bungalow = [[0,0]] * 5
+        coordinaten_bungalow = [[0,0]] * self.aantal_bungalow
         bungalow_coordinatenlijst = coordinaten_bungalow
 
-        for i in range(0,aantal_bungalow):
+        for i in range(0,self.aantal_bungalow):
 
             highest_price = 0
 
-            for j in range(0,10):
+            for j in range(0,self.random_range):
   
                 x = random.randrange(3,146)
                 y = random.randrange(3,170)
@@ -251,12 +251,11 @@ class Placing:
                 self.wijk[(y - 3):(y + 10),(x - 3):(x + 14)] = 5
                 self.wijk[y:(y + 7),x:(x + 11)] = 2
 
-                price = Kosten(self.wijk, 12, 5, 3)
+                price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
                 new_price = price.total(coordinaten_maison, bungalow_coordinatenlijst, coordinaten_eensgezin)
 
                 self.wijk[(y - 3):(y + 10),(x - 3):(x + 14)] = 0
                 self.water()
-                # self.wijk[y:(y + 7),x:(x + 11)] = 0
 
                 if new_price > highest_price:
                     highest_price = new_price
@@ -290,9 +289,8 @@ class Kosten():
         self.eengezins_aantal = eengezins_aantal
         self.bungalow_aantal = bungalow_aantal
         self.maison_aantal = maison_aantal
-
         
-    def eengezins_cost(self, coordinaten, eengezins_aantal):
+    def eengezins_cost(self, coordinaten):
 
         """ This method calculates the extra price per house depending on the free space that surrounds
          the house. This is done by looking up the coordinates of every house in the coordinates list
@@ -301,13 +299,12 @@ class Kosten():
 
         # make default prices of houses
         self.eengezins = 285000 
-        self.eengezins_aantal = eengezins_aantal
 
         # calcualte percentage of extra housing worth per extra sqaure meter space
         self.percentage_eengezins = self.eengezins * 0.03
 
         # make default total prices
-        self.total_eengezins = eengezins_aantal * self.eengezins
+        self.total_eengezins = self.eengezins_aantal * self.eengezins
 
         # getting the coordinates from placing class
         coordinateslijst = coordinaten
@@ -362,7 +359,7 @@ class Kosten():
 
         return self.total_eengezins
         
-    def bungalow_cost(self, coordinaten, bungalow_aantal):
+    def bungalow_cost(self, coordinaten):
 
         """ This method calculates the extra price per house depending on the free space that surrounds
          the house. This is done by looking up the coordinates of every house in the coordinates list
@@ -371,13 +368,12 @@ class Kosten():
 
         # make default prices of houses
         self.bungalow = 399000
-        self.bungalow_aantal = bungalow_aantal
 
         # calcualte percentage of extra housing worth per extra sqaure meter space
         self.percentage_bungalow = self.bungalow * 0.04
 
         # make default total prices
-        self.total_bungalow = bungalow_aantal * self.bungalow
+        self.total_bungalow = self.bungalow_aantal * self.bungalow
 
         # getting the coordinates from placing class
         coordinateslijst = coordinaten
@@ -395,7 +391,6 @@ class Kosten():
             som = 0 
             
             check = True
-
             while check == True:
 
                 x = x_coordinaat - afstand_tot_huis
@@ -413,8 +408,7 @@ class Kosten():
                 y_ver = y_coordinaat + 7 + afstand_tot_huis
                 if y_ver > 180:
                     y_ver = 180
-
-                
+   
                 self.wijk[(y_coordinaat - 3):(y_coordinaat + 10),(x_coordinaat - 3):(x_coordinaat + 14)] = 0
 
                 try: 
@@ -437,7 +431,7 @@ class Kosten():
 
         return self.total_bungalow
 
-    def maison_cost(self, coordinaten, maison_aantal):
+    def maison_cost(self, coordinaten):
 
         """ This method calculates the extra price per house depending on the free space that surrounds
          the house. This is done by looking up the coordinates of every house in the coordinates list
@@ -446,13 +440,12 @@ class Kosten():
         
         # make default prices of houses
         self.maison = 610000
-        self.maison_aantal = maison_aantal
 
         # calcualte percentage of extra housing worth per extra sqaure meter space
         self.percentage_maison = self.maison * 0.06
 
         # make default total prices
-        self.total_maison = maison_aantal * self.maison
+        self.total_maison = self.maison_aantal * self.maison
 
         # getting the coordinates from placing class
         coordinateslijst = coordinaten
@@ -504,16 +497,14 @@ class Kosten():
 
             self.wijk[(y_coordinaat - 6):(y_coordinaat + 16),(x_coordinaat - 6):(x_coordinaat + 18)] = 5
             self.wijk[y_coordinaat:(y_coordinaat + 10),x_coordinaat:(x_coordinaat + 12)] = 3
-
         
         return self.total_maison
 
-
     def total(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin):
         
-        omzet_eengezin = self.eengezins_cost(coordinaten_eensgezin, 12)
-        omzet_bungalow = self.bungalow_cost(coordinaten_bungalow, 5)
-        omzet_maison = self.maison_cost(coordinaten_maison, 3)
+        omzet_eengezin = self.eengezins_cost(coordinaten_eensgezin)
+        omzet_bungalow = self.bungalow_cost(coordinaten_bungalow)
+        omzet_maison = self.maison_cost(coordinaten_maison)
        
         totaal = omzet_eengezin + omzet_bungalow + omzet_maison
 
@@ -522,7 +513,8 @@ class Kosten():
 
 class Move(): 
 
-    def __init__(self,wijk,wijk_type):
+    def __init__(self, wijk, wijk_type, houses, random_range):
+
         self.index_vrijstand = 5
         self.index_water = 4
         self.index_maison = 3 
@@ -530,9 +522,13 @@ class Move():
         self.index_eengezinswoning = 1
         self.wijk_type = wijk_type
         self.wijk = wijk
-        
-        self.place = Placing(self.wijk, 12, 5, 3, self.wijk_type)
+        self.houses = houses
+        self.aantal_eensgezins = int(houses * 0.6)
+        self.aantal_maison = int(houses * 0.15)
+        self.aantal_bungalow = int(houses * 0.25)
+        self.random_range = random_range
 
+        self.place = Placing(self.wijk, self.houses, self.wijk_type, self.random_range)
     
     def possible_move(self, x, y, x_len, y_len, vrijstand):
         
@@ -553,15 +549,14 @@ class Move():
 
         else:
             return True
-
         
-    def move_maison(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk):
+    def move_maison(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin):
         self.coordinaten_maison = coordinaten_maison
         self.coordinaten_bungalow = coordinaten_bungalow
         self.coordinaten_eensgezin = coordinaten_eensgezin
-        self.wijk = wijk
 
-        price = Kosten(wijk, 12, 5, 3)
+        price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
+
         counter = 0 
 
         for coordinaten in coordinaten_maison:
@@ -579,7 +574,7 @@ class Move():
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
 
-            wijk[coordinaten[1]-6:(coordinaten[1]+16), coordinaten[0]-6:(coordinaten[0]+18)] = 0
+            self.wijk[coordinaten[1]-6:(coordinaten[1]+16), coordinaten[0]-6:(coordinaten[0]+18)] = 0
             self.place.water()
 
             if self.possible_move(x, y, 12, 10, 6) == True:
@@ -591,7 +586,7 @@ class Move():
                 coordinaten_maison[counter] = linksboven
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-6:y+16, x-6:x+18] = 0
+                self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -611,7 +606,7 @@ class Move():
                 coordinaten_maison[counter] = boven
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-6:y+16, x-6:x+18] = 0
+                self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
 
             else:
@@ -632,7 +627,7 @@ class Move():
                 coordinaten_maison[counter] = rechtsboven
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-6:y+16, x-6:x+18] = 0
+                self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -652,7 +647,7 @@ class Move():
                 coordinaten_maison[counter] = rechts
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-6:y+16, x-6:x+18] = 0
+                self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -672,7 +667,7 @@ class Move():
                 coordinaten_maison[counter] = rechtsonder
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-6:y+16, x-6:x+18] = 0
+                self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -692,7 +687,7 @@ class Move():
                 coordinaten_maison[counter] = onder
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-6:y+16, x-6:x+18] = 0
+                self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -712,13 +707,12 @@ class Move():
                 coordinaten_maison[counter] = linksonder
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-6:y+16, x-6:x+18] = 0
+                self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
             else:
                 # Adding default
                 lijst.append([0,0])
-                opbrengst.append(0.00)
-            
+                opbrengst.append(0.00)     
 
             # Links
             x = coordinaten[0] - 1
@@ -733,13 +727,12 @@ class Move():
                 coordinaten_maison[counter] = links
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-6:y+16, x-6:x+18] = 0
+                self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
             else:
                 # Adding default
                 lijst.append([0,0])
-                opbrengst.append(0.00)
-            
+                opbrengst.append(0.00) 
             
             # Getting the best option
             hoogste = max(opbrengst)
@@ -757,15 +750,13 @@ class Move():
             counter += 1
     
         return coordinaten_maison
-
             
-    def move_eensgezin(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk):
+    def move_eensgezin(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin):
         self.coordinaten_maison = coordinaten_maison
         self.coordinaten_bungalow = coordinaten_bungalow
         self.coordinaten_eensgezin = coordinaten_eensgezin
-        self.wijk = wijk
 
-        price = Kosten(wijk, 12, 5, 3)
+        price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
         counter = 0 
 
         for coordinaten in coordinaten_eensgezin:
@@ -778,7 +769,7 @@ class Move():
             opbrengst.append(new)
 
             # Linksboven
-            wijk[coordinaten[1]-2:(coordinaten[1]+10) , coordinaten[0]-2:(coordinaten[0]+10)] = 0
+            self.wijk[coordinaten[1]-2:(coordinaten[1]+10) , coordinaten[0]-2:(coordinaten[0]+10)] = 0
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
             self.place.water()
@@ -791,7 +782,7 @@ class Move():
                 coordinaten_eensgezin[counter] = linksboven
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-2:y+10, x-2:x+10] = 0
+                self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -811,7 +802,7 @@ class Move():
                 coordinaten_eensgezin[counter] = boven
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-2:y+10, x-2:x+10] = 0
+                self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -831,14 +822,12 @@ class Move():
                 coordinaten_eensgezin[counter] = rechtsboven
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-2:y+10, x-2:x+10] = 0
+                self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
             else:
                 # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
-            
-            
 
             # Rechts
             x = coordinaten[0] + 1
@@ -853,7 +842,7 @@ class Move():
                 coordinaten_eensgezin[counter] = rechts
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-2:y+10, x-2:x+10] = 0
+                self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -873,7 +862,7 @@ class Move():
                 coordinaten_eensgezin[counter] = rechtsonder
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-2:y+10, x-2:x+10] = 0
+                self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -893,7 +882,7 @@ class Move():
                 coordinaten_eensgezin[counter] = onder
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-2:y+10, x-2:x+10] = 0
+                self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -913,7 +902,7 @@ class Move():
                 coordinaten_eensgezin[counter] = linksonder
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-2:y+10, x-2:x+10] = 0
+                self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -933,7 +922,7 @@ class Move():
                 coordinaten_eensgezin[counter] = links
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-2:y+10, x-2:x+10] = 0
+                self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -953,17 +942,14 @@ class Move():
             self.wijk[y:(y + 8),x:(x + 8)] = 1
             
             coordinaten_eensgezin[counter] = best_coor
-            counter += 1
-        
-            
+            counter += 1          
 
-    def move_bungalow(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk):
+    def move_bungalow(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin):
         self.coordinaten_maison = coordinaten_maison
         self.coordinaten_bungalow = coordinaten_bungalow
         self.coordinaten_eensgezin = coordinaten_eensgezin
-        self.wijk = wijk
 
-        price = Kosten(wijk, 12, 5, 3)
+        price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
         counter = 0 
 
         for coordinaten in coordinaten_bungalow:
@@ -978,7 +964,7 @@ class Move():
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
             
-            wijk[coordinaten[1]-3:(coordinaten[1]+10), coordinaten[0]-3:(coordinaten[0]+14)] = 0
+            self.wijk[coordinaten[1]-3:(coordinaten[1]+10), coordinaten[0]-3:(coordinaten[0]+14)] = 0
             self.place.water()
 
             if self.possible_move(x, y, 11, 7, 3) == True:
@@ -990,7 +976,7 @@ class Move():
                 coordinaten_bungalow[counter] = linksboven
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-3:y+10, x-3:x+14] = 0
+                self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -1010,7 +996,7 @@ class Move():
                 coordinaten_bungalow[counter] = boven
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-3:y+10, x-3:x+14] = 0
+                self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
 
             else:
@@ -1031,7 +1017,7 @@ class Move():
                 coordinaten_bungalow[counter] = rechtsboven
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-3:y+10, x-3:x+14] = 0
+                self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -1051,14 +1037,13 @@ class Move():
                 coordinaten_bungalow[counter] = rechts
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-3:y+10, x-3:x+14] = 0
+                self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
 
             else:
                 # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
-            
 
             # Rechtsonder
             x = coordinaten[0] + 1
@@ -1073,7 +1058,7 @@ class Move():
                 coordinaten_bungalow[counter] = rechtsonder
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-3:y+10, x-3:x+14] = 0
+                self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
             else:
                 # Adding default
@@ -1093,13 +1078,12 @@ class Move():
                 coordinaten_bungalow[counter] = onder
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-3:y+10, x-3:x+14] = 0
+                self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
             else:
                 # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
-
 
             # Linksonder
             x = coordinaten[0] - 1
@@ -1114,13 +1098,12 @@ class Move():
                 coordinaten_bungalow[counter] = linksonder
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-3:y+10, x-3:x+14] = 0
+                self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
             else:
                 # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
-
 
             # Links
             x = coordinaten[0] - 1
@@ -1135,13 +1118,12 @@ class Move():
                 coordinaten_bungalow[counter] = links
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
-                wijk[y-3:y+10, x-3:x+14] = 0
+                self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
             else:
                 # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
-
 
             # Getting the best option
             hoogste = max(opbrengst)
@@ -1160,29 +1142,38 @@ class Move():
 
 def main():
     
-    wijk_type = 3
-    runs = 1
-    highest_price_move = 0
+    # settings
+    wijk_type = 1
+    houses = 20
+    runs = 3
+    random_range = 3
 
+    # initialize variables
+    aantal_eensgezins = int(houses * 0.6)
+    aantal_bungalow = int(houses * 0.25)
+    aantal_maison = int(houses * 0.15)
+    highest_price_move = 0
     total_prices = []
 
     for i in range(runs):
+        print("Run", (i+1))
+
         # create a 160 x 180 gridmap
         x, y = (160, 180) 
         wijk = [[0 for i in range(x)] for j in range(y)]
-        wijk = np.array(wijk) 
+        wijk = np.array(wijk)
 
         # adding houses
-        price = Kosten(wijk, 12, 5, 3)
-        place = Placing(wijk, 12, 5, 3, wijk_type)
-        move = Move(wijk, wijk_type)
+        price = Kosten(wijk, aantal_eensgezins, aantal_bungalow, aantal_maison)
+        place = Placing(wijk, houses, wijk_type, random_range)
+        move = Move(wijk, wijk_type, houses, random_range)
 
         # create the different water values of the gridmap
         place.water()
 
-        coordinaten_eensgezin = place.eensgezinswoningen(12)
-        coordinaten_maison = place.maison(3, coordinaten_eensgezin)
-        coordinaten_bungalow = place.bungalow(5, coordinaten_eensgezin, coordinaten_maison)
+        coordinaten_eensgezin = place.eensgezinswoningen()
+        coordinaten_maison = place.maison(coordinaten_eensgezin)
+        coordinaten_bungalow = place.bungalow(coordinaten_eensgezin, coordinaten_maison)
 
         totaal = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
         total_prices.append(totaal)
@@ -1193,34 +1184,30 @@ def main():
             print(max(total_prices))
             
             oud_move = totaal
-            
             counter = 1
 
-            move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-            move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-            move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-            
-            new_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+            move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+            move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+            move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
 
+            new_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
             
             while new_move > oud_move:
+
                 # Move houses
-                counter +=1
-                move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-                move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
-                move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
+                counter += 1
+                move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
+                move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 
                 # New values
                 oud_move = new_move
                 new_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
             
-            
             price_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
 
-
-            print("Move klaar")
-            print(price_move)
-            print(counter)
+            # print("Move klaar")
+            # print(price_move)
             if price_move >= highest_price_move:
                 highest_price_move = price_move
                 wijk_move = wijk
@@ -1249,8 +1236,16 @@ def main():
     colors = ca[ca[:,0].argsort()][:,1:]/255.
     cmap = matplotlib.colors.ListedColormap(colors)
     plt.pcolor(H, cmap = cmap)
-    plt.title("Visualisatie Wijk " + str(wijk_type))
-    plt.show()
+    plt.title("Wijk " + str(wijk_type) + " | " + str(houses) + " houses | " + str(runs) + " runs | " + str(max(total_prices)) + " €")
+    plt.axis('off')
+
+    # create legend for visualization
+    een = mpatches.Patch(color=colors[1], label="Eengezins")
+    bung = mpatches.Patch(color=colors[2], label="Bungalow")
+    mais = mpatches.Patch(color=colors[3], label="Maison")
+    wat = mpatches.Patch(color=colors[4], label="Water")
+    extr = mpatches.Patch(color=colors[5], label="Vrijstand")
+    plt.legend(handles=[wat,een,bung,mais,extr], bbox_to_anchor=(1.01, 0.5), loc='center left')
 
     # create boxplot
     fig, ax1 = plt.subplots()
@@ -1265,10 +1260,10 @@ def main():
     plt.show()
 
     # saving in csv file
-    with open("wijk1.csv","w+") as my_csv:
+    with open("output.csv","w+") as my_csv:
         csvWriter = csv.writer(my_csv,delimiter=',')
-        # csvWriter.writerows(wijk_max)
         csvWriter.writerows(wijk_move)
+        # csvWriter.writerows(wijk_max)
 
 
 if __name__ == '__main__':

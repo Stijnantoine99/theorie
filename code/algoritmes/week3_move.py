@@ -502,7 +502,7 @@ class Move():
         elif self.index_vrijstand in self.wijk[y:(y+y_len),x:(x+x_len)]:
            return False
         
-        elif x+x_len+vrijstand > 160:
+        elif x+x_len+vrijstand > 160 or x-vrijstand<0:
             return False
         
         elif y+y_len+vrijstand>180 or y-vrijstand<0:
@@ -1125,7 +1125,7 @@ def main():
     total_prices = []
 
     for i in range(runs):
-
+        print(i)
         # create a 160 x 180 gridmap
         x, y = (160, 180)
         wijk = [[0 for i in range(x)] for j in range(y)]
@@ -1152,7 +1152,7 @@ def main():
             print(max(total_prices))
 
             for i in range(0,10):
-                
+                print(i)
                 move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
                 move.move_eensgezin(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
                 move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin, wijk)
