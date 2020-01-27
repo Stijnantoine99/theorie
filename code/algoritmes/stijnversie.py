@@ -8,12 +8,10 @@ import matplotlib.colors
 
 class Placing: 
 
-    """ This class consists out of methods which place the different houses on the created gridmap. This 
+    """ All houses are being placed on the created gridmap called "neighbourhood". This 
     is done by scanning the ground for empty space after which the houses are placed one by one.
     Furthermore the water is created and placed. """
 
-    # save the amount of houses being placed when running the Placing class 
-    # def __init__(self, wijk, aantal_eensgezins, aantal_maison, aantal_bungalow, wijk_type):
     def __init__(self, wijk, houses, wijk_type, random_range):
         
         self.wijk = wijk
@@ -30,99 +28,112 @@ class Placing:
 
     def water(self):
 
-        """ This method adds areas of water to the created gridmap. 
-         The type of neighbourhood is given as an argument when calling the method.
-         The method checks which neighbourhood type is given and creates the water area for that type.
-         The area where the water should be generated is changed from an "empty" value to the "water" value. """
+        """ Depending on the type of neighbourhood, water is added on the gridmap. 
+        The type of neighbourhood is given as an argument when calling the whole Class.
+        The area where the water should be generated is changed from an "empty" value to a "water" value. """
 
-        # self.wijk_type = wijk_type
-
-        # if the wijk type given is 1 create the water for wijk 1
+        # change values in array to "water" values, when neighbourhood type is 1
         if self.wijk_type == 1:
-
-            # change the values in the selected area from the array to the "water" value
             self.wijk[0:180, 0:32] = 4
 
-        # if the wijk type given is 2 create the water for wijk 2
+        # change values in array to "water" values, when neighbourhood type is 2
         if self.wijk_type == 2:
-
-            # change the values in the selected area from the array to the "water" value
             self.wijk[135:180, 0:32] = 4
             self.wijk[0:45, 0:32] = 4
             self.wijk[135:180, 128:160] = 4
             self.wijk[0:45, 128:160] = 4
 
-        # if the wijk type given is 3 create the water for wijk 3
+        # change values in array to "water" values, when neighbourhood type is 2
         if self.wijk_type == 3:
-
-            # change the values in the selected area from the array to the "water" value
             self.wijk[50:130, 44:116] = 4
 
         return self.wijk_type
 
     def eensgezinswoningen(self):
 
-        """ This method searches the gridmap for empty areas by creating random coordinates. If the area
-         around the randomized coordinate fits this specific type of house, the house is placed and saved
-         in the coordinates list. """
+        """ Random coordinates for an single family home are generated and placed in the neighbourhood.
+        If the area around the randomized coordinate fits this specific type of house, the house is placed and saved
+        in the coordinates list. """
 
+        # create empty coordinates list for each type of house
         eensgezins_coordinatenlijst = [[0,0]] * self.aantal_eensgezins
         coordinaten_maison = [[0,0]] * self.aantal_maison
         coordinaten_bungalow = [[0,0]] * self.aantal_bungalow
 
+        # amount of times a house is placed
         for i in range(0,self.aantal_eensgezins):
             
+            # set default value for the highest price of a placed house
             highest_price = 0
 
+            # amount of times a random coordinate is placed checked for a house
             for j in range(0,self.random_range):
 
+                # generate random coordinates for the upper-left corner of a single family home
+                # the coordinates should fit the range of the neighbourhood, which is dependent on the size of the house
+                # the size of a single family home is 10x10 metres including obligatory free space
+                # from the upper-left corner of the house, the ranges of the random coordinates should fall between 2-150 (x-axis) and 2-170 (y-axis)
                 x = random.randrange(2,150)
                 y = random.randrange(2,170)
 
+                # create new coordinates whenever a coordinate does not meet the requirements
                 check = True
                 while check == True:
 
+                    # new coordinates when water present in new house
                     if self.index_water in self.wijk[y:(y+8),x:(x+8)]:
                         x = random.randrange(2,150)
                         y = random.randrange(2,170)
 
+                    # new coordinate when another house already present in new house
                     elif self.index_eengezinswoning in self.wijk[(y-2):(y+10),(x-2):(x+10)] or self.index_bungalow in self.wijk[(y-2):(y+10),(x-2):(x+10)] or self.index_maison in self.wijk[(y-2):(y+10),(x-2):(x+10)]:
                         x = random.randrange(2,150)
                         y = random.randrange(2,170)
 
+                    # new coordinate when obligatory free space from another house present in new house
                     elif self.index_vrijstand in self.wijk[y:(y+8),x:(x+8)]:
                         x = random.randrange(2,150)
                         y = random.randrange(2,170)
-                        
+
+                    # coordinate is valid
                     else:
                         check = False
 
+                # excluding the first house placement, check the price of the given coordinates
                 if i == 0:
                     highest_price_coor = [x,y]
                     break
 
+                # new coordinates are saved in coordinates list
                 new_coor = [x,y]
                 eensgezins_coordinatenlijst[i] = new_coor
 
+                # house is drawn in neighbourhood before checking the price.
                 self.wijk[(y - 2):(y + 10),(x - 2):(x + 10)] = 5
                 self.wijk[y:(y + 8),x:(x + 8)] = 1
 
+                # calculate price of current neighborhood with the new house
                 price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
                 new_price = price.eengezins_cost(eensgezins_coordinatenlijst)
 
+                # redraw neighbourhood so that new house is removed from neighbourhood and water is placed again
                 self.wijk[(y - 2):(y + 10),(x - 2):(x + 10)] = 0
                 self.water()
 
+                # save current highest price and coordinates
                 if new_price > highest_price:
                     highest_price = new_price
                     highest_price_coor = new_coor
 
+            # fill empty coordinates with coordinates of other house
             for b in range(0,len(eensgezins_coordinatenlijst)):
                 if eensgezins_coordinatenlijst[b] == [0,0]:
                     eensgezins_coordinatenlijst[b] = highest_price_coor
 
+            # save coordinates in coordinates list
             eensgezins_coordinatenlijst[i] = highest_price_coor
 
+            # draw every house on the gridmap
             for coor in eensgezins_coordinatenlijst:
                 y = coor[1]
                 x = coor[0]
@@ -133,69 +144,91 @@ class Placing:
 
     def maison(self, coordinaten_eensgezin):
 
-        """ This method searches the gridmap for empty areas by creating random coordinates. If the area
-         around the randomized coordinate fits this specific type of house, the house is placed and saved
-         in the coordinates list. """
+        """ Random coordinates for a maison are generated and placed in the neighbourhood.
+        If the area around the randomized coordinate fits this specific type of house, the house is placed and saved
+        in the coordinates list. """
 
+        # create empty coordinates list of remaining house types
         coordinaten_maison = [[0,0]] * self.aantal_maison
         maison_coordinatenlijst = coordinaten_maison
         coordinaten_bungalow = [[0,0]] * self.aantal_bungalow
 
+        # amount of times a house is placed
         for i in range(0,self.aantal_maison):
 
+            # set default value for the highest price of a placed house
             highest_price = 0
             
+            # amount of times a random coordinate is placed and checked for a house
             for j in range(0,self.random_range):
 
+                # generate random coordinates for the upper-left corner of a maison
+                # the coordinates should fit the range of the neighbourhood, which is dependent on the size of the house
+                # the size of a maison is 18x16 metres including obligatory free space
+                # from the upper-left corner of the house, the ranges of the random coordinates should fall between 6-142 (x-axis) and 6-164 (y-axis)
                 x = random.randrange(6,142)
                 y = random.randrange(6,164)
                 
+                # create new coordinates whenever a coordinate does not meet the requirements
                 check = True
                 while check == True:
 
+                    # new coordinates when water present in new house
                     if self.index_water in self.wijk[y:(y+10),x:(x+12)]:
                         x = random.randrange(6,142)
                         y = random.randrange(6,164)
 
+                    # new coordinates when another house already present in new house
                     elif self.index_eengezinswoning in self.wijk[(y-6):(y+16),(x-6):(x+18)] or self.index_bungalow in self.wijk[(y-6):(y+16),(x-6):(x+18)] or self.index_maison in self.wijk[(y-6):(y+16),(x-6):(x+18)]:
                         x = random.randrange(6,142)
                         y = random.randrange(6,164)
 
+                    # new coordinates when obligatory free space from another house present in new house
                     elif self.index_vrijstand in self.wijk[y:(y+10),x:(x+12)]:
                         x = random.randrange(6,142)
                         y = random.randrange(6,164)
 
+                    # coordinate is valid
                     else:
                         check = False
                     
+                # excluding the first house placement, check the price of the given coordinates
                 if i == 0:
                     highest_price_coor = [x,y]
                     break
 
+                # new coordinates are saved in coordinates list
                 new_coor = [x,y]
                 maison_coordinatenlijst[i] = new_coor
 
+                # house is drawn in neighbourhood before checking the price.
                 self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
                 self.wijk[y:(y + 10),x:(x + 12)] = 3
 
+                # calculate price of current neighborhood with the new house
                 price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
                 new_mais = price.maison_cost(maison_coordinatenlijst)
                 new_eens = price.eengezins_cost(coordinaten_eensgezin)
                 new_price = new_mais + new_eens
 
+                # redraw neighbourhood so that new house is removed from neighbourhood and water is placed again
                 self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 0
                 self.water()
         
+                # save current highest price and coordinates
                 if new_price > highest_price:
                     highest_price = new_price
                     highest_price_coor = new_coor
 
+            # fill empty coordinates with coordinates of other house
             for b in range(0,len(maison_coordinatenlijst)):
                 if maison_coordinatenlijst[b] == [0,0]:
                     maison_coordinatenlijst[b] = highest_price_coor
 
+            # save coordinates in coordinates list
             maison_coordinatenlijst[i] = highest_price_coor
 
+            # draw every house on the gridmap
             for coor in maison_coordinatenlijst:
                 y = coor[1]
                 x = coor[0]
@@ -206,67 +239,88 @@ class Placing:
 
     def bungalow(self, coordinaten_eensgezin, coordinaten_maison):
 
-        """ This method searches the gridmap for empty areas by creating random coordinates. If the area
-         around the randomized coordinate fits this specific type of house, the house is placed and saved
-         in the coordinates list. """
+        """ Random coordinates for a bungalow are generated and placed in the neighbourhood.
+        If the area around the randomized coordinate fits this specific type of house, the house is placed and saved
+        in the coordinates list. """
          
-        # create a coordinates list of the houses being placed
+        # create empty coordinates list for bungalow
         coordinaten_bungalow = [[0,0]] * self.aantal_bungalow
         bungalow_coordinatenlijst = coordinaten_bungalow
 
+        # amount of times a bungalow is placed
         for i in range(0,self.aantal_bungalow):
 
+            # set default value for the highest price of a placed house
             highest_price = 0
 
+            # amount of times a random coordinate is placed and checked for a house
             for j in range(0,self.random_range):
-  
+
+                # generate random coordinates for the upper-left corner of a bungalow
+                # the coordinates should fit the range of the neighbourhood, which is dependent on the size of the house
+                # the size of a maison is 14x10 metres including obligatory free space
+                # from the upper-left corner of the house, the ranges of the random coordinates should fall between 3-146 (x-axis) and 2-170 (y-axis)
                 x = random.randrange(3,146)
                 y = random.randrange(3,170)
 
+                # create new coordinates whenever a coordinate does not meet the requirements
                 check = True
                 while check == True:
 
+                    # new coordinates when water present in new house
                     if self.index_water in self.wijk[y:(y+7),x:(x+11)]:
                         x = random.randrange(3,146)
                         y = random.randrange(3,170)
 
+                    # new coordinates when another house already present in new house
                     elif self.index_eengezinswoning in self.wijk[(y-3):(y+10),(x-3):(x+14)] or self.index_bungalow in self.wijk[(y-3):(y+10),(x-3):(x+14)] or self.index_maison in self.wijk[(y-3):(y+10),(x-3):(x+14)]:
                         x = random.randrange(3,146)
                         y = random.randrange(3,170)
 
+                    # new coordinates when obligatory free space from another house present in new house
                     elif self.index_vrijstand in self.wijk[y:(y+7),x:(x+11)]:
                         x = random.randrange(3,146)
                         y = random.randrange(3,170)
                     
+                    # coordinate is valid
                     else:
                         check = False
 
+                # excluding the first house placement, check the price of the given coordinates
                 if i == 0:
                     highest_price_coor = [x,y]
                     break
 
+                # new coordinates are saved in coordinates list
                 new_coor = [x,y]
                 bungalow_coordinatenlijst[i] = new_coor
 
+                # house is drawn in neighbourhood before checking the price.
                 self.wijk[(y - 3):(y + 10),(x - 3):(x + 14)] = 5
                 self.wijk[y:(y + 7),x:(x + 11)] = 2
 
+                # calculate price of current neighborhood with the new house
                 price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
                 new_price = price.total(coordinaten_maison, bungalow_coordinatenlijst, coordinaten_eensgezin)
 
+                # redraw neighbourhood so that new house is removed from neighbourhood and water is placed again
                 self.wijk[(y - 3):(y + 10),(x - 3):(x + 14)] = 0
                 self.water()
 
+                # save current highest price and coordinates
                 if new_price > highest_price:
                     highest_price = new_price
                     highest_price_coor = new_coor
 
+            # fill empty coordinates with coordinates of other house
             for b in range(0,len(bungalow_coordinatenlijst)):
                 if bungalow_coordinatenlijst[b] == [0,0]:
                     bungalow_coordinatenlijst[b] = highest_price_coor
 
+            # save coordinates in coordinates list
             bungalow_coordinatenlijst[i] = highest_price_coor
 
+            # draw every house on the gridmap
             for coor in bungalow_coordinatenlijst:
                 y = coor[1]
                 x = coor[0]
@@ -277,12 +331,10 @@ class Placing:
 
 class Kosten():
 
-    """ This class consists out of methods which calculate the price of the houses placed on the gridmap.
-    The total price is firstly set at a default value. After this the methods can be called upon which
-    adds the extra price per house when going over the map. """
+    """ In each method, the price of a certain housetype is calculated. 
+    In the last method, the total price of the neighbourhood will be calculated.
+    All houses have a default price, but for every meter of free space around a house, the value of a house will increase. """
 
-
-    # save the amount of houses being placed when running the Placing class 
     def __init__(self, wijk, eengezins_aantal, bungalow_aantal, maison_aantal):
         
         self.wijk = wijk
@@ -292,61 +344,73 @@ class Kosten():
         
     def eengezins_cost(self, coordinaten):
 
-        """ This method calculates the extra price per house depending on the free space that surrounds
-         the house. This is done by looking up the coordinates of every house in the coordinates list
-         saved when placing the houses. From these coordinates the free space around the houses are checked
-         and the total house price is being adjusted. """
+        """ The total price for each single family house is calculated. 
+        The extra price per house is dependent on the free space that surrounds the house. 
+        This is done by looking up the coordinates of every house in the coordinates list saved when placing the houses. 
+        From these coordinates the free space around the houses are checked and the total house price is being adjusted. """
 
-        # make default prices of houses
+        # set default price of a single family home
         self.eengezins = 285000 
 
-        # calcualte percentage of extra housing worth per extra sqaure meter space
+        # calculate percentage of extra housing worth per extra square meter space
         self.percentage_eengezins = self.eengezins * 0.03
 
-        # make default total prices
+        # make default total price of all single family houses
         self.total_eengezins = self.eengezins_aantal * self.eengezins
 
-        # getting the coordinates from placing class
+        # retrieve coordinates
         coordinateslijst = coordinaten
 
-        # check the outline of every eengezinshuis
+        # check the outline of every single family house for extra free space
         for coordinates in coordinateslijst:
             eensgezinswoning = 1 
             bungalow = 2 
             maison = 3      
-      
+
+            # free space is calculated by checking the distance between house and its surroundings.
             afstand_tot_huis = 3 
+
             x_coordinaat = coordinates[0]
             y_coordinaat = coordinates[1]
-            som = 0 
 
+            # check for free space around house until another house is found
             check = True
             while check == True:
+
+                # the distance between house and its surroundings is increased by one for each run to check for more free space
+                # the free space around a house is checked on each side (up, down, left and right)
                 x = x_coordinaat - afstand_tot_huis
+                x_ver = x_coordinaat + 8 + afstand_tot_huis
+                y = y_coordinaat - afstand_tot_huis
+                y_ver = y_coordinaat + 8 + afstand_tot_huis
+
+                # reset coordinates when out of boundary, because extra free space is able to 'go over' the boundaries
                 if x < 0:
                     x = 0 
 
-                x_ver = x_coordinaat + 8 + afstand_tot_huis
                 if x_ver > 160:
                     x_ver = 160
 
-                y = y_coordinaat - afstand_tot_huis
                 if y < 0:
                     y = 0
-            
-                y_ver = y_coordinaat + 8 + afstand_tot_huis
+
                 if y_ver > 180:
                     y_ver = 180
 
+                # remove current house from the gridmap
                 self.wijk[(y_coordinaat - 2):(y_coordinaat + 10),(x_coordinaat - 2):(x_coordinaat + 10)] = 0
     
+                # check for other house in given range of free space
                 try:
                     if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
+
+                    # when no house is found, recalculate total price and add one extra meter of free space
                     else:
                         self.total_eengezins = self.total_eengezins + self.percentage_eengezins
                         afstand_tot_huis += 1
                 
+                # check for IndexError to be sure a coordinate does not go out of range
                 except IndexError:
                     if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
@@ -354,6 +418,7 @@ class Kosten():
                         self.total_eengezins = self.total_eengezins + self.percentage_eengezins
                         afstand_tot_huis += 1
 
+            # redraw house on the gridmap
             self.wijk[(y_coordinaat - 2):(y_coordinaat + 10),(x_coordinaat - 2):(x_coordinaat + 10)] = 5
             self.wijk[y_coordinaat:(y_coordinaat + 8),x_coordinaat:(x_coordinaat + 8)] = 1
 
@@ -361,63 +426,74 @@ class Kosten():
         
     def bungalow_cost(self, coordinaten):
 
-        """ This method calculates the extra price per house depending on the free space that surrounds
-         the house. This is done by looking up the coordinates of every house in the coordinates list
-         saved when placing the houses. From these coordinates the free space around the houses are checked
-         and the total house price is being adjusted. """
+        """ The total price for each bungalow is calculated. 
+        The extra price per house is dependent on the free space that surrounds the house. 
+        This is done by looking up the coordinates of every house in the coordinates list saved when placing the houses. 
+        From these coordinates the free space around the houses are checked and the total house price is being adjusted. """
 
-        # make default prices of houses
+        # set default price of a bungalow
         self.bungalow = 399000
 
-        # calcualte percentage of extra housing worth per extra sqaure meter space
+        # calculate percentage of extra housing worth per extra square meter space
         self.percentage_bungalow = self.bungalow * 0.04
 
-        # make default total prices
+        # make default total price of all bungalows
         self.total_bungalow = self.bungalow_aantal * self.bungalow
 
-        # getting the coordinates from placing class
+        # retrieve coordinates
         coordinateslijst = coordinaten
 
-        # check the outline of every bungalow
+        # check the outline of every bungalow for extra free space
         for coordinates in coordinaten:
 
             eensgezinswoning = 1 
             bungalow = 2 
-            maison = 3 
+            maison = 3
             
+            # free space is calculated by checking the distance between house and its surroundings.
             afstand_tot_huis = 4
+
             x_coordinaat = coordinates[0]
             y_coordinaat = coordinates[1]
-            som = 0 
-            
+                        
+            # check for free space around house until another house is found
             check = True
             while check == True:
 
+                # distance between house and its surroundings is increased by one for each run to check for more free space
+                # free space around a house is checked on each side (up, down, left and right)
                 x = x_coordinaat - afstand_tot_huis
+                x_ver = x_coordinaat + 11 + afstand_tot_huis
+                y = y_coordinaat - afstand_tot_huis
+                y_ver = y_coordinaat + 7 + afstand_tot_huis
+
+                # reset coordinates when out of boundary, because extra free space is able to 'go over' the boundaries
                 if x < 0:
                     x = 0 
 
-                x_ver = x_coordinaat + 11 + afstand_tot_huis
                 if x_ver > 160:
                     x_ver=160
 
-                y = y_coordinaat - afstand_tot_huis
                 if y < 0:
                     y = 0
             
-                y_ver = y_coordinaat + 7 + afstand_tot_huis
                 if y_ver > 180:
                     y_ver = 180
    
+                # remove current house from the gridmap
                 self.wijk[(y_coordinaat - 3):(y_coordinaat + 10),(x_coordinaat - 3):(x_coordinaat + 14)] = 0
 
+                # check for other house in given range of free space
                 try: 
                     if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
+
+                    # when no house is found, recalculate total price and add one extra meter of free space
                     else:
                         self.total_eengezins = self.total_eengezins + self.percentage_eengezins
                         afstand_tot_huis += 1 
-               
+
+                # check for IndexError to be sure a coordinate does not go out of range
                 except IndexError:
                     if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
@@ -425,7 +501,7 @@ class Kosten():
                         self.total_eengezins = self.total_eengezins + self.percentage_eengezins
                         afstand_tot_huis += 1 
 
-
+            # redraw house on the gridmap
             self.wijk[(y_coordinaat - 3):(y_coordinaat + 10),(x_coordinaat - 3):(x_coordinaat + 14)] = 5
             self.wijk[y_coordinaat:(y_coordinaat + 7),x_coordinaat:(x_coordinaat + 11)] = 2
 
@@ -433,61 +509,74 @@ class Kosten():
 
     def maison_cost(self, coordinaten):
 
-        """ This method calculates the extra price per house depending on the free space that surrounds
-         the house. This is done by looking up the coordinates of every house in the coordinates list
-         saved when placing the houses. From these coordinates the free space around the houses are checked
-         and the total house price is being adjusted. """
+        """ The total price for each maison is calculated. 
+        The extra price per house is dependent on the free space that surrounds the house. 
+        This is done by looking up the coordinates of every house in the coordinates list saved when placing the houses. 
+        From these coordinates the free space around the houses are checked and the total house price is being adjusted. """
         
-        # make default prices of houses
+        # set default price of a maison
         self.maison = 610000
 
-        # calcualte percentage of extra housing worth per extra sqaure meter space
+        # calculate percentage of extra housing worth per extra square meter space
         self.percentage_maison = self.maison * 0.06
 
-        # make default total prices
+        # make default total price of all maisons
         self.total_maison = self.maison_aantal * self.maison
 
         # getting the coordinates from placing class
         coordinateslijst = coordinaten
 
-        # check the outline of every bungalow
+        # check the outline of every maison
         for coordinates in coordinaten:
 
+            # free space is calculated by checking the distance between house and its surroundings.
             afstand_tot_huis = 7
+
             x_coordinaat = coordinates[0]
             y_coordinaat = coordinates[1]
-            som = 0 
             
             eensgezinswoning = 1 
             bungalow = 2 
             maison = 3 
             
+            # check for free space around house until another house is found
             check = True
             while check == True:
+
+                # distance between house and its surroundings is increased by one for each run to check for more free space
+                # free space around a house is checked on each side (up, down, left and right)
                 x = x_coordinaat - afstand_tot_huis
+                x_ver = x_coordinaat + 12 + afstand_tot_huis
+                y = y_coordinaat - afstand_tot_huis
+                y_ver = y_coordinaat + 10 + afstand_tot_huis
+
+                # reset coordinates when out of boundary, because extra free space is able to 'go over' the boundaries
                 if x < 0:
                     x = 0 
 
-                x_ver = x_coordinaat + 12 + afstand_tot_huis
                 if x_ver > 160:
-                    x_ver=160
+                    x_ver = 160
 
-                y = y_coordinaat - afstand_tot_huis
                 if y < 0:
                     y = 0
-            
-                y_ver = y_coordinaat + 10 + afstand_tot_huis
+                
                 if y_ver > 180:
                     y_ver = 180
                 
+                # remove current house from the gridmap
                 self.wijk[(y_coordinaat-6):(y_coordinaat+16), (x_coordinaat-6):(x_coordinaat+18)] = 0
 
+                # check for other house in given range of free space
                 try: 
                     if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
+
+                    # when no house is found, recalculate total price and add one extra meter of free space
                     else:
                         self.total_maison = self.total_maison + self.percentage_maison
                         afstand_tot_huis += 1
+
+                # check for IndexError to be sure a coordinate does not go out of range
                 except IndexError:
                     if eensgezinswoning in self.wijk[y:y_ver, x:x_ver] or bungalow in self.wijk[y:y_ver, x:x_ver] or maison in self.wijk[y:y_ver, x:x_ver]:
                         check = False
@@ -495,6 +584,7 @@ class Kosten():
                         self.total_maison = self.total_maison + self.percentage_maison
                         afstand_tot_huis += 1
 
+            # redraw house on the gridmap
             self.wijk[(y_coordinaat - 6):(y_coordinaat + 16),(x_coordinaat - 6):(x_coordinaat + 18)] = 5
             self.wijk[y_coordinaat:(y_coordinaat + 10),x_coordinaat:(x_coordinaat + 12)] = 3
         
@@ -502,6 +592,10 @@ class Kosten():
 
     def total(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin):
         
+        """ The total price of the whole neighbourhood is calculated. 
+        This is done by adding up each housing type's total price.
+        Each housing type their method is called. """
+
         omzet_eengezin = self.eengezins_cost(coordinaten_eensgezin)
         omzet_bungalow = self.bungalow_cost(coordinaten_bungalow)
         omzet_maison = self.maison_cost(coordinaten_maison)
@@ -531,16 +625,25 @@ class Move():
         self.place = Placing(self.wijk, self.houses, self.wijk_type, self.random_range)
     
     def possible_move(self, x, y, x_len, y_len, vrijstand):
-        
+    
+    """ For every possible move of a house, the move should be checked whether it is a valid move.
+        A single move should meet a certain set of requirements which are presented in the if-statements.
+        For every single move, the 'moved' coordinates are given as input and these coordinates are checked.
+        When a move is seen as valid, this method will return True. """
+
+        # check for water
         if self.index_water in self.wijk[y:(y+y_len),x:(x+x_len)]:
            return False
         
+        # check for other house
         elif self.index_eengezinswoning in self.wijk[(y-vrijstand):(y+y_len+vrijstand),(x-vrijstand):(x+x_len+vrijstand)] or self.index_bungalow in self.wijk[(y-vrijstand):(y+y_len+vrijstand),(x-vrijstand):(x+x_len+vrijstand)] or self.index_maison in self.wijk[(y-vrijstand):(y+y_len+vrijstand),(x-vrijstand):(x+x_len+vrijstand)]:
             return False
 
+        # check for obligatory free space of other houses
         elif self.index_vrijstand in self.wijk[y:(y+y_len),x:(x+x_len)]:
            return False
         
+        # check for neighbourhood borders
         elif x+x_len+vrijstand > 160 or x-vrijstand<0:
             return False
         
@@ -551,45 +654,55 @@ class Move():
             return True
         
     def move_maison(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin):
+
         self.coordinaten_maison = coordinaten_maison
         self.coordinaten_bungalow = coordinaten_bungalow
         self.coordinaten_eensgezin = coordinaten_eensgezin
 
         price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
 
+        # set counter for indexation within coordinates lists
         counter = 0 
 
+        # check for every maison the best possible move
         for coordinaten in coordinaten_maison:
             
+            # set default empty lists. 'lijst' and 'opbrengst' respectively store the coordinates and price of each move in a certain direction.
             lijst = []
             opbrengst = []
+
+            # save coordinate and price of initial situation
             lijst.append(coordinaten)
 
             new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
             opbrengst.append(new)
 
-            # wijk[coordinaten[1]:(coordinaten[1]+8), coordinaten[0]:(coordinaten[0]+8)] = 0
-
-            # Linksboven
+            # top left 
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
 
+            # remove current house from the gridmap, and place water when obligatory free space of house is in water
             self.wijk[coordinaten[1]-6:(coordinaten[1]+16), coordinaten[0]-6:(coordinaten[0]+18)] = 0
             self.place.water()
 
+            # check for valid move with given coordinates (x,y), maison length (12,10) and obligatory free space (6) as input
             if self.possible_move(x, y, 12, 10, 6) == True:
-                # Adding new coordinate
+
+                # save top left coordinates
                 linksboven = [x,y]
                 lijst.append(linksboven)
 
-                # Adding calculated price
+                # save top left price
                 coordinaten_maison[counter] = linksboven
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # ???
                 self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
