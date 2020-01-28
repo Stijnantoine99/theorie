@@ -16,8 +16,8 @@ Every neighbourhood is on an area of land with a depth of 180 meters and a width
 
 All the houses have different prices and obligatory free space around. A single family house has a value of €285.000,- and needs 2 meters of obligatory free space. For every extra meter, the value of the house increases with 3%. A bungalow has a value of €399.000,- it is obligated to have at least 3 meters of free space around it. For every extra meter, the value increases with 4%. The maison has a value of €610.000,- and needs 6 meters of obligatory space. For every extra meter, the value of the house increases with 6%. The obligatory free space of the houses need to be within the neighbourhoods area but it is able to 'cross' the water.
 
-### House table
-| House type/features 	| Size (width x dept) 	| Obligatory space in meters 	| Price in euro's 	| Price increasement 	|
+##### House information
+| House type/features 	| Size (width x depth) 	| Obligatory space in meters 	| Price in euro's 	| Price increasement 	|
 |---------------------	|---------------------	|----------------------------	|-----------------	|--------------------	|
 | Single family home  	| 8 x 8               	| 2                          	| 285.000         	| 3%                 	|
 | Bungalow            	| 11 x 7              	| 3                          	| 399.000         	| 4%                 	|
@@ -25,7 +25,7 @@ All the houses have different prices and obligatory free space around. A single 
 
 
 ## Solution
-It is our job to create the most profitable outcome possible. Here we need to create the neighborhood with the highest house prices and therefore the highest total price for the area. To reach this ultimate situation we wrote 4 different algorithms.
+It is our job to create the most profitable outcome possible. Here we need to create the neighbourhood with the highest house prices and therefore the highest total price for the area. To reach this ultimate situation we wrote 4 different algorithms.
 
 1. [Random algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/random_algorithm)
 
