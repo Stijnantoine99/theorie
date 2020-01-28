@@ -42,7 +42,11 @@ It is our job to create the most profitable outcome possible. Here we need to cr
 4. [Main algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/main_algorithm)
  
    * The main algorithm is an combination between the greedy and move algorithm
+
+5. [Simulated Annealing algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/simulated_annealing_algorithm.py)
  
+   * The simulated annealing algorithm will move the houses like the move algorithm, but will initiate simulated annealing (check for bigger random steps) if possible.
+
 
 Each of these algorithms are clarified in there own readme wich you can find in the repository or you can click on the links above. The readme files will explain some details of each algorithm:
 
