@@ -48,9 +48,9 @@ It is our task to create the most profitable outcome possible. In order to do th
    * The simulated annealing algorithm will move the houses like the move algorithm, but will initiate simulated annealing (check for bigger random steps) if possible.
 
 
-### The algorithms
+### Algorithms
 
-The algorithms are made to create the best possible way to place the houses in every neighborhood. Every algorithm is different and are therefore hard to compare. However every algorithm has a method to place the houses and a method to calculate the total price. In the table below we have tried to quantify the amount of steps every algorithm has to take in the place and price method.
+Algorithms are made to create the best possible way to place the houses in every neighbourhood. Every algorithm is different and are therefore hard to compare. However every algorithm has a method to place the houses and a method to calculate the total price. In the table below we have tried to quantify the amount of steps every algorithm has to take in the place and price method.
 
 #### Variables
 We have made use of some variables which are distinguishable in our algorithms. All these variables affect the running time of a specific algorithm. We have tried to characterize the variables in all our algorithms and these are presented below.
