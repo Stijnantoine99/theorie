@@ -1358,7 +1358,7 @@ def main():
     colors = ca[ca[:,0].argsort()][:,1:]/255.
     cmap = matplotlib.colors.ListedColormap(colors)
     plt.pcolor(H, cmap = cmap)
-    plt.title("Wijk " + str(neighbourhood_type) + " | " + str(houses) + " houses | " + str(runs) + " runs | " + str(max(total_prices)) + " €")
+    plt.title("Wijk " + str(neighbourhood_type) + " | " + str(houses) + " houses | " + str(runs) + " runs | " + str(highest_price_move) + " €")
     plt.axis('off')
 
     # create legend for visualization
@@ -1371,7 +1371,7 @@ def main():
 
     # create boxplot
     fig, ax1 = plt.subplots()
-    ax1.boxplot(total_prices)
+    ax1.boxplot(total_prices_move)
     ax1.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     plt.title("Boxplot Wijk " + str(neighbourhood_type))
     ax1.set_ylabel("Price")
