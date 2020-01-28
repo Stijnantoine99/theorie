@@ -1388,7 +1388,7 @@ class Move():
 def main():
     
     # settings
-    neighbourhood_type = 1
+    neighbourhood_type = 2
     houses = 20
     runs = 3
     random_range = 10
@@ -1427,17 +1427,17 @@ def main():
         if total_price >= max(total_prices):
             neighbourhood_max = neighbourhood
             print(max(total_prices))
-            
-            oud_move = total_price
-            counter = 1
 
             # perform move for first time
             move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
             move.move_single(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
             move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
 
+            # intialize variables before while loop
             new_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
-            
+            oud_move = total_price
+            counter = 1
+
             # move until no move is possible
             while new_move > oud_move:
                 counter += 1
@@ -1449,13 +1449,13 @@ def main():
                 oud_move = new_move
                 new_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
             
+            # save price after move
             price_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
 
             # save highest price after move
             if price_move >= highest_price_move:
                 highest_price_move = price_move
                 neighbourhood_move = neighbourhood
-
 
     # calculate and show statistics
     mean = statistics.mean(total_prices)
@@ -1467,10 +1467,8 @@ def main():
     print()
 
     # create visualization
-    # H = np.array(neighbourhood_max)
     H = np.array(neighbourhood_move)
     plt.imshow(H)
-
     ca = np.array([[0, 102, 204, 0],
                   [1, 255, 51, 51],
                   [2, 255, 153, 51],
@@ -1498,16 +1496,12 @@ def main():
     plt.title("Boxplot Wijk " + str(neighbourhood_type))
     ax1.set_ylabel("Price")
     plt.xticks([1], ["Wijk" + str(neighbourhood_type)])
-    bottom = 7500000
-    top = 10000000
-    # ax1.set_ylim(bottom, top)
     plt.show()
 
     # saving in csv file
-    with open("output.csv","w+") as my_csv:
+    with open("output_main.csv","w+") as my_csv:
         csvWriter = csv.writer(my_csv,delimiter=',')
         csvWriter.writerows(neighbourhood_move)
-        # csvWriter.writerows(neighbourhood_max)
 
 
 if __name__ == '__main__':

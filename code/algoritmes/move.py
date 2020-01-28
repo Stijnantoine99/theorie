@@ -13,7 +13,7 @@ class Placing:
     is done by scanning the ground for empty space after which the houses are placed one by one.
     Furthermore the water is created and placed. """
 
-    def __init__(self, neighbourhood, houses, neighbourhood_type, random_range):
+    def __init__(self, neighbourhood, houses, neighbourhood_type):
         
         self.neighbourhood = neighbourhood
         self.amount_single = int(houses * 0.6)
@@ -25,7 +25,6 @@ class Placing:
         self.index_maison = 3 
         self.index_water = 4
         self.index_free_space = 5
-        self.random_range = random_range
 
     def place_water(self):
 
@@ -98,10 +97,7 @@ class Placing:
             new_coor = [x,y]
             single_coordinatenlijst[i] = new_coor
 
-        # draw every house on the gridmap
-        for coor in single_coordinatenlijst:
-            y = coor[1]
-            x = coor[0]
+            # draw house on the gridmap
             self.neighbourhood[(y - 2):(y + 10),(x - 2):(x + 10)] = 5
             self.neighbourhood[y:(y + 8),x:(x + 8)] = 1
 
@@ -121,85 +117,44 @@ class Placing:
         # amount of times a house is placed
         for i in range(0,self.amount_maison):
 
-            # set default value for the highest price of a placed house
-            highest_price = 0
+            # generate random coordinates for the upper-left corner of a maison
+            # the coordinates should fit the range of the neighbourhood, which is dependent on the size of the house
+            # the size of a maison is 18x16 metres including obligatory free space
+            # from the upper-left corner of the house, the ranges of the random coordinates should fall between 6-142 (x-axis) and 6-164 (y-axis)
+            x = random.randrange(6,142)
+            y = random.randrange(6,164)
             
-            # amount of times a random coordinate is placed and checked for a house
-            for j in range(0,self.random_range):
+            # create new coordinates whenever a coordinate does not meet the requirements
+            check = True
+            while check == True:
 
-                # generate random coordinates for the upper-left corner of a maison
-                # the coordinates should fit the range of the neighbourhood, which is dependent on the size of the house
-                # the size of a maison is 18x16 metres including obligatory free space
-                # from the upper-left corner of the house, the ranges of the random coordinates should fall between 6-142 (x-axis) and 6-164 (y-axis)
-                x = random.randrange(6,142)
-                y = random.randrange(6,164)
-                
-                # create new coordinates whenever a coordinate does not meet the requirements
-                check = True
-                while check == True:
+                # new coordinates when water present in new house
+                if self.index_water in self.neighbourhood[y:(y+10),x:(x+12)]:
+                    x = random.randrange(6,142)
+                    y = random.randrange(6,164)
 
-                    # new coordinates when water present in new house
-                    if self.index_water in self.neighbourhood[y:(y+10),x:(x+12)]:
-                        x = random.randrange(6,142)
-                        y = random.randrange(6,164)
+                # new coordinates when another house already present in new house
+                elif self.index_single in self.neighbourhood[(y-6):(y+16),(x-6):(x+18)] or self.index_bungalow in self.neighbourhood[(y-6):(y+16),(x-6):(x+18)] or self.index_maison in self.neighbourhood[(y-6):(y+16),(x-6):(x+18)]:
+                    x = random.randrange(6,142)
+                    y = random.randrange(6,164)
 
-                    # new coordinates when another house already present in new house
-                    elif self.index_single in self.neighbourhood[(y-6):(y+16),(x-6):(x+18)] or self.index_bungalow in self.neighbourhood[(y-6):(y+16),(x-6):(x+18)] or self.index_maison in self.neighbourhood[(y-6):(y+16),(x-6):(x+18)]:
-                        x = random.randrange(6,142)
-                        y = random.randrange(6,164)
+                # new coordinates when obligatory free space from another house present in new house
+                elif self.index_free_space in self.neighbourhood[y:(y+10),x:(x+12)]:
+                    x = random.randrange(6,142)
+                    y = random.randrange(6,164)
 
-                    # new coordinates when obligatory free space from another house present in new house
-                    elif self.index_free_space in self.neighbourhood[y:(y+10),x:(x+12)]:
-                        x = random.randrange(6,142)
-                        y = random.randrange(6,164)
+                # coordinate is valid
+                else:
+                    check = False
 
-                    # coordinate is valid
-                    else:
-                        check = False
-                    
-                # excluding the first house placement, check the price of the given coordinates
-                if i == 0:
-                    highest_price_coor = [x,y]
-                    break
-
-                # new coordinates are saved in coordinates list
-                new_coor = [x,y]
-                maison_coordinatenlijst[i] = new_coor
-
-                # house is drawn in neighbourhood before checking the price.
-                self.neighbourhood[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
-                self.neighbourhood[y:(y + 10),x:(x + 12)] = 3
-
-                # calculate price of current neighborhood with the new house
-                price = Price(self.neighbourhood, self.amount_single, self.amount_bungalow, self.amount_maison)
-                new_mais = price.maison_cost(maison_coordinatenlijst)
-                new_sing = price.single_cost(coordinaten_single)
-                new_price = new_mais + new_sing
-
-                # redraw neighbourhood so that new house is removed from neighbourhood and water is placed again
-                self.neighbourhood[(y - 6):(y + 16),(x - 6):(x + 18)] = 0
-                self.place_water()
-        
-                # save current highest price and coordinates
-                if new_price > highest_price:
-                    highest_price = new_price
-                    highest_price_coor = new_coor
-
-            # fill empty coordinates with coordinates of other house
-            for b in range(0,len(maison_coordinatenlijst)):
-                if maison_coordinatenlijst[b] == [0,0]:
-                    maison_coordinatenlijst[b] = highest_price_coor
-
-            # save coordinates in coordinates list
-            maison_coordinatenlijst[i] = highest_price_coor
+            # new coordinates are saved in coordinates list
+            new_coor = [x,y]
+            maison_coordinatenlijst[i] = new_coor
 
             # draw every house on the gridmap
-            for coor in maison_coordinatenlijst:
-                y = coor[1]
-                x = coor[0]
-                self.neighbourhood[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
-                self.neighbourhood[y:(y + 10),x:(x + 12)] = 3
-
+            self.neighbourhood[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
+            self.neighbourhood[y:(y + 10),x:(x + 12)] = 3
+        
         return maison_coordinatenlijst
 
     def place_bungalow(self, coordinaten_single, coordinaten_maison):
@@ -215,84 +170,46 @@ class Placing:
         # amount of times a bungalow is placed
         for i in range(0,self.amount_bungalow):
 
-            # set default value for the highest price of a placed house
-            highest_price = 0
+            # generate random coordinates for the upper-left corner of a bungalow
+            # the coordinates should fit the range of the neighbourhood, which is dependent on the size of the house
+            # the size of a maison is 14x10 metres including obligatory free space
+            # from the upper-left corner of the house, the ranges of the random coordinates should fall between 3-146 (x-axis) and 2-170 (y-axis)
+            x = random.randrange(3,146)
+            y = random.randrange(3,170)
 
-            # amount of times a random coordinate is placed and checked for a house
-            for j in range(0,self.random_range):
+            # create new coordinates whenever a coordinate does not meet the requirements
+            check = True
+            while check == True:
 
-                # generate random coordinates for the upper-left corner of a bungalow
-                # the coordinates should fit the range of the neighbourhood, which is dependent on the size of the house
-                # the size of a maison is 14x10 metres including obligatory free space
-                # from the upper-left corner of the house, the ranges of the random coordinates should fall between 3-146 (x-axis) and 2-170 (y-axis)
-                x = random.randrange(3,146)
-                y = random.randrange(3,170)
+                # new coordinates when water present in new house
+                if self.index_water in self.neighbourhood[y:(y+7),x:(x+11)]:
+                    x = random.randrange(3,146)
+                    y = random.randrange(3,170)
 
-                # create new coordinates whenever a coordinate does not meet the requirements
-                check = True
-                while check == True:
+                # new coordinates when another house already present in new house
+                elif self.index_single in self.neighbourhood[(y-3):(y+10),(x-3):(x+14)] or self.index_bungalow in self.neighbourhood[(y-3):(y+10),(x-3):(x+14)] or self.index_maison in self.neighbourhood[(y-3):(y+10),(x-3):(x+14)]:
+                    x = random.randrange(3,146)
+                    y = random.randrange(3,170)
 
-                    # new coordinates when water present in new house
-                    if self.index_water in self.neighbourhood[y:(y+7),x:(x+11)]:
-                        x = random.randrange(3,146)
-                        y = random.randrange(3,170)
+                # new coordinates when obligatory free space from another house present in new house
+                elif self.index_free_space in self.neighbourhood[y:(y+7),x:(x+11)]:
+                    x = random.randrange(3,146)
+                    y = random.randrange(3,170)
+                
+                # coordinate is valid
+                else:
+                    check = False
 
-                    # new coordinates when another house already present in new house
-                    elif self.index_single in self.neighbourhood[(y-3):(y+10),(x-3):(x+14)] or self.index_bungalow in self.neighbourhood[(y-3):(y+10),(x-3):(x+14)] or self.index_maison in self.neighbourhood[(y-3):(y+10),(x-3):(x+14)]:
-                        x = random.randrange(3,146)
-                        y = random.randrange(3,170)
-
-                    # new coordinates when obligatory free space from another house present in new house
-                    elif self.index_free_space in self.neighbourhood[y:(y+7),x:(x+11)]:
-                        x = random.randrange(3,146)
-                        y = random.randrange(3,170)
-                    
-                    # coordinate is valid
-                    else:
-                        check = False
-
-                # excluding the first house placement, check the price of the given coordinates
-                if i == 0:
-                    highest_price_coor = [x,y]
-                    break
-
-                # new coordinates are saved in coordinates list
-                new_coor = [x,y]
-                bungalow_coordinatenlijst[i] = new_coor
-
-                # house is drawn in neighbourhood before checking the price.
-                self.neighbourhood[(y - 3):(y + 10),(x - 3):(x + 14)] = 5
-                self.neighbourhood[y:(y + 7),x:(x + 11)] = 2
-
-                # calculate price of current neighborhood with the new house
-                price = Price(self.neighbourhood, self.amount_single, self.amount_bungalow, self.amount_maison)
-                new_price = price.total(coordinaten_maison, bungalow_coordinatenlijst, coordinaten_single)
-
-                # redraw neighbourhood so that new house is removed from neighbourhood and water is placed again
-                self.neighbourhood[(y - 3):(y + 10),(x - 3):(x + 14)] = 0
-                self.place_water()
-
-                # save current highest price and coordinates
-                if new_price > highest_price:
-                    highest_price = new_price
-                    highest_price_coor = new_coor
-
-            # fill empty coordinates with coordinates of other house
-            for b in range(0,len(bungalow_coordinatenlijst)):
-                if bungalow_coordinatenlijst[b] == [0,0]:
-                    bungalow_coordinatenlijst[b] = highest_price_coor
-
-            # save coordinates in coordinates list
-            bungalow_coordinatenlijst[i] = highest_price_coor
+            # new coordinates are saved in coordinates list
+            new_coor = [x,y]
+            bungalow_coordinatenlijst[i] = new_coor
 
             # draw every house on the gridmap
-            for coor in bungalow_coordinatenlijst:
-                y = coor[1]
-                x = coor[0]
-                self.neighbourhood[(y - 3):(y + 10),(x - 3):(x + 14)] = 5
-                self.neighbourhood[y:(y + 7),x:(x + 11)] = 2
+            self.neighbourhood[(y - 3):(y + 10),(x - 3):(x + 14)] = 5
+            self.neighbourhood[y:(y + 7),x:(x + 11)] = 2
 
         return bungalow_coordinatenlijst
+
 
 class Price():
 
@@ -572,7 +489,7 @@ class Price():
 
 class Move(): 
 
-    def __init__(self, neighbourhood, neighbourhood_type, houses, random_range):
+    def __init__(self, neighbourhood, neighbourhood_type, houses):
 
         self.index_free_space = 5
         self.index_water = 4
@@ -585,9 +502,8 @@ class Move():
         self.amount_single = int(houses * 0.6)
         self.amount_maison = int(houses * 0.15)
         self.amount_bungalow = int(houses * 0.25)
-        self.random_range = random_range
 
-        self.place = Placing(self.neighbourhood, self.houses, self.neighbourhood_type, self.random_range)
+        self.place = Placing(self.neighbourhood, self.houses, self.neighbourhood_type)
     
     def possible_move(self, x, y, x_len, y_len, free_space):
     
@@ -1352,10 +1268,9 @@ class Move():
 def main():
     
     # settings
-    neighbourhood_type = 1
+    neighbourhood_type = 2
     houses = 20
-    runs = 3
-    random_range = 10
+    runs = 100
 
     # initialize variables
     amount_single = int(houses * 0.6)
@@ -1363,6 +1278,7 @@ def main():
     amount_maison = int(houses * 0.15)
     highest_price_move = 0
     total_prices = []
+    total_prices_move = []
 
     for i in range(runs):
         print("Run", (i+1))
@@ -1374,8 +1290,8 @@ def main():
 
         # adding houses
         price = Price(neighbourhood, amount_single, amount_bungalow, amount_maison)
-        place = Placing(neighbourhood, houses, neighbourhood_type, random_range)
-        move = Move(neighbourhood, neighbourhood_type, houses, random_range)
+        place = Placing(neighbourhood, houses, neighbourhood_type)
+        move = Move(neighbourhood, neighbourhood_type, houses)
 
         # create the different water values of the gridmap
         place.place_water()
@@ -1391,50 +1307,48 @@ def main():
         if total_price >= max(total_prices):
             neighbourhood_max = neighbourhood
             print(max(total_prices))
-            
-            oud_move = total_price
-            counter = 1
 
-            # perform move for first time
-            move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
+        # perform move for first time
+        move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
+        move.move_single(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
+        move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
+
+        # intialize variables before while loop
+        new_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
+        oud_move = total_price
+        counter = 1
+
+        # move until no move is possible
+        while new_move > oud_move:
+            counter += 1
             move.move_single(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
+            move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
             move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
-
+            
+            # new values
+            oud_move = new_move
             new_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
-            
-            # move until no move is possible
-            while new_move > oud_move:
-                counter += 1
-                move.move_single(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
-                move.move_maison(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
-                move.move_bungalow(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
-                
-                # new values
-                oud_move = new_move
-                new_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
-            
-            price_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
+        
+        # save price after move
+        price_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
+        total_prices_move.append(price_move)
 
-            # save highest price after move
-            if price_move >= highest_price_move:
-                highest_price_move = price_move
-                neighbourhood_move = neighbourhood
-
+        # save highest price after move
+        if price_move >= highest_price_move:
+            highest_price_move = price_move
+            neighbourhood_move = neighbourhood
 
     # calculate and show statistics
-    mean = statistics.mean(total_prices)
+    mean = statistics.mean(total_prices_move)
     print()
     print("Wijk", neighbourhood_type, ":", runs, "runs")
     print("Mean:", mean)
-    print("Max:", max(total_prices))
-    print("Max with move:", highest_price_move)
+    print("Max:", highest_price_move)
     print()
 
     # create visualization
-    # H = np.array(neighbourhood_max)
     H = np.array(neighbourhood_move)
     plt.imshow(H)
-
     ca = np.array([[0, 102, 204, 0],
                   [1, 255, 51, 51],
                   [2, 255, 153, 51],
@@ -1462,16 +1376,12 @@ def main():
     plt.title("Boxplot Wijk " + str(neighbourhood_type))
     ax1.set_ylabel("Price")
     plt.xticks([1], ["Wijk" + str(neighbourhood_type)])
-    bottom = 7500000
-    top = 10000000
-    # ax1.set_ylim(bottom, top)
     plt.show()
 
     # saving in csv file
-    with open("output.csv","w+") as my_csv:
+    with open("output_move.csv","w+") as my_csv:
         csvWriter = csv.writer(my_csv,delimiter=',')
         csvWriter.writerows(neighbourhood_move)
-        # csvWriter.writerows(neighbourhood_max)
 
 
 if __name__ == '__main__':
