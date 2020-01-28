@@ -1478,7 +1478,7 @@ def main():
     colors = ca[ca[:,0].argsort()][:,1:]/255.
     cmap = matplotlib.colors.ListedColormap(colors)
     plt.pcolor(H, cmap = cmap)
-    plt.title("Wijk " + str(neighbourhood_type) + " | " + str(houses) + " houses | " + str(runs) + " runs | " + str(max(total_prices)) + " €")
+    plt.title("Wijk " + str(neighbourhood_type) + " | " + str(houses) + " houses | " + str(runs) + " runs | " + str(highest_price_move) + " €")
     plt.axis('off')
 
     # create legend for visualization
