@@ -150,6 +150,7 @@ However there is still some area which could increase the total price of the nei
 Taken from this hypothetical state of the model the upper bound could be calculated by adding the default values of the houses to the increase in value for all the houses:
 
   * 7,245,000 + 5,050,800 + 1,755,600 + 2,462,400 = 16,513,800 euro's as a total price
+  > This value could be probably never be met as the placement of the houses could not be achieved this ideally
 
 ### Requirements
 For the code to work these requirements should be met. 
