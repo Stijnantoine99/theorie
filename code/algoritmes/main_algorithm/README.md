@@ -16,3 +16,6 @@ To use the algorithm it is necessary to choose the house-variant(20/40/60), the 
 ### Results 
 After running the algorithm with neighbourhood_type = 2, house_variant = 20, runs = 100 and random_range = 10.
 
+![Map Main](https://github.com/Stijnantoine99/theorie/blob/master/doc/main_map_100.png)
+
+![Boxplot Main](https://github.com/Stijnantoine99/theorie/blob/master/doc/main_box_100.png)
