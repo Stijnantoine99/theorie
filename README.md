@@ -9,6 +9,7 @@ Date: 28/01/2020
 
 ![Amstelhaege](https://github.com/Stijnantoine99/theorie/blob/master/doc/Amstelhaege.png)
 
+## Problem Statement
 With current housing problem in the city of Amsterdam the local authorities decided to create 3 new neighbourhoods in the southern parts of Amsterdam. The local authorities still have to decide how many houses they want to build in three different neighbourhoods. There are 3 different housing variants: 20 houses, 40 houses and 60 houses. The 3 neighbourhoods are different in the distribution of the water. 
 
 Every neighbourhood is on an area of land with a depth of 180 meters and a width of 160 meters. In every one of the areas the water is distributed in a different way. In every neighborhood there are 3 different house types: single family houses, bungalows and maisons. The houses are always in the same proportions: 60% single family houses, 25% bungalows and 15% maisons. The houses all have different sizes: the single family houses 8x8 meter (width x depth),  bungalows 11x7 meter (width x depth) and maisons 12x10 meters (width x depth). 
@@ -23,7 +24,7 @@ All the houses have different prices and obligatory free space around. A single 
 | Maison              	| 12 x 10             	| 6                          	| 610.000         	| 6%                 	|
 
 
-## Our Job
+## Solution
 It is our job to create the most profitable outcome possible. Here we need to create the neighborhood with the highest house prices and therefore the highest total price for the area. To reach this ultimate situation we wrote 4 different algorithms.
 
 1. [Random algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/random_algorithm)
