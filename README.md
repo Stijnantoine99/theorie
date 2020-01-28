@@ -25,7 +25,7 @@ All the houses have different prices and obligatory free space around. A single 
 
 
 ## Solution
-It is our task to create the most profitable outcome possible. In order to do this, we need to create a neighbourhood with the highest house prices and therefore the highest total price for the area. To reach this ultimate situation we have written 4 different algorithms which are briefly explained below. A more detailed description of each algorithm can be found in the algorithms folder or be accessed by the links below.
+It is our task to create the most profitable outcome possible. In order to do this, we need to create a neighbourhood with the highest house prices and therefore the highest total price for the area. To reach this ultimate situation we have written five different algorithms which are briefly explained below. A more detailed description of each algorithm can be found in the algorithms folder or be accessed by the links below.
 
 1. [Random algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/random_algorithm)
 
