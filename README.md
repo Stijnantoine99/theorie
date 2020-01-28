@@ -1,13 +1,11 @@
 # AmstelHaege
 Group: Utopia
-
 Date: 28/01/2020
-
-![Amstelhaege](https://github.com/Stijnantoine99/theorie/blob/master/doc/Amstelhaege.png)
-
 * Lars van der Water  - 11320532
 * Rob Burger          - 11338059 
 * Stijn van den Berg  - 11887648
+
+![Amstelhaege](https://github.com/Stijnantoine99/theorie/blob/master/doc/Amstelhaege.png)
 
 With current housing problem in the city of Amsterdam the local authorities decided to create 3 new neighbourhoods in the southern parts of Amsterdam. The local authorities still have to decide how many houses they want to build in three different neighbourhoods. There are 3 different housing variants: 20 houses, 40 houses and 60 houses. The 3 neighbourhoods are different in the distribution of the water. 
 
