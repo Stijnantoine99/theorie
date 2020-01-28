@@ -626,10 +626,10 @@ class Move():
     
     def possible_move(self, x, y, x_len, y_len, vrijstand):
     
-    """ For every possible move of a house, the move should be checked whether it is a valid move.
+        """ For every possible move of a house, the move should be checked whether it is a valid move.
         A single move should meet a certain set of requirements which are presented in the if-statements.
         For every single move, the 'moved' coordinates are given as input and these coordinates are checked.
-        When a move is seen as valid, this method will return True. """
+        When a move is seen as valid, this method will return true. """ 
 
         # check for water
         if self.index_water in self.wijk[y:(y+y_len),x:(x+x_len)]:
@@ -677,7 +677,7 @@ class Move():
             new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
             opbrengst.append(new)
 
-            # top left 
+            # top left coordinates
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
 
@@ -691,13 +691,13 @@ class Move():
                 # save top left coordinates
                 linksboven = [x,y]
                 lijst.append(linksboven)
-
-                # save top left price
                 coordinaten_maison[counter] = linksboven
+                
+                # save top left price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
 
-                # ???
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
 
@@ -706,148 +706,182 @@ class Move():
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Boven
+            # top coordinates
             x = (coordinaten[0])
             y = (coordinaten[1] - 1)
             
+            # check for valid move with given coordinates (x,y), maison length (12,10) and obligatory free space (6) as input
             if self.possible_move(x, y, 12, 10, 6) == True:
-                # Adding new coordinate
+                
+                # save top coordinates
                 boven = [x,y]
                 lijst.append(boven)
-
-                # Adding calculated price
                 coordinaten_maison[counter] = boven
+                
+                # save top price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
 
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
             
-            # Rechtsboven
+            # top right coordinates
             x = coordinaten[0] + 1
             y = coordinaten[1] - 1
 
+            # check for valid move with given coordinates (x,y), maison length (12,10) and obligatory free space (6) as input
             if self.possible_move(x, y, 12, 10, 6) == True:
-                # Adding new coordinate
+
+                # save top right coordinates
                 rechtsboven = [x,y]
                 lijst.append(rechtsboven)
-
-                # Adding calculated price
                 coordinaten_maison[counter] = rechtsboven
+                
+                # save top right price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Rechts
+            # right coordinates
             x = coordinaten[0] + 1
             y = coordinaten[1]
 
+            # check for valid move with given coordinates (x,y), maison length (12,10) and obligatory free space (6) as input
             if self.possible_move(x, y, 12, 10, 6) == True:
-                # Adding new coordinate
+            
+                # save right coordinates
                 rechts = [x,y]
                 lijst.append(rechts)
-
-                # Adding calculated price
                 coordinaten_maison[counter] = rechts
+                
+                # save right price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
             
-            # Rechtsonder
+            # bottom right coordinates
             x = coordinaten[0] + 1
             y = coordinaten[1] + 1
 
+            # check for valid move with given coordinates (x,y), maison length (12,10) and obligatory free space (6) as input
             if self.possible_move(x, y, 12, 10, 6) == True:
-                # Adding new coordinate
+                
+                # save bottom right coordinates
                 rechtsonder = [x,y]
                 lijst.append(rechtsonder)
-
-                # Adding calculated price
                 coordinaten_maison[counter] = rechtsonder
+                
+                # save bottom right price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
         
-            # Onder
+            # bottom coordinates
             x = coordinaten[0] 
             y = coordinaten[1] + 1
 
+            # check for valid move with given coordinates (x,y), maison length (12,10) and obligatory free space (6) as input
             if self.possible_move(x, y, 12, 10, 6) == True:
-                # Adding new coordinate
+                
+                # save bottom coordinates
                 onder = [x,y]
                 lijst.append(onder)
-
-                # Adding calculated price
                 coordinaten_maison[counter] = onder
+                
+                # save bottom price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
             
-            # Linksonder
+            # bottom left coordinates
             x = coordinaten[0] - 1
             y = coordinaten[1] + 1
 
+            # check for valid move with given coordinates (x,y), maison length (12,10) and obligatory free space (6) as input
             if self.possible_move(x, y, 12, 10, 6) == True:
-                # Adding new coordinate
+                
+                # save bottom left coordinates
                 linksonder = [x,y]
                 lijst.append(linksonder)
-
-                # Adding calculated price
                 coordinaten_maison[counter] = linksonder
+
+                # save bottom left price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)     
 
-            # Links
+            # left coordinates
             x = coordinaten[0] - 1
             y = coordinaten[1]
             
+            # check for valid move with given coordinates (x,y), maison length (12,10) and obligatory free space (6) as input
             if self.possible_move(x, y, 12, 10, 6) == True:
-                # Adding new coordinate
+                
+                # save left coordinates
                 links = [x,y]
                 lijst.append(links)
-
-                # Adding calculated price
                 coordinaten_maison[counter] = links
+                
+                # save left price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-6:y+16, x-6:x+18] = 0
                 self.place.water()
+            
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00) 
             
-            # Getting the best option
+            # obtain the best move with highest price
             hoogste = max(opbrengst)
             index = opbrengst.index(hoogste)
             best_coor = lijst[index]
@@ -855,194 +889,243 @@ class Move():
             y = best_coor[1]
             x = best_coor[0]
             
-            # Draw
+            # draw move on the map
             self.wijk[(y - 6):(y + 16),(x - 6):(x + 18)] = 5
             self.wijk[y:(y + 10),x:(x + 12)] = 3
 
+            # change moved coordinates
             coordinaten_maison[counter] = best_coor
             counter += 1
     
-        return coordinaten_maison
-            
+        return coordinaten_maison          
+
     def move_eensgezin(self, coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin):
         self.coordinaten_maison = coordinaten_maison
         self.coordinaten_bungalow = coordinaten_bungalow
         self.coordinaten_eensgezin = coordinaten_eensgezin
 
         price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
-        counter = 0 
 
+        # set counter for indexation within coordinates lists
+        counter = 0
+
+        # check for every single family home the best possible move
         for coordinaten in coordinaten_eensgezin:
             
+            # set default empty lists. 'lijst' and 'opbrengst' respectively store the coordinates and price of each move in a certain direction.
             lijst = []
             opbrengst = []
+
+            # save coordinate and price of initial situation
             lijst.append(coordinaten)
-            
             new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
             opbrengst.append(new)
 
-            # Linksboven
+            # remove current house from the gridmap, and place water when obligatory free space of house is in water
             self.wijk[coordinaten[1]-2:(coordinaten[1]+10) , coordinaten[0]-2:(coordinaten[0]+10)] = 0
+            self.place.water()
+
+            # top left coordinates
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
-            self.place.water()
+
+            # check for valid move with given coordinates (x,y), single family house length (8,8) and obligatory free space (2) as input
             if self.possible_move(x,y,8,8,2) == True:
-                # Adding new coordinate
+                
+                # save top left coordinates
                 linksboven = [x,y]
                 lijst.append(linksboven)
-
-                # Adding calculated price
                 coordinaten_eensgezin[counter] = linksboven
+                
+                # save top left price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Boven
+            # top coordinates
             x = (coordinaten[0])
             y = (coordinaten[1] - 1)
             
+            # check for valid move with given coordinates (x,y), single family house length (8,8) and obligatory free space (2) as input
             if self.possible_move(x,y,8,8,2) == True:
-                # Adding new coordinate
+                
+                # save top coordinates
                 boven = [x,y]
                 lijst.append(boven)
-
-                # Adding calculated price
                 coordinaten_eensgezin[counter] = boven
+
+                # save top price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water                
                 self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal            
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
         
-            # Rechtsboven
+            # top right coordinates
             x = coordinaten[0] + 1
             y = coordinaten[1] - 1
 
+            # check for valid move with given coordinates (x,y), single family house length (8,8) and obligatory free space (2) as input
             if self.possible_move(x,y,8,8,2) == True:
-                # Adding new coordinate
+                
+                # save top right coordinates
                 rechtsboven = [x,y]
                 lijst.append(rechtsboven)
-
-                # Adding calculated price
                 coordinaten_eensgezin[counter] = rechtsboven
+
+                # save top right price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water                
                 self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal            
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Rechts
+            # right coordinates
             x = coordinaten[0] + 1
             y = coordinaten[1]
 
+            # check for valid move with given coordinates (x,y), single family house length (8,8) and obligatory free space (2) as input
             if self.possible_move(x,y,8,8,2) == True:
-                # Adding new coordinate
+                
+                # save right coordinates
                 rechts = [x,y]
                 lijst.append(rechts)
-
-                # Adding calculated price
                 coordinaten_eensgezin[counter] = rechts
+
+                # save right price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
+            
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Rechtsonder
+            # bottom right coordinates
             x = coordinaten[0] + 1
             y = coordinaten[1] + 1
 
+            # check for valid move with given coordinates (x,y), single family house length (8,8) and obligatory free space (2) as input
             if self.possible_move(x,y,8,8,2) == True:
-                # Adding new coordinate
+                
+                # save bottom right coordinates
                 rechtsonder = [x,y]
                 lijst.append(rechtsonder)
-
-                # Adding calculated price
                 coordinaten_eensgezin[counter] = rechtsonder
+
+                # save bottom right price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
+            
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Onder
+            # bottom coordinates
             x = coordinaten[0] 
             y = coordinaten[1] + 1
 
+            # check for valid move with given coordinates (x,y), single family house length (8,8) and obligatory free space (2) as input
             if self.possible_move(x,y,8,8,2) == True:
-                # Adding new coordinate
+                
+                # save bottom coordinates
                 onder = [x,y]
                 lijst.append(onder)
-
-                # Adding calculated price
                 coordinaten_eensgezin[counter] = onder
+
+                # save bottom price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Linksonder
+            # bottom left coordinates
             x = coordinaten[0] - 1
             y = coordinaten[1] + 1
 
+            # check for valid move with given coordinates (x,y), single family house length (8,8) and obligatory free space (2) as input
             if self.possible_move(x,y,8,8,2) == True:
-                # Adding new coordinate
+                
+                # save bottom left coordinates
                 linksonder = [x,y]
                 lijst.append(linksonder)
-
-                # Adding calculated price
                 coordinaten_eensgezin[counter] = linksonder
+
+                # save bottom left price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Links
+            # left coordinates
             x = coordinaten[0] - 1
             y = coordinaten[1]
             
+            # check for valid move with given coordinates (x,y), single family house length (8,8) and obligatory free space (2) as input
             if self.possible_move(x,y,8,8,2) == True:
-                # Adding new coordinate
+
+                # save left coordinates
                 links = [x,y]
                 lijst.append(links)
-
-                # Adding calculated price
                 coordinaten_eensgezin[counter] = links
+
+                # save left price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-2:y+10, x-2:x+10] = 0
                 self.place.water()
+            
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Getting the best option
+            # obtain the best move with highest price
             hoogste = max(opbrengst)
             index = opbrengst.index(hoogste)
             best_coor = lijst[index]
@@ -1050,10 +1133,11 @@ class Move():
             y = best_coor[1]
             x = best_coor[0]
 
-            # Draw
+            # draw move on the map
             self.wijk[(y - 2):(y + 10),(x - 2):(x + 10)] = 5
             self.wijk[y:(y + 8),x:(x + 8)] = 1
             
+            # change moved coordinates
             coordinaten_eensgezin[counter] = best_coor
             counter += 1          
 
@@ -1063,192 +1147,239 @@ class Move():
         self.coordinaten_eensgezin = coordinaten_eensgezin
 
         price = Kosten(self.wijk, self.aantal_eensgezins, self.aantal_bungalow, self.aantal_maison)
+        
+        # set counter for indexation within coordinates lists
         counter = 0 
 
+        # check for every single family home the best possible move
         for coordinaten in coordinaten_bungalow:
+            
+            # set default empty lists. 'lijst' and 'opbrengst' respectively store the coordinates and price of each move in a certain direction.
             lijst = []
             opbrengst = []
+            
+            # save coordinate and price of initial situation
             lijst.append(coordinaten)
-         
             new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
             opbrengst.append(new)
 
-            # Linksboven
+            # remove current house from the gridmap, and place water when obligatory free space of house is in water
+            self.wijk[coordinaten[1]-3:(coordinaten[1]+10), coordinaten[0]-3:(coordinaten[0]+14)] = 0
+            self.place.water()
+            
+            # top left coordinates
             x = (coordinaten[0] - 1)
             y = (coordinaten[1] - 1)
             
-            self.wijk[coordinaten[1]-3:(coordinaten[1]+10), coordinaten[0]-3:(coordinaten[0]+14)] = 0
-            self.place.water()
-
+            # check for valid move with given coordinates (x,y), bungalow length (11,7) and obligatory free space (3) as input
             if self.possible_move(x, y, 11, 7, 3) == True:
-                # Adding new coordinate
+                
+                # save top left coordinates
                 linksboven = [x,y]
                 lijst.append(linksboven)
-
-                # Adding calculated price
                 coordinaten_bungalow[counter] = linksboven
+                
+                # save top left price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
+            
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
             
-            # Boven
+            # top coordinates
             x = (coordinaten[0])
             y = (coordinaten[1] - 1)
             
+            # check for valid move with given coordinates (x,y), bungalow length (11,7) and obligatory free space (3) as input
             if self.possible_move(x, y, 11, 7, 3) == True:
-                # Adding new coordinate
+                
+                # save top coordinates
                 boven = [x,y]
                 lijst.append(boven)
-
-                # Adding calculated price
                 coordinaten_bungalow[counter] = boven
+
+                # save top price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+                
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
 
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Rechtsboven
+            # top right coordinates
             x = coordinaten[0] + 1
             y = coordinaten[1] - 1
 
+            # check for valid move with given coordinates (x,y), bungalow length (11,7) and obligatory free space (3) as input
             if self.possible_move(x, y, 11, 7, 3) == True:
-                # Adding new coordinate
+                
+                # save top right coordinates
                 rechtsboven = [x,y]
                 lijst.append(rechtsboven)
-
-                # Adding calculated price
                 coordinaten_bungalow[counter] = rechtsboven
+
+                # save top right price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
+            
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Rechts
+            # right coordinates
             x = coordinaten[0] + 1
             y = coordinaten[1]
 
+            # check for valid move with given coordinates (x,y), bungalow length (11,7) and obligatory free space (3) as input
             if self.possible_move(x, y, 11, 7, 3) == True:
-                # Adding new coordinate
+                
+                # save right coordinates
                 rechts = [x,y]
                 lijst.append(rechts)
-
-                # Adding calculated price
                 coordinaten_bungalow[counter] = rechts
+
+                # save right price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
 
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Rechtsonder
+            # bottom right coordinates
             x = coordinaten[0] + 1
             y = coordinaten[1] + 1
 
+            # check for valid move with given coordinates (x,y), bungalow length (11,7) and obligatory free space (3) as input
             if self.possible_move(x, y, 11, 7, 3) == True:
-                # Adding new coordinate
+                
+                # save bottom right coordinates
                 rechtsonder = [x,y]
                 lijst.append(rechtsonder)
-
-                # Adding calculated price
                 coordinaten_bungalow[counter] = rechtsonder
+
+                # save bottom right price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Onder
+            # bottom coordinates
             x = coordinaten[0] 
             y = coordinaten[1] + 1
-
+            
+            # check for valid move with given coordinates (x,y), bungalow length (11,7) and obligatory free space (3) as input
             if self.possible_move(x, y, 11, 7, 3) == True:
-                # Adding new coordinate
+                
+                # save bottom coordinates
                 onder = [x,y]
                 lijst.append(onder)
-
-                # Adding calculated price
                 coordinaten_bungalow[counter] = onder
+
+                # save bottom price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+                
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
+            
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Linksonder
+            # bottom left coordinates
             x = coordinaten[0] - 1
             y = coordinaten[1] + 1
 
+            # check for valid move with given coordinates (x,y), bungalow length (11,7) and obligatory free space (3) as input
             if self.possible_move(x, y, 11, 7, 3) == True:
-                # Adding new coordinate
+                
+                # save bottom left coordinates
                 linksonder = [x,y]
                 lijst.append(linksonder)
-
-                # Adding calculated price
                 coordinaten_bungalow[counter] = linksonder
+
+                # save bottom left price
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
+
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Links
+            # left coordinates
             x = coordinaten[0] - 1
             y = coordinaten[1]
             
+            # check for valid move with given coordinates (x,y), bungalow length (11,7) and obligatory free space (3) as input
             if self.possible_move(x, y, 11, 7, 3) == True:
-                # Adding new coordinate
+                
+                # save left coordinates
                 links = [x,y]
                 lijst.append(links)
-
-                # Adding calculated price
                 coordinaten_bungalow[counter] = links
+
+                # save left coordinates
                 new = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_eensgezin)
                 opbrengst.append(new)
+
+                # remove moved house from the gridmap, and place water when obligatory free space of house is in water
                 self.wijk[y-3:y+10, x-3:x+14] = 0
                 self.place.water()
+            
+            # add zeroes to coordinates and prices list to ensure the length of the lists remain equal
             else:
-                # Adding default
                 lijst.append([0,0])
                 opbrengst.append(0.00)
 
-            # Getting the best option
+            # obtain the best move with highest price
             hoogste = max(opbrengst)
             index = opbrengst.index(hoogste)
             best_coor = lijst[index]
             
             y = best_coor[1]
             x = best_coor[0]
-            # Draw
+            
+            # draw move on the map
             self.wijk[(y - 3):(y + 10),(x - 3):(x + 14)] = 5
             self.wijk[y:(y + 7),x:(x + 11)] = 2
 
+            # change moved coordinates
             coordinaten_bungalow[counter] = best_coor
             counter += 1
 
@@ -1353,11 +1484,11 @@ def main():
     plt.axis('off')
 
     # create legend for visualization
-    een = mpatches.Patch(color=colors[1], label="Eengezins")
+    een = mpatches.Patch(color=colors[1], label="Single")
     bung = mpatches.Patch(color=colors[2], label="Bungalow")
     mais = mpatches.Patch(color=colors[3], label="Maison")
     wat = mpatches.Patch(color=colors[4], label="Water")
-    extr = mpatches.Patch(color=colors[5], label="Vrijstand")
+    extr = mpatches.Patch(color=colors[5], label="Free space")
     plt.legend(handles=[wat,een,bung,mais,extr], bbox_to_anchor=(1.01, 0.5), loc='center left')
 
     # create boxplot
