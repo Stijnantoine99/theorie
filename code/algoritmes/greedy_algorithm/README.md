@@ -14,5 +14,8 @@ The algorithm is almost the same as the random algorithm. The price calculation 
 To use the algorithm you need to choose the house-variant (20/40/60), the neighborhoodtype (1/2/3) and the random_range(amount of times you want to place a house). With this you need to choose the amount of runs you want the whole algorithm to run. From these runs the mean and max will be shown in the terminal. The neigborhood with the highest price will be visualised and a boxplot of all the runs will be shown. 
 
 ### Results 
+After running the algorithm with neighborhoodtype = 2, house-variant = 20, runs = 100 and random_range = 10.
 
 
+[Boxplot Greedy] (https://github.com/Stijnantoine99/theorie/blob/master/doc/Greedy_box_100.png)
+[Map Greedy] (https://github.com/Stijnantoine99/theorie/blob/master/doc/Greedy_map_100.png)
