@@ -9,11 +9,11 @@ Date: 28/01/2020
 * Rob Burger          - 11338059 
 * Stijn van den Berg  - 11887648
 
-With current housing problem in the city of Amsterdam the local authorities decided to create a 3 new neighborhoods in the southern parts of Amsterdam. The local authorities still have to decide how many houses they want to build in three different neighborhoods. There are 3 different housevariants: 20 houses, 40 houses and 60 houses. The 3 neighborhoods are different in the distribution of the water. 
+With current housing problem in the city of Amsterdam the local authorities decided to create 3 new neighbourhoods in the southern parts of Amsterdam. The local authorities still have to decide how many houses they want to build in three different neighbourhoods. There are 3 different housing variants: 20 houses, 40 houses and 60 houses. The 3 neighbourhoods are different in the distribution of the water. 
 
-Every neighborhood is on an area of land with a depth of 180 meters and a width of 160 meters. In every one of the areas the water is distributed in a different way. In every neighborhood there are 3 different house types: single family homes, bungalows and maisons. The houses are always in the same proportions: 60% single family homes, 25% bungalows and 15% maisons. The houses have all different sizes: the single family homes 8x8 meter (width x depth),  bungalows 11x7 meter (width x depth) and maisons 12x10 meters (width x depth). 
+Every neighbourhood is on an area of land with a depth of 180 meters and a width of 160 meters. In every one of the areas the water is distributed in a different way. In every neighborhood there are 3 different house types: single family houses, bungalows and maisons. The houses are always in the same proportions: 60% single family houses, 25% bungalows and 15% maisons. The houses all have different sizes: the single family houses 8x8 meter (width x depth),  bungalows 11x7 meter (width x depth) and maisons 12x10 meters (width x depth). 
 
-All the houses have different prices and obligatory free space around. A single family house has a value of €285.000,- with that it needs 2 meters of obligatory free space. Every extra meter the price of the house increases with 3%. A bungalow has a value of €399.000,- it is obligated to have at least 3 meters of free space around it. Every extra meter the price increases with 4%. The maison has a price of €610.000,- with that it needs 6 meters of obligatory space. Every extra meter the price of the house increases with 6%. The obligatory space of the houses need to be within the neighborhoods area but can cross the water. 
+All the houses have different prices and obligatory free space around. A single family house has a value of €285.000,- and needs 2 meters of obligatory free space. For every extra meter, the value of the house increases with 3%. A bungalow has a value of €399.000,- it is obligated to have at least 3 meters of free space around it. For every extra meter, the value increases with 4%. The maison has a value of €610.000,- with that it needs 6 meters of obligatory space. Every extra meter the price of the house increases with 6%. The obligatory space of the houses need to be within the neighborhoods area but can cross the water. 
 
 ### House table
 | House type/features 	| Size (width x dept) 	| Obligatory space in meters 	| Price in euro's 	| Price increasement 	|
@@ -23,7 +23,7 @@ All the houses have different prices and obligatory free space around. A single 
 | Maison              	| 12 x 10             	| 6                          	| 610.000         	| 6%                 	|
 
 
-# Our Job
+## Our Job
 It is our job to create the most profitable outcome possible. Here we need to create the neighborhood with the highest house prices and therefore the highest total price for the area. To reach this ultimate situation we wrote 4 different algorithms.
 
 1. [Random algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/random_algorithm)
