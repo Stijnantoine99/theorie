@@ -25,7 +25,7 @@ All the houses have different prices and obligatory free space around. A single 
 
 
 ## Solution
-It is our job to create the most profitable outcome possible. Here we need to create the neighbourhood with the highest house prices and therefore the highest total price for the area. To reach this ultimate situation we wrote 4 different algorithms.
+It is our task to create the most profitable outcome possible. In order to do this, we need to create a neighbourhood with the highest house prices and therefore the highest total price for the area. To reach this ultimate situation we have written 4 different algorithms which are briefly explained below. A more detailed description of each algorithm can be found in the algorithms folder or be accessed by the links below.
 
 1. [Random algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/random_algorithm)
 
@@ -33,33 +33,30 @@ It is our job to create the most profitable outcome possible. Here we need to cr
 
 2. [Greedy algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/greedy_algorithm)
 
-   * The greedy algorithm will place very house multiple times and will choose the one with the highest price outcome
+   * The greedy algorithm will place each house multiple times and will choose the one with the highest price outcome
 
 3. [Move algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/move_algorithm)
 
-   * The move algorithm will move the houses after placing and searches for the highest price possible. it will find an equilibrium._
+   * The move algorithm will move the houses after placing and searches for the highest price possible. it will find an equilibrium.
 
 4. [Main algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/main_algorithm)
  
-   * The main algorithm is an combination between the greedy and move algorithm
+   * The main algorithm is a combination of the greedy and move algorithm
 
 5. [Simulated Annealing algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/simulated_annealing_algorithm.py)
  
    * The simulated annealing algorithm will move the houses like the move algorithm, but will initiate simulated annealing (check for bigger random steps) if possible.
 
 
-Each of these algorithms are clarified in there own readme wich you can find in the repository or you can click on the links above. The readme files will explain some details of each algorithm:
-
-* How does it work
-* What are the results
-
 ### The algorithms
 
 The algorithms are made to create the best possible way to place the houses in every neighborhood. Every algorithm is different and are therefore hard to compare. However every algorithm has a method to place the houses and a method to calculate the total price. In the table below we have tried to quantify the amount of steps every algorithm has to take in the place and price method.
 
-__Variables__
+#### Variables
+We have made use of some variables which are distinguishable in our algorithms. All these variables affect the running time of a specific algorithm. We have tried to characterize the variables in all our algorithms and these are presented below.
+
 * House-variant = 20/40/60
-* Random_range = Amount of extra times every house will be placed and checked
+* Random_range = Amount of extra times every house will be placed and checked (essential in Greedy algorithm)
 * Amount of moves = How much time the move function will run until the balance is found (around 15)
 * The 9 in the move function is the amount of possible moves (8) + the current place
 
@@ -68,10 +65,10 @@ __Variables__
 |--------------------	|-------------------------------------------------------	|-----------------	|
 | Random Algorithm   	| House-variant                                         	| 1               	|
 | Greedy Algorithm   	| House-variant * random_range                          	| Same as placing 	|
-| Move Algorithm     	| House-variant + (9*  House-variant * Amount of moves) 	| Same as placing 	|
+| Move Algorithm     	| House-variant + (9 *  House-variant * Amount of moves) 	| Same as placing 	|
 | Main Algorithm     	| Greedy(placing) + Move(placing)                       	| Same as placing 	|
 
-The price method will take a longer time to generate. Therefore when comparing it is important that the highest value is the same. This means that the value in the price column needs to have a similar value per algorithm. For example when comparing the random algorithm with the greedy algorithm you will need to run the random algorithm random_range amount of times to be able to compare both algorithms. 
+The price method will take a longer time to generate. Therefore, when comparing it is important that the highest value is the same. This means that the value in the price column needs to have a similar value per algorithm. For example, when comparing the random algorithm with the greedy algorithm you will need to run the random algorithm random_range amount of times to be able to compare both algorithms. 
 
 ### State space
 
