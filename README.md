@@ -1,6 +1,8 @@
 # AmstelHaege
 Group: Utopia
+
 Date: 28/01/2020
+
 * Lars van der Water  - 11320532
 * Rob Burger          - 11338059 
 * Stijn van den Berg  - 11887648
