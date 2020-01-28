@@ -17,5 +17,5 @@ To use the algorithm you need to choose the house-variant (20/40/60), the neighb
 After running the algorithm with neighborhoodtype = 2, house-variant = 20, runs = 100 and random_range = 10.
 
 
-[Boxplot Greedy] (https://github.com/Stijnantoine99/theorie/blob/master/doc/Greedy_box_100.png)
-[Map Greedy] (https://github.com/Stijnantoine99/theorie/blob/master/doc/Greedy_map_100.png)
+![Boxplot Greedy] (https://github.com/Stijnantoine99/theorie/blob/master/doc/Greedy_box_100.png)
+![Map Greedy] (https://github.com/Stijnantoine99/theorie/blob/master/doc/Greedy_map_100.png)
