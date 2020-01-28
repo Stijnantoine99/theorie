@@ -3,6 +3,7 @@ Group: Utopia
 
 Date: 28/01/2020
 
+![Amstelhaege](https://github.com/Stijnantoine99/theorie/blob/master/doc/Amstelhaege.png)
 
 * Lars van der Water  - 11320532
 * Rob Burger          - 11338059 
@@ -25,19 +26,19 @@ All the houses have different prices and obligatory free space around. A single 
 # Our Job
 It is our job to create the most profitable outcome possible. Here we need to create the neighborhood with the highest house prices and therefore the highest total price for the area. To reach this ultimate situation we wrote 4 different algorithms.
 
-1. [Random algorithm](https://github.com/Stijnantoine99/readme/blob/master/random.md):
+1. [Random algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/random_algorithm)
 
    * The random algorithm will place the houses randomly and will calculate the price
 
-2. [Greedy algorithm](https://github.com/Stijnantoine99/readme/blob/master/greedy.md):
+2. [Greedy algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/greedy_algorithm)
 
    * The greedy algorithm will place very house multiple times and will choose the one with the highest price outcome
 
-3. [Move algorithm]:
+3. [Move algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/move_algorithm)
 
    * The move algorithm will move the houses after placing and searches for the highest price possible. it will find an equilibrium._
 
-4. [Main algorithm]:
+4. [Main algorithm](https://github.com/Stijnantoine99/theorie/tree/master/code/algoritmes/main_algorithm)
  
    * The main algorithm is an combination between the greedy and move algorithm
  
