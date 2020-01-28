@@ -19,8 +19,8 @@ In the placing method a random coordinate is generated within the borders of the
 When the placing is done the price will be calculated. Every meter extra around the house will cause an increasement of the houseprice. To calculate the price the house is removed from the grid. Then the total area of the field is checked for the number 1 (one family house), 2 (bungalow) or 3 (maison). If there is one of these numbers in the total area the price increasment is stopped and the price of the house is calculated. All of these houses together will result in the total price of het area. 
 
 ### Results 
+After running the algorithm with neighbourhood_type = 2, house_variant = 20, runs = 100 and random_range = 10.
 
+![Map Random](https://github.com/Stijnantoine99/theorie/blob/master/doc/random_map_1000.png)
 
-
-
-
+![Boxplot Random](https://github.com/Stijnantoine99/theorie/blob/master/doc/random_box_1000.png)
