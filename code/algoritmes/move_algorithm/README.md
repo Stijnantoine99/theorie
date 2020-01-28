@@ -14,3 +14,8 @@ The move algorithm works the same as the random algorithm at first, the houses g
 For the algorithm to work the house-variant(20/40/60), the neighborhoodtype (1/2/3) and the amount of runs need to be selected in the main. With that the algorithm will move the houses until there is no better place for any of the houses. The houses will move until they find their balancepoint. 
 
 ### Results 
+After running the algorithm with neighbourhood_type = 2, house_variant = 20 and runs = 100.
+
+![Map Move](https://github.com/Stijnantoine99/theorie/blob/master/doc/move_map_100.png)
+
+![Boxplot Move](https://github.com/Stijnantoine99/theorie/blob/master/doc/move_box_100.png)
