@@ -20,3 +20,10 @@ For the algorithm to work the house-variant(20/40/60), the neighborhoodtype (1/2
 
 ### Results 
 Since the algorithm is not finished yet, no results can be shown for this algorithm.
+
+### Improvements
+Due to time shortage we had at the end the algorithm is not fully functional yet. Therefore there are some points which should be improved on. The important improvements are:
+
+  - Create a cooling down method for the temperature. As mentioned the temperature is supposed to decrease after every house has been tried to move. However currently there is no method to enable this.
+  - Divide the "Move" class into a "Move" and "Simulated annealing" class. The "Move" class was purposed for the hill climbing method and the simulated annealing was supposed to be a different class. However due to time shortage we were not able to this before the deadline.
+  - Enable the user of the algorithm to insert the values for temperature and acceptance probabilty threshold in the main function. This makes use of the algorithm more comfortable for the user.
