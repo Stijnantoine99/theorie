@@ -14,6 +14,5 @@ Every house will be placed random_range amount of times. From these the location
 To use the algorithm it is necessary to choose the house-variant(20/40/60), the neighborhoodtype(1/2/3), the random_range and the amount of runs. This will create a gridmap with all the placed houses. After the placing every house will move with the move function. When the houses cannot increase the price with moving the algorithm will end. Based on the amount of runs the algorithm will start over. After all the runs the max and mean price will be shown. The neighborhood with the highest price will be visualised and a boxplot will appear. 
 
 ### Results 
-
-
+After running the algorithm with neighbourhood_type = 2, house_variant = 20, runs = 100 and random_range = 10.
 
