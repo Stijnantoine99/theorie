@@ -1,5 +1,5 @@
 # AmstelHaege
-## Move Algorithm
+## Simulated Annealing Algorithm
 Date: 28/01/2020
 * Lars van der Water  - 11320532
 * Rob Burger          - 11338059 
