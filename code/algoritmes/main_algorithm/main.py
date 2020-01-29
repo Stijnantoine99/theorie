@@ -1388,9 +1388,9 @@ class Move():
 def main():
     
     # settings
-    neighbourhood_type = 2
+    neighbourhood_type = 1
     houses = 20
-    runs = 3
+    runs = 5
     random_range = 10
 
     # initialize variables
@@ -1459,6 +1459,7 @@ def main():
 
     # calculate and show statistics
     mean = statistics.mean(total_prices)
+    median = statistics.median(total_prices)
     print()
     print("Wijk", neighbourhood_type, ":", runs, "runs")
     print("Mean:", mean)
@@ -1493,9 +1494,17 @@ def main():
     fig, ax1 = plt.subplots()
     ax1.boxplot(total_prices)
     ax1.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
-    plt.title("Boxplot Wijk " + str(neighbourhood_type))
-    ax1.set_ylabel("Price")
-    plt.xticks([1], ["Wijk" + str(neighbourhood_type)])
+    plt.title("Main", fontsize= 20)
+    ax1.set_ylabel("Price (€)", fontsize = 15)
+    ax1.tick_params(axis = 'y', labelsize = 12)
+    plt.xticks([1], ["Main"],fontsize= 15)
+    bottom = 7000000
+    top = 15000000
+    ax1.set_ylim(bottom, top)
+    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+    text = "Mean: € " + str(mean) + "\nMedian: € " + str(median) + "\nMax: € " + str(max(total_prices))
+    ax1.text(0.05, 0.95, text, transform=ax1.transAxes, fontsize=11,
+        verticalalignment='top', bbox=props)
     plt.show()
 
     # saving in csv file

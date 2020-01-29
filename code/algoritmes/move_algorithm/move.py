@@ -1268,9 +1268,9 @@ class Move():
 def main():
     
     # settings
-    neighbourhood_type = 2
+    neighbourhood_type = 1
     houses = 20
-    runs = 100
+    runs = 3
 
     # initialize variables
     amount_single = int(houses * 0.6)
@@ -1279,6 +1279,7 @@ def main():
     highest_price_move = 0
     total_prices = []
     total_prices_move = []
+    move_counter = []
 
     for i in range(runs):
         print("Run", (i+1))
@@ -1329,6 +1330,10 @@ def main():
             oud_move = new_move
             new_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
         
+        # # save move counter
+        # print(move_counter)
+        # move_counter.append(counter)
+
         # save price after move
         price_move = price.total(coordinaten_maison, coordinaten_bungalow, coordinaten_single)
         total_prices_move.append(price_move)
@@ -1340,10 +1345,12 @@ def main():
 
     # calculate and show statistics
     mean = statistics.mean(total_prices_move)
+    median = statistics.median(total_prices_move)
     print()
     print("Wijk", neighbourhood_type, ":", runs, "runs")
     print("Mean:", mean)
     print("Max:", highest_price_move)
+    # print("MOVE COUNTER MEAN:", statistics.mean(move_counter))
     print()
 
     # create visualization
@@ -1373,9 +1380,17 @@ def main():
     fig, ax1 = plt.subplots()
     ax1.boxplot(total_prices_move)
     ax1.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
-    plt.title("Boxplot Wijk " + str(neighbourhood_type))
-    ax1.set_ylabel("Price")
-    plt.xticks([1], ["Wijk" + str(neighbourhood_type)])
+    plt.title("Move", fontsize= 20)
+    ax1.set_ylabel("Price (€)", fontsize = 15)
+    ax1.tick_params(axis = 'y', labelsize = 12)
+    plt.xticks([1], ["Move"],fontsize= 15)
+    bottom = 7000000
+    top = 15000000
+    ax1.set_ylim(bottom, top)
+    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+    text = "Mean: € " + str(mean) + "\nMedian: € " + str(median) + "\nMax: € " + str(max(total_prices_move))
+    ax1.text(0.05, 0.95, text, transform=ax1.transAxes, fontsize=11,
+        verticalalignment='top', bbox=props)
     plt.show()
 
     # saving in csv file
